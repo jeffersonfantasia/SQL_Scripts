@@ -1,0 +1,27 @@
+SELECT *
+  FROM (
+    SELECT E.CODFILIAL,
+               /* P.CODAUXILIAR,*/
+           P.CODFORNEC,
+           F.FORNECEDOR,
+           E.CODPROD,
+           P.DESCRICAO,
+           E.QTESTGER,
+           NVL (E.QTFRENTELOJA, 0) QTFRENTELOJA,
+           (E.QTESTGER - NVL (E.QTFRENTELOJA, 0)) QTDEPOSITO
+              /* E.QTBLOQUEADA,*/
+              /* E.QTINDENIZ*/
+      FROM PCEST E,
+           PCPRODUT P,
+           PCFORNEC F
+     WHERE F.CODFORNEC = P.CODFORNEC
+       AND E.CODPROD = P.CODPROD
+       AND E.CODFILIAL = 4
+)
+ WHERE
+     /*QTDEPOSITO > 0
+   AND QTFRENTELOJA <> 0
+   AND */ QTESTGER <> 0
+ ORDER BY FORNECEDOR,
+          QTDEPOSITO;
+/

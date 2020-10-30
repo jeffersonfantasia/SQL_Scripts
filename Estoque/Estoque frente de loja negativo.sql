@@ -1,0 +1,20 @@
+SELECT *
+  FROM (
+    SELECT E.CODFILIAL,
+              /* P.CODAUXILIAR,*/
+           E.CODPROD,
+           P.DESCRICAO,
+           E.QTESTGER,
+           E.QTFRENTELOJA,
+           (E.QTESTGER - E.QTFRENTELOJA) QTDEPOSITO,
+           E.QTBLOQUEADA,
+           E.QTINDENIZ
+      FROM PCEST E,
+           PCPRODUT P
+     WHERE E.CODPROD = P.CODPROD
+       AND E.CODFILIAL = 1
+)
+ WHERE QTFRENTELOJA < 0
+   AND QTESTGER >= 0
+ ORDER BY QTFRENTELOJA
+/
