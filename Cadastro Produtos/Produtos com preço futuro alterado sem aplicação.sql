@@ -1,0 +1,167 @@
+SELECT * FROM ( SELECT EST.CODFILIAL FILIAL,
+                       PR.DTULTALTPTABELA DTULTALT,
+                       EST.QTESTGER ESTOQUE,
+                       REG.NUMREGIAO,
+                       REG.REGIAO REGIAO,
+                       PROD.CODAUXILIAR,
+                       PROD.CODPROD,
+                       PROD.DESCRICAO PRODUTO,
+                       PR.PTABELA PFUTURO,
+                       PR.PVENDA PATUAL,
+                       (PR.PVENDA - PR.PTABELA) DIF,
+                       PROD.TIPOMERC
+  FROM PCTABPR PR,
+       PCPRODUT PROD,
+       PCEST EST,
+       PCREGIAO REG,
+       PCFILIAL,
+       PCFORNEC
+ WHERE PR.CODPROD = PROD.CODPROD
+   AND PCFILIAL.CODIGO = EST.CODFILIAL
+   AND PROD.CODFORNEC = PCFORNEC.CODFORNEC
+   AND NVL (PCFILIAL.PRECOPOREMBALAGEM, 'N') = 'N'
+   AND EST.CODPROD = PROD.CODPROD
+   AND REG.NUMREGIAO = PR.NUMREGIAO
+   AND PROD.DTEXCLUSAO IS NULL
+   AND PR.DTULTALTPTABELA < TRUNC (SYSDATE)
+   AND NVL (REG.STATUS, 'A') = 'A' AND (( REG.NUMREGIAO NOT IN ([ EXREGIAO ])) OR
+               ('9999' IN ([ EXREGIAO ])))
+           AND ((PCFORNEC.CODCOMPRADOR IN ([ CODCOMPRADOR ])) OR
+               ('9999' IN ([ CODCOMPRADOR ])))
+           AND ((PROD.CODEPTO IN ([ DEPARTAMENTO ])) OR
+               ('9999' IN ([ DEPARTAMENTO ])))
+           AND ((EST.CODFILIAL IN ([ FILIAL ])) OR ('99' IN ([ FILIAL ])))
+           AND ((REG.CODFILIAL = EST.CODFILIAL) OR (REG.CODFILIAL IS NULL) OR
+               (REG.CODFILIAL = '99'))
+              --AND   EST.QTESTGER > 0
+           AND ROUND(PR.PTABELA, 2) <> ROUND(PR.PVENDA, 2)
+        UNION ALL
+        SELECT 'PCTABPR_ATACADO' TIPO,
+               EST.CODFILIAL FILIAL,
+               PR.DTULTALTPTABELA DTULTALT,
+               EST.QTESTGER ESTOQUE,
+               REG.NUMREGIAO || '-' || REG.REGIAO REGIAO,
+               PROD.CODAUXILIAR,
+               PROD.CODPROD,
+               PROD.DESCRICAO PRODUTO,
+               PROD.EMBALAGEM,
+               PROD.UNIDADE,
+               PROD.QTUNIT,
+               PR.PTABELAATAC PFUTURO,
+               PR.PVENDAATAC PATUAL,
+               (PR.PVENDA - PR.PTABELA) DIF,
+               PROD.TIPOMERC
+          FROM PCTABPR  PR,
+               PCPRODUT PROD,
+               PCEST    EST,
+               PCREGIAO REG,
+               PCFILIAL,
+               PCFORNEC
+         WHERE PR.CODPROD = PROD.CODPROD
+           AND PROD.CODFORNEC = PCFORNEC.CODFORNEC
+           AND PROD.CODFORNEC = PCFORNEC.CODFORNEC
+           AND PCFILIAL.CODIGO = EST.CODFILIAL
+           AND NVL(PCFILIAL.PRECOPOREMBALAGEM, 'N') = 'N'
+           AND NVL(PCFILIAL.TIPOPRECIFICACAO, 'P') <> 'P'
+           AND EST.CODPROD = PROD.CODPROD
+           AND PR.DTULTALTPTABELA < TRUNC(SYSDATE)
+           AND NVL(REG.STATUS, 'A') = 'A'
+           AND PROD.DTEXCLUSAO IS NULL
+           AND ((PROD.CODEPTO IN ([ DEPARTAMENTO ])) OR
+               ('9999' IN ([ DEPARTAMENTO ])))
+           AND ((PCFORNEC.CODCOMPRADOR IN ([ CODCOMPRADOR ])) OR
+               ('9999' IN ([ CODCOMPRADOR ])))
+           AND ((REG.NUMREGIAO NOT IN ([ EXREGIAO ])) OR
+               ('9999' IN ([ EXREGIAO ])))
+           AND ((EST.CODFILIAL IN ([ FILIAL ])) OR ('99' IN ([ FILIAL ])))
+           AND ((REG.CODFILIAL = EST.CODFILIAL) OR (REG.CODFILIAL IS NULL) OR
+               (REG.CODFILIAL = '99'))
+           AND REG.CODFILIAL = EST.CODFILIAL
+              --AND   EST.QTESTGER > 0
+           AND ROUND(PR.PTABELAATAC, 2) <> ROUND(PR.PVENDAATAC, 2)
+        UNION ALL
+        SELECT 'EMBALAGEM_VAREJO' TIPO,
+               EST.CODFILIAL FILIAL,
+               EMB.DTULTALTPTABELA DTULTALT,
+               EST.QTESTGER ESTOQUE,
+               PCREGIAO.NUMREGIAO || '-' || PCREGIAO.REGIAO REGIAO,
+               EMB.CODAUXILIAR,
+               PROD.CODPROD,
+               PROD.DESCRICAO PRODUTO,
+               EMB.EMBALAGEM,
+               EMB.UNIDADE,
+               EMB.QTUNIT,
+               EMB.PTABELA PFUTURO,
+               EMB.PVENDA PATUAL,
+               (EMB.PVENDA - EMB.PTABELA) DIF,
+               PROD.TIPOMERC
+          FROM PCPRODUT    PROD,
+               PCEST       EST,
+               PCEMBALAGEM EMB,
+               PCFILIAL,
+               PCREGIAO,
+               PCFORNEC
+         WHERE EST.CODPROD = PROD.CODPROD
+           AND PCFILIAL.CODIGO = EST.CODFILIAL
+           AND PCFILIAL.NUMREGIAOPADRAO = PCREGIAO.NUMREGIAO
+           AND PROD.CODFORNEC = PCFORNEC.CODFORNEC
+           AND ((PROD.CODEPTO IN ([ DEPARTAMENTO ])) OR
+               ('9999' IN ([ DEPARTAMENTO ])))
+           AND ((PCFORNEC.CODCOMPRADOR IN ([ CODCOMPRADOR ])) OR
+               ('9999' IN ([ CODCOMPRADOR ])))
+           AND ((PCFORNEC.CODCOMPRADOR IN ([ CODCOMPRADOR ])) OR
+               ('9999' IN ([ CODCOMPRADOR ])))
+           AND ((EST.CODFILIAL IN ([ FILIAL ])) OR ('99' IN ([ FILIAL ])))
+           AND ((PCREGIAO.NUMREGIAO NOT IN ([ EXREGIAO ])) OR
+               ('9999' IN ([ EXREGIAO ])))
+           AND NVL(PCFILIAL.PRECOPOREMBALAGEM, 'N') = 'S'
+           AND EMB.CODPROD = PROD.CODPROD
+           AND PROD.DTEXCLUSAO IS NULL
+           AND EMB.DTULTALTPTABELA < TRUNC(SYSDATE)
+           AND EMB.CODFILIAL = EST.CODFILIAL
+              --AND   EST.QTESTGER>0
+           AND NVL(EMB.PTABELA, 0) > 0
+           AND ROUND(EMB.PTABELA, 2) <> ROUND(EMB.PVENDA, 2)
+        UNION ALL
+        SELECT 'EMBALAGEM' TIPO,
+               EST.CODFILIAL FILIAL,
+               EMB.DTULTALTPTABELA DTULTALT,
+               EST.QTESTGER ESTOQUE,
+               PCREGIAO.NUMREGIAO || '-' || PCREGIAO.REGIAO REGIAO,
+               EMB.CODAUXILIAR,
+               PROD.CODPROD,
+               PROD.DESCRICAO PRODUTO,
+               EMB.EMBALAGEM,
+               EMB.UNIDADE,
+               EMB.QTUNIT,
+               EMB.PTABELAATAC PFUTURO,
+               EMB.PVENDAATAC PATUAL,
+               (EMB.PVENDA - EMB.PTABELA) DIF,
+               PROD.TIPOMERC
+          FROM PCPRODUT    PROD,
+               PCEST       EST,
+               PCEMBALAGEM EMB,
+               PCFILIAL,
+               PCREGIAO,
+               PCFORNEC
+         WHERE EST.CODPROD = PROD.CODPROD
+           AND EMB.CODPROD = PROD.CODPROD
+           AND PCFILIAL.NUMREGIAOPADRAO = PCREGIAO.NUMREGIAO
+           AND PROD.CODFORNEC = PCFORNEC.CODFORNEC
+           AND PCFILIAL.CODIGO = EST.CODFILIAL
+           AND EMB.DTULTALTPTABELA < TRUNC(SYSDATE)
+           AND NVL(PCFILIAL.PRECOPOREMBALAGEM, 'N') = 'S'
+           AND ((PROD.CODEPTO IN ([ DEPARTAMENTO ])) OR
+               ('9999' IN ([ DEPARTAMENTO ])))
+           AND ((PCFORNEC.CODCOMPRADOR IN ([ CODCOMPRADOR ])) OR
+               ('9999' IN ([ CODCOMPRADOR ])))
+           AND ((EST.CODFILIAL IN ([ FILIAL ])) OR ('99' IN ([ FILIAL ])))
+           AND ((PCREGIAO.NUMREGIAO NOT IN ([ EXREGIAO ])) OR
+               ('9999' IN ([EXREGIAO])))
+AND EMB.CODFILIAL = EST.CODFILIAL
+   AND PROD.DTEXCLUSAO IS NULL
+              /*AND   EST.QTESTGER>0*/
+   AND NVL (EMB.PTABELA, 0) > 0
+   AND ROUND (EMB.PTABELAATAC, 2) <> ROUND (EMB.PVENDAATAC, 2))
+ WHERE ABS (DIF) > 0.01
+/
