@@ -1,0 +1,14 @@
+SELECT P.CODPROD, P.DESCRICAO, P.CODAUXILIAR, M.QT
+  FROM PCMOV M,
+       PCPRODUT P,
+       (SELECT LEVEL AS LVL
+          FROM DUAL
+        CONNECT BY LEVEL <= (SELECT MAX(QT)
+                               FROM PCMOV
+                              WHERE CODOPER = 'EP'
+                                AND NUMTRANSENT = 320308)) AUX
+ WHERE M.CODPROD = P.CODPROD
+   AND AUX.LVL BETWEEN 1 AND M.QT
+   AND M.CODOPER = 'EP'
+   AND M.NUMTRANSENT = 32308
+ ORDER BY M.CODPROD
