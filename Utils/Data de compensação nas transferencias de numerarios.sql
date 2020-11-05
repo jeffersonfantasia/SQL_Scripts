@@ -1,4 +1,3 @@
-/*Data de compensação nas transferencias de numerarios*/
 WITH PCMOVCR_CREDITO AS (
   SELECT M.DTCOMPENSACAO AS DATA_CRED,
          M.NUMTRANS,
