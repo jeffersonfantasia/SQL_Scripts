@@ -13,6 +13,7 @@ SELECT C.CODFILIAL,
        A.PRODUTO,
        A.OBS,
        A.QT,
+       A.PVENDA,
        A.VALOR,
        A.VLATENDPREV,
        (CASE WHEN VLATENDPREV = 0 THEN 'SEM ESTOQUE' ELSE 'COM ESTOQUE' END) STATUS
@@ -22,6 +23,7 @@ SELECT C.CODFILIAL,
                W.PRODUTO,
                W.OBS,
                W.QT,
+               W.PVENDA,
                W.VALOR,
 			   SUM((CASE
                      WHEN W.QTATENDPREV >= 0 THEN
@@ -39,7 +41,7 @@ SELECT C.CODFILIAL,
                        P.DESCRICAO PRODUTO,
                        P.OBS,
                        I.QT,
-		 I.PVENDA,
+                       I.PVENDA,
                        ROUND((I.QT * I.PVENDA), 2) VALOR,
                        (E.QTESTGER - E.QTRESERV - E.QTBLOQUEADA) QTDISPONIVEL,
                        (E.QTESTGER - E.QTRESERV - E.QTBLOQUEADA - QT) QTATENDPREV
@@ -50,7 +52,7 @@ SELECT C.CODFILIAL,
                    AND I.CODUSUR NOT IN (14,39,46)
                    AND I.POSICAO IN ('B', 'P')) W
         -----------------------------------------------------------------------------------------------1----
-         GROUP BY W.NUMPED, W.CODPROD, W.PRODUTO, W.OBS, W.QT, W.VALOR) A,
+         GROUP BY W.NUMPED, W.CODPROD, W.PRODUTO, W.OBS, W.QT, W.PVENDA, W.VALOR) A,
        -------------------------------------------------------------------------------------------------2-----
        PCPEDC   C,
        PCCLIENT T,
@@ -61,5 +63,5 @@ SELECT C.CODFILIAL,
    AND U.CODUSUR = C.CODUSUR
    AND C.CODPLPAG = G.CODPLPAG
    AND C.CONDVENDA NOT IN (10)
- --  AND C.CODUSUR =
+   AND C.CODUSUR IN (1,4)
  ORDER BY A.NUMPED, STATUS;
