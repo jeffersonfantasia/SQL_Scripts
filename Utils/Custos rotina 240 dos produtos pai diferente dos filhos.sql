@@ -1,4 +1,3 @@
---Custos rotina 240 dos produtos pai diferente dos filhos
 SELECT *
 FROM
 (SELECT F.CODFILIAL,
