@@ -1,24 +1,22 @@
 CREATE OR REPLACE VIEW VIEW_JC_PCPRODUT AS
     WITH PRODUTOMASTER AS (
-        SELECT CODPROD,
-               DESCRICAO
+        SELECT T.CODPROD,
+               T.DESCRICAO
           FROM PCPRODUT T
-         WHERE CODPROD = CODPRODMASTER
+          LEFT JOIN PCLINHAPROD L ON T.CODLINHAPROD = L.CODLINHA
+         WHERE T.CODPROD = T.CODPRODMASTER
     )
      /*PARA TERMOS A DESCRICAO DO PRODUTO MASTER*/
     SELECT P.CODPROD,
            P.CODPRODMASTER,
-           P.CODFAB,
            PM.DESCRICAO AS PRODUTO_MASTER,
            P.DESCRICAO AS PRODUTO,
-           P.QTUNITCX,
            (
                CASE
                    WHEN P.CODMARCA IN (
                        165, 166, 167
                    ) THEN
-     /*AGRUPARMOS A MARCA DOREL*/
-                    'DOREL'
+     /*AGRUPARMOS A MARCA DOREL*/ 'DOREL'
                    ELSE M.MARCA
                END
            ) AS MARCA,
