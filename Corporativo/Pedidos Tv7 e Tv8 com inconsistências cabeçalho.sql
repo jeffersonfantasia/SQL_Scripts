@@ -1,5 +1,6 @@
 SELECT C.DATA,
        C.NUMPED,
+       C.NUMPEDENTFUT,
        C.CONDVENDA,
        C.CONTAORDEM,
        C.CODCLI,
@@ -18,12 +19,8 @@ SELECT C.DATA,
     OR (
     CASE
         WHEN (C.CONDVENDA = 8
-           AND C.CODCOB = 'SENT') THEN 1
-        ELSE 0
-    END
-) = 0
-   AND (
-    CASE
+           AND C.CODCOB = 'SENT'
+           AND C.NUMPEDENTFUT IS NOT NULL) THEN 1
         WHEN (C.CONDVENDA = 7
            AND C.CODCOB <> 'SENT') THEN 1
         ELSE 0
