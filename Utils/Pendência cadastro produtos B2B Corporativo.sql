@@ -1,4 +1,3 @@
---Pendência cadastro produtos B2B Corporativo
 WITH PRECOS_KIT AS
  (SELECT F.CODPRODACAB AS CODPROD, 
          SUM(NVL(T.PVENDA, 0)) AS PVENDA
