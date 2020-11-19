@@ -17,6 +17,7 @@ SELECT DTMOV,
         1, 8, 9
     )
        AND M.DTMOV >= TO_DATE ('01/01/2017', 'DD/MM/YYYY')
+       AND M.DTCANCEL IS NULL
 )
  GROUP BY DTMOV,
           CODIGO,
