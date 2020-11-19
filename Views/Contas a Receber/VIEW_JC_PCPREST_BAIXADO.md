@@ -8,6 +8,7 @@
 ### Títulos Estornados (Tipo E):
 	1. Devemos pegar o valor pago somente das cobranças ESTORNADAS
 	2. DATA  = DTPAG
+	3. Retirar baixa nos bancos de bonifiação, acerto de motorista e extravios de mercadoria
 
 **União com:**
 
