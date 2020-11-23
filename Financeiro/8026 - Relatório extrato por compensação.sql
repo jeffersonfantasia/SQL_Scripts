@@ -40,7 +40,7 @@ SELECT M.NUMTRANS "NumTrans",
                SELECT SUM (M.VALOR) ENTRADAS
                  FROM PCMOVCR M
                 WHERE M.TIPO <> 'C'
-                  AND M.DTCOMPENSACAO < TO_DATE ('01/10/2020', 'DD/MM/YYYY')
+                  AND M.DTCOMPENSACAO < TO_DATE ('20/10/2020', 'DD/MM/YYYY')
                   AND M.CONCILIACAO = 'OK'
                   AND M.CODBANCO = 1
                   AND M.CODCOB IN (
@@ -51,7 +51,7 @@ SELECT M.NUMTRANS "NumTrans",
                       SELECT (SUM (M.VALOR) * - 1) SAIDAS
                         FROM PCMOVCR M
                        WHERE M.TIPO = 'C'
-                         AND M.DTCOMPENSACAO < TO_DATE ('01/10/2020', 'DD/MM/YYYY')
+                         AND M.DTCOMPENSACAO < TO_DATE ('20/10/2020', 'DD/MM/YYYY')
                          AND M.CONCILIACAO = 'OK'
                          AND M.CODBANCO = 1
                          AND M.CODCOB IN (
@@ -60,8 +60,8 @@ SELECT M.NUMTRANS "NumTrans",
                   ) SAIDAS
        ) SI
  WHERE M.CONCILIACAO = 'OK'
-   AND TRUNC (M.DTCOMPENSACAO) >= TO_DATE ('01/10/2020', 'DD/MM/YYYY')
-   AND TRUNC (M.DTCOMPENSACAO) <= TO_DATE ('31/10/2020', 'DD/MM/YYYY')
+   AND TRUNC (M.DTCOMPENSACAO) >= TO_DATE ('20/10/2020', 'DD/MM/YYYY')
+   AND TRUNC (M.DTCOMPENSACAO) <= TO_DATE ('20/10/2020', 'DD/MM/YYYY')
    AND M.CODBANCO = 1
    AND M.CODCOB IN (
     'D'
