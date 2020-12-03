@@ -1,6 +1,7 @@
 /*CONTA--*/
 SELECT ROWID,
        C.CONTACONTABIL,
+       C.
        C.*
   FROM PCCONTA C
  WHERE C.GRUPOCONTA = 550
