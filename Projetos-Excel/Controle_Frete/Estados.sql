@@ -1,0 +1,5 @@
+SELECT UF,
+       ESTADO
+  FROM PCESTADO
+ ORDER BY UF;
+/
