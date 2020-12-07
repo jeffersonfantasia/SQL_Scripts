@@ -20,5 +20,5 @@ SELECT DTMOV,
        AND M.DTCANCEL IS NULL
 )
  GROUP BY DTMOV,
-          CODIGO,
+          CODCLI,
           CODUSUR
