@@ -11,7 +11,7 @@ SELECT A.CODFILIAL,
            2, 3
          )
             AND B.CODPROD = A.CODPROD
-       ) QTESTGERSOMA
+       ) QTESTGERSOMA   
   FROM PCEST A,
        PCPRODUT C
  WHERE A.CODPROD = C.CODPROD
