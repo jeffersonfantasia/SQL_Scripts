@@ -14,8 +14,9 @@
 
 ### Desconto financeiros obtidos:
 	1. Com relação aos descontos financeiros obtidos, temos que buscar os lançamentos de impostos HISTORICO2 IN ('ISS', 'CSRF', 'IRRF', 'INSS') que tenham desconto ou juros, para termos o RECNUM e com isso desconsiderar esses registros da relação de lançamentos de desconto financeiro obtidos.
-	2. Assim conseguiremos ter uma relação "limpa" dos descontos obtidos válidos.
-	3. Inclusão da coluna TIPO = 'D'
+	2. Com relação aos descontos financeiros obtidos, temos que buscar os lançamentos de nas contas gerenciais que os lançamentos não passam pelo fornecedor, que tenham desconto ou juros, para termos o RECNUM e com isso desconsiderar esses registros da relação de lançamentos de desconto financeiro obtidos.
+	3. Assim conseguiremos ter uma relação "limpa" dos descontos obtidos válidos.
+	4. Inclusão da coluna TIPO = 'D'
 
 **União com**
 
