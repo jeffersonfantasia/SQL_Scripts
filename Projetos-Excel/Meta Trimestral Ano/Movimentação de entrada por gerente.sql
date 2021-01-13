@@ -4,22 +4,8 @@ SELECT DTMOV,
        SUM (VALOR) AS VALOR
   FROM (
     SELECT M.DTMOV,
-           (
-               CASE
-                   WHEN V.CODSUPERVISOR IN (
-                       12
-                   ) THEN 12
-                   ELSE V.CODGERENTE
-               END
-           ) AS CODGERENTE,
-           (
-               CASE
-                   WHEN V.CODSUPERVISOR IN (
-                       12
-                   ) THEN 'B2B'
-                   ELSE V.GERENTE
-               END
-           ) AS GERENTE,
+           V.CODGERENTE,
+           V.GERENTE,
            M.QTCONT * (M.PUNITCONT + NVL (M.VLFRETE, 0) + NVL (M.VLOUTROS, 0)) AS VALOR
       FROM PCMOV M
      INNER JOIN PCNFENT E ON M.NUMTRANSENT = E.NUMTRANSENT
