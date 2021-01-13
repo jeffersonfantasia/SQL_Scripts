@@ -14,7 +14,7 @@ SELECT DTMOV,
         1202, 1411, 2202, 2411
     )
        AND V.CODGERENTE IN (
-        1, 8, 9
+        1, 8, 9, 10
     )
        AND M.DTMOV >= TO_DATE ('01/01/2017', 'DD/MM/YYYY')
        AND M.DTCANCEL IS NULL
