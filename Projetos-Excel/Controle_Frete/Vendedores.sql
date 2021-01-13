@@ -1,6 +1,6 @@
 SELECT *
   FROM VIEW_JC_VENDEDOR V
  WHERE V.CODGERENTE IN (
-    1, 2, 5, 8, 9
+    1, 2, 5, 8, 9, 10
 );
 /
