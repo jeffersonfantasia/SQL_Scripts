@@ -9,7 +9,7 @@ SELECT A.CODFILIAL,
            FROM PCEST B
           WHERE B.CODFILIAL IN (
            2, 3
-         )
+         ) 
             AND B.CODPROD = A.CODPROD
        ) QTESTGERSOMA   
   FROM PCEST A,
