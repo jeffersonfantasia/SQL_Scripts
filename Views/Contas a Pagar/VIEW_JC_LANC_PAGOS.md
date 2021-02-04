@@ -20,6 +20,13 @@
 
 **União com**
 
+### Desconto financeiros INTEGRALMENTE obtidos:
+	1. Quando é obtivo desconto de 100% sobre o valor da nota, este não gera resgitro de NUMTRANS, e por isso não estava aparecendo no relatório.
+	2. Logo, devemos trazer somente registros que possuem desconto, que foram pagos e que não foram cancelados e nem estornados.
+	3. Inclusão da coluna TIPO = 'D'
+
+**União com**
+
 ### Juros pagos a fornecedor:
 	1. Com relação aos juros pagos, temos que buscar os lançamentos de impostos HISTORICO2 IN ('ISS', 'CSRF', 'IRRF', 'INSS') que tenham desconto ou juros, para termos o RECNUM e com isso desconsiderar esses registros da relação de lançamentos de juros pagos.
 	2. Assim conseguiremos ter uma relação "limpa" dos juros pagos válidos.
