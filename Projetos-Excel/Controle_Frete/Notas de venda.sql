@@ -7,6 +7,7 @@ SELECT DTMOV,
        CODUSUR,
        CODFORNECFRETE,
        FORNECEDOR,
+       'S' AS TIPO,
        SUM (VALOR) AS VALOR
   FROM (
     SELECT M.DTMOV,
