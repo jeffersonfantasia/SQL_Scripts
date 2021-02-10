@@ -7,6 +7,7 @@ SELECT DTMOV,
        CODUSUR,
        CODFORNECFRETE,
        FORNECEDOR,
+       TOTPESO,
        'ED' AS TIPO,
        SUM (VALOR) AS VALOR
   FROM (
@@ -19,6 +20,7 @@ SELECT DTMOV,
            E.CODUSURDEVOL AS CODUSUR,
            E.CODFORNECFRETE,
            F.FORNECEDOR,
+           E.TOTPESO,
            (
                CASE
                    WHEN M.CODFISCAL IN (
@@ -49,4 +51,5 @@ SELECT DTMOV,
           NUMNOTA,
           CODUSUR,
           CODFORNECFRETE,
-          FORNECEDOR
+          FORNECEDOR,
+          TOTPESO
