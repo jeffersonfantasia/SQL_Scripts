@@ -66,6 +66,7 @@ SELECT DTMOV,
     )
        AND M.DTMOV >= TO_DATE ('01/01/2015', 'DD/MM/YYYY')
        AND M.DTCANCEL IS NULL
+       AND S.UF = 'SP'
 )
  GROUP BY DTMOV,
           CODFILIAL,
