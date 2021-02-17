@@ -37,18 +37,16 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODUSUR,
            T.NUMTRANS,
            (
-               CASE T.CARTORIO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.CARTORIO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.CARTORIO
                END
            ) AS CARTORIO,
            (
-               CASE T.PROTESTO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.PROTESTO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.PROTESTO
                END
            ) AS PROTESTO,
@@ -95,18 +93,16 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODUSUR,
            T.NUMTRANS,
            (
-               CASE T.CARTORIO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.CARTORIO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.CARTORIO
                END
            ) AS CARTORIO,
            (
-               CASE T.PROTESTO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.PROTESTO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.PROTESTO
                END
            ) AS PROTESTO,
@@ -159,18 +155,16 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODUSUR,
            T.NUMTRANS,
            (
-               CASE T.CARTORIO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.CARTORIO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.CARTORIO
                END
            ) AS CARTORIO,
            (
-               CASE T.PROTESTO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.PROTESTO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.PROTESTO
                END
            ) AS PROTESTO,
@@ -229,18 +223,16 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODUSUR,
            T.NUMTRANS,
            (
-               CASE T.CARTORIO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.CARTORIO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.CARTORIO
                END
            ) AS CARTORIO,
            (
-               CASE T.PROTESTO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.PROTESTO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.PROTESTO
                END
            ) AS PROTESTO,
@@ -292,18 +284,16 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODUSUR,
            T.NUMTRANS,
            (
-               CASE T.CARTORIO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.CARTORIO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.CARTORIO
                END
            ) AS CARTORIO,
            (
-               CASE T.PROTESTO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.PROTESTO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.PROTESTO
                END
            ) AS PROTESTO,
@@ -342,18 +332,16 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODUSUR,
            T.NUMTRANS,
            (
-               CASE T.CARTORIO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.CARTORIO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.CARTORIO
                END
            ) AS CARTORIO,
            (
-               CASE T.PROTESTO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.PROTESTO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.PROTESTO
                END
            ) AS PROTESTO,
@@ -396,18 +384,16 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODUSUR,
            T.NUMTRANS,
            (
-               CASE T.CARTORIO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.CARTORIO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.CARTORIO
                END
            ) AS CARTORIO,
            (
-               CASE T.PROTESTO
-                   WHEN 'S'    THEN 'SIM'
-                   WHEN 'N'    THEN 'NÃO'
-                   WHEN NULL   THEN 'NÃO'
+               CASE NVL (T.PROTESTO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
                    ELSE T.PROTESTO
                END
            ) AS PROTESTO,
