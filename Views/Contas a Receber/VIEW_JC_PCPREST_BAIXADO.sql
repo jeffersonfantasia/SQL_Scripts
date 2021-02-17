@@ -36,6 +36,22 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           (
+               CASE T.CARTORIO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.CARTORIO
+               END
+           ) AS CARTORIO,
+           (
+               CASE T.PROTESTO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.PROTESTO
+               END
+           ) AS PROTESTO,
            'J' AS TIPO,
            (
                CASE
@@ -78,6 +94,22 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           (
+               CASE T.CARTORIO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.CARTORIO
+               END
+           ) AS CARTORIO,
+           (
+               CASE T.PROTESTO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.PROTESTO
+               END
+           ) AS PROTESTO,
            'D' AS TIPO,
            (
                CASE
@@ -126,6 +158,22 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           (
+               CASE T.CARTORIO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.CARTORIO
+               END
+           ) AS CARTORIO,
+           (
+               CASE T.PROTESTO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.PROTESTO
+               END
+           ) AS PROTESTO,
            'T' AS TIPO,
            (
                CASE
@@ -180,6 +228,22 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           (
+               CASE T.CARTORIO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.CARTORIO
+               END
+           ) AS CARTORIO,
+           (
+               CASE T.PROTESTO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.PROTESTO
+               END
+           ) AS PROTESTO,
            'B' AS TIPO,
            (
                CASE
@@ -227,6 +291,22 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           (
+               CASE T.CARTORIO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.CARTORIO
+               END
+           ) AS CARTORIO,
+           (
+               CASE T.PROTESTO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.PROTESTO
+               END
+           ) AS PROTESTO,
            'P' AS TIPO,
            (
                CASE
@@ -261,6 +341,22 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           (
+               CASE T.CARTORIO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.CARTORIO
+               END
+           ) AS CARTORIO,
+           (
+               CASE T.PROTESTO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.PROTESTO
+               END
+           ) AS PROTESTO,
            'E' AS TIPO,
            (
                CASE
@@ -299,6 +395,22 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           (
+               CASE T.CARTORIO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.CARTORIO
+               END
+           ) AS CARTORIO,
+           (
+               CASE T.PROTESTO
+                   WHEN 'S'    THEN 'SIM'
+                   WHEN 'N'    THEN 'NÃO'
+                   WHEN NULL   THEN 'NÃO'
+                   ELSE T.PROTESTO
+               END
+           ) AS PROTESTO,
            'EJ' AS TIPO,
            (
                CASE
