@@ -2,7 +2,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_CONTABILIDADE AS
     SELECT L.CODFILIAL,
            L.RECNUM,
            (NVL (L.VALOR, 0) + NVL (L.VLPIS, 0) + NVL (L.VLCOFINS, 0) + NVL (L.VLCSRF, 0) + NVL (L.VLINSS, 0) + NVL (L.VLIRRF, 0)
-           + + NVL (L.VLISS, 0)) AS VALOR,
+           + NVL (L.VLISS, 0)) AS VALOR,
            L.DTCOMPETENCIA,
            L.DTEMISSAO,
            L.CODCONTA,
