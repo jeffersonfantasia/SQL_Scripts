@@ -4,7 +4,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_FISCAL AS
         SELECT DISTINCT (NUMTRANSENT)
           FROM PCMOV
     ), NOTAS_DESPESAS AS (
-        SELECT E.CODFILIALNF,
+        SELECT E.CODFILIALNF AS CODFILIAL,
                E.DTEMISSAO,
                E.DTENT,
                E.NUMTRANSENT,
@@ -14,12 +14,10 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_FISCAL AS
                        ELSE E.CODCONT
                    END
                ) AS CODCONTA,
-               E.NUMNOTA,
-               E.ESPECIE,
                B.CODFISCAL,
                E.CODFORNEC,
-               ('CNPJ: ' || E.CGC || ' - ' || E.FORNECEDOR) AS FORNECEDOR,
-               B.VLCONTABIL,
+               (E.ESPECIE || ' ' || E.NUMNOTA || ' - CNPJ: ' || E.CGC || ' - ' || E.FORNECEDOR) AS HISTORICO,
+               B.VLCONTABIL AS VALOR,
                B.SITTRIBUT AS CST_ICMS,
                B.VLBASE,
                B.ALIQUOTA AS ALIQ_ICMS,
@@ -52,18 +50,16 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_FISCAL AS
         ))
      /*NÃO TRAZER REMESSAS*/
     )
-    SELECT N.CODFILIALNF,
+    SELECT N.CODFILIAL,
            N.DTEMISSAO,
            N.DTENT,
            N.NUMTRANSENT,
            N.CODCONTA,
            C.CONTACONTABIL,
-           N.ESPECIE,
-           N.NUMNOTA,
            N.CODFISCAL,
            N.CODFORNEC,
-           N.FORNECEDOR,
-           N.VLCONTABIL,
+           N.HISTORICO,
+           N.VALOR,
            N.CST_ICMS,
            N.VLBASE,
            N.ALIQ_ICMS,
