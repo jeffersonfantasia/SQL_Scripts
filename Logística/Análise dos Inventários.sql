@@ -1,25 +1,49 @@
-SELECT I.NUMINVENT,
-       I.DATA,
-       I.CODFILIAL,
-       I.CODPROD,
-       P.DESCRICAO,
-       M.MARCA,
-       I.QT1,
-       I.QTESTGER,
-       I.QTAVARIA1,
-       I.INVENTAVARIA,
-       I.DATACONT1,
-       I.CUSTO,
-       (I.QT1 - I.QTESTGER) DIF,
+SELECT NUMINVENT,
+       DATA,
+       CODFILIAL,
+       CODPROD,
+       DESCRICAO,
+       MARCA,
+       QTCONTADO,
+       QTESTGER,
+       QTAVARIA,
+       INVENTAVARIA,
+       CUSTO,
+       (QTCONTADO - QTESTGER) DIF,
        (
            CASE
-               WHEN (I.QT1 - I.QTESTGER) > 0 THEN 'ENTRADA'
+               WHEN (QTCONTADO - QTESTGER) > 0 THEN 'ENTRADA'
                ELSE 'PERDA'
            END
        ) AS OPERACAO,
-       ((I.QT1 - I.QTESTGER) * I.CUSTO) AS VLOPERACAO
-  FROM PCINVENTROT I
-  LEFT JOIN PCPRODUT P ON I.CODPROD = P.CODPROD
-  LEFT JOIN PCMARCA M ON P.CODMARCA = M.CODMARCA
- WHERE NUMINVENT = 1005
-   AND QT1 <> QTESTGER;
+       ((QTCONTADO - QTESTGER) * CUSTO) AS VLOPERACAO
+  FROM (
+    SELECT I.NUMINVENT,
+           I.DATA,
+           I.CODFILIAL,
+           I.CODPROD,
+           P.DESCRICAO,
+           M.MARCA,
+           SUM (I.QT1) AS QTCONTADO,
+           I.QTESTGER,
+           SUM (I.QTAVARIA1) AS QTAVARIA,
+           I.INVENTAVARIA,
+           E.CUSTOCONT AS CUSTO
+      FROM PCINVENTROT I
+      LEFT JOIN PCPRODUT P ON I.CODPROD = P.CODPROD
+      LEFT JOIN PCMARCA M ON P.CODMARCA = M.CODMARCA
+      LEFT JOIN PCEST E ON I.CODPROD = E.CODPROD
+       AND I.CODFILIAL = E.CODFILIAL
+     WHERE I.NUMINVENT = 1010
+     GROUP BY I.NUMINVENT,
+              I.DATA,
+              I.CODFILIAL,
+              I.CODPROD,
+              P.DESCRICAO,
+              M.MARCA,
+              I.QTESTGER,
+              I.INVENTAVARIA,
+              E.CUSTOCONT
+)
+ WHERE QTCONTADO <> QTESTGER;
+/
