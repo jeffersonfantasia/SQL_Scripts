@@ -2,9 +2,8 @@ WITH ESTOQUE_ENDERECADO AS (
     SELECT A.PROD_ID,
            SUM (A.QTD) AS QT_END,
            B.FILIAL_ID
-      FROM JCENDESTOQUE A,
-           JCENDAPTO B
-     WHERE A.APTO_ID = B.ID
+      FROM JCENDESTOQUE A
+      LEFT JOIN JCENDAPTO B ON A.APTO_ID = B.ID
      GROUP BY A.PROD_ID,
               B.FILIAL_ID
 ), ESTOQUE_GERENCIAL AS (
@@ -13,27 +12,15 @@ WITH ESTOQUE_ENDERECADO AS (
            C.QTESTGER,
            C.DTULTINVENT
       FROM PCEST C
-), ANALISE_EST_ENDERECADO_X_GER AS (
-        SELECT G.DTULTINVENT,
-               G.CODFILIAL,
-               G.CODPROD,
-               G.QTESTGER AS QT_GER,
-               E.QT_END,
-               (G.QTESTGER - E.QT_END) AS DIVERG
-          FROM ESTOQUE_ENDERECADO E,
-               ESTOQUE_GERENCIAL G
-         WHERE E.FILIAL_ID = G.CODFILIAL
-           AND E.PROD_ID = G.CODPROD
-           AND (G.QTESTGER - E.QT_END) <> 0
 ), BONUS_DIVERGENTE AS (
-        SELECT D.DATABONUS,
-               D.CODFILIAL,
-               E.CODPROD,
-               (E.QTNF - E.QTENTRADA) AS DIF_ENT
-          FROM PCBONUSC D,
-               PCBONUSI E
-         WHERE D.NUMBONUS = E.NUMBONUS
-         AND (E.QTNF - E.QTENTRADA) > 0
+    SELECT D.DATABONUS,
+           D.CODFILIAL,
+           E.CODPROD,
+           (E.QTNF - E.QTENTRADA) AS DIF_ENT
+      FROM PCBONUSC D,
+           PCBONUSI E
+     WHERE D.NUMBONUS = E.NUMBONUS
+       AND (E.QTNF - E.QTENTRADA) > 0
 ), PEDIDOS AS (
     SELECT G.CODFILIALRETIRA AS CODFILIAL,
            G.CODPROD,
@@ -60,66 +47,74 @@ WITH ESTOQUE_ENDERECADO AS (
               G.QT,
               F.NUMPED
 ), DEVOLUCAO AS (
-    SELECT I.DTMOV,
+    SELECT MAX (I.DTMOV) AS MAX_DTMOV,
            I.CODFILIAL,
            I.CODPROD,
            SUM (I.QT) AS DIV_DEV
       FROM PCMOV I
+      LEFT JOIN ESTOQUE_GERENCIAL G ON I.CODFILIAL = G.CODFILIAL
+       AND I.CODPROD = G.CODPROD
      WHERE I.NUMBONUS IS NULL
        AND I.CODOPER = 'ED'
-     GROUP BY I.DTMOV,
-              I.CODFILIAL,
+       AND I.DTMOV > G.DTULTINVENT
+     GROUP BY I.CODFILIAL,
               I.CODPROD
-) SELECT DTULTINVENT,
-         CODFILIAL,
-         CODPROD,
-         DESCRICAO,
-         QT_GER,
-         QT_END,
-         DIF,
-         BONUS_PEND,
-         SEPARACAO_PEND,
-         SITUACAO_SEP,
-         DEVOLUCAO_PEND,
-         (
-             CASE
-                 WHEN (DIF = BONUS_PEND
-                     OR DIF = (BONUS_PEND + SEPARACAO_PEND)
-                     OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND + BONUS_PEND)) THEN 'OK'
-                 WHEN (DIF = SEPARACAO_PEND
-                     OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND)
-                     OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND + BONUS_PEND)) THEN 'OK'
-                 WHEN (DIF = DEVOLUCAO_PEND
-                     OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND)
-                     OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND + BONUS_PEND)) THEN 'OK'
-                 ELSE 'ANALISAR'
-             END
-         ) AS STATUS
-    FROM (
-      SELECT A.DTULTINVENT,
-             A.CODFILIAL,
-             A.CODPROD,
-             P.DESCRICAO,
-             NVL (A.QT_GER, 0) AS QT_GER,
-             A.QT_END,
-             A.DIVERG AS DIF,
-             B.DIF_ENT AS BONUS_PEND,
-             P.QT AS SEPARACAO_PEND,
-             P.STATUS AS SITUACAO_SEP,
-             D.DIV_DEV AS DEVOLUCAO_PEND
-        FROM ANALISE_EST_ENDERECADO_X_GER A
-        LEFT JOIN PCPRODUT P ON A.CODPROD = P.CODPROD
-        LEFT JOIN BONUS_DIVERGENTE B ON B.CODFILIAL = A.CODFILIAL
-         AND B.CODPROD = A.CODPROD
-         AND B.DATABONUS > A.DTULTINVENT
-        LEFT JOIN PEDIDOS P ON P.CODFILIAL = A.CODFILIAL
-         AND P.CODPROD = A.CODPROD
-        LEFT JOIN DEVOLUCAO D ON D.CODFILIAL = A.CODFILIAL
-         AND D.CODPROD = A.CODPROD
-         AND D.DTMOV > A.DTULTINVENT
-       WHERE A.CODFILIAL IN (
-          7
-      )
-     /*([FILIAL])*/
-       ORDER BY A.CODPROD
-  )
+)
+SELECT DTULTINVENT,
+       CODFILIAL,
+       CODPROD,
+       DESCRICAO,
+       QT_GER,
+       QT_END,
+       DIF,
+       BONUS_PEND,
+       SEPARACAO_PEND,
+       SITUACAO_SEP,
+       DEVOLUCAO_PEND,
+       (
+           CASE
+               WHEN (DIF = BONUS_PEND
+                   OR DIF = (BONUS_PEND + SEPARACAO_PEND)
+                   OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND + BONUS_PEND)) THEN 'OK'
+               WHEN (DIF = SEPARACAO_PEND
+                   OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND)
+                   OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND + BONUS_PEND)) THEN 'OK'
+               WHEN (DIF = DEVOLUCAO_PEND
+                   OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND)
+                   OR DIF = (DEVOLUCAO_PEND + SEPARACAO_PEND + BONUS_PEND)) THEN 'OK'
+               ELSE 'ANALISAR'
+           END
+       ) AS STATUS
+  FROM (
+    SELECT G.DTULTINVENT,
+           G.CODFILIAL,
+           G.CODPROD,
+           P.DESCRICAO,
+           NVL (G.QTESTGER, 0) AS QT_GER,
+           NVL (E.QT_END, 0) AS QT_END,
+           NVL ((G.QTESTGER - E.QT_END), 0) AS DIF,
+           NVL (B.DIF_ENT, 0) AS BONUS_PEND,
+           NVL (P.QT, 0) AS SEPARACAO_PEND,
+           NVL (P.STATUS, '') AS SITUACAO_SEP,
+           NVL (D.DIV_DEV, 0) AS DEVOLUCAO_PEND
+      FROM ESTOQUE_GERENCIAL G
+      LEFT JOIN ESTOQUE_ENDERECADO E ON G.CODFILIAL = E.FILIAL_ID
+       AND G.CODPROD = E.PROD_ID
+      LEFT JOIN PCPRODUT P ON G.CODPROD = P.CODPROD
+      LEFT JOIN BONUS_DIVERGENTE B ON G.CODFILIAL = B.CODFILIAL
+       AND G.CODPROD = B.CODPROD
+       AND G.DTULTINVENT < B.DATABONUS
+      LEFT JOIN PEDIDOS P ON G.CODFILIAL = P.CODFILIAL
+       AND G.CODPROD = P.CODPROD
+      LEFT JOIN DEVOLUCAO D ON G.CODFILIAL = D.CODFILIAL
+       AND G.CODPROD = D.CODPROD
+     WHERE (NVL (G.QTESTGER, 0) - NVL (E.QT_END, 0)) <> 0
+       AND P.CODEPTO NOT IN (
+        97, 98, 99
+    )
+       AND G.CODFILIAL IN (
+        7
+    )
+     /*(['FILIAL'])*/
+     ORDER BY G.CODPROD
+)
