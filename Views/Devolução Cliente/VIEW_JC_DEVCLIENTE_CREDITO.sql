@@ -132,13 +132,13 @@ SELECT B.CODFILIAL,
        B.CODCONTAB_BANCO,
        (
            CASE
-               WHEN B.ROTINABAIXA LIKE '%1286%' THEN 'C'
+               WHEN (B.ROTINABAIXA LIKE '%1286%' OR NVL(B.ROTINABAIXA,'1303') = '1303') THEN 'C'
                ELSE 'D'
            END
        ) AS TIPO,
        (
            CASE
-               WHEN (B.ROTINABAIXA LIKE '%1286%') THEN 'BAIXA CRED NFD ' || B.NUMNOTA || ' - DUPLIC - ' || B.NUMNOTADESC || ' - '
+               WHEN (B.ROTINABAIXA LIKE '%1286%' OR NVL(B.ROTINABAIXA,'1303') = '1303') THEN 'BAIXA CRED NFD ' || B.NUMNOTA || ' - DUPLIC - ' || B.NUMNOTADESC || ' - '
                || B.CLIENTE
                ELSE 'PAG CRED NFD ' || B.NUMNOTA || ' - ' || B.CLIENTE
            END
