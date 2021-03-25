@@ -26,12 +26,11 @@ WITH ESTOQUE_ENDERECADO AS (
            G.CODPROD,
            (
                CASE
-                   WHEN (G.QT <> SUM (NVL (H.QTD_MOV, 0))) THEN 'A SEPARAR'
+                   WHEN (SUM (G.QT) <> SUM (NVL (H.QTD_MOV, 0))) THEN 'A SEPARAR'
                    ELSE 'SEPARADO'
                END
            ) AS STATUS,
-           G.QT,
-           F.NUMPED
+           SUM (G.QT) AS QT
       FROM PCPEDI G
      INNER JOIN PCPEDC F ON G.NUMPED = F.NUMPED
       LEFT JOIN JCENDOSITEM H ON G.NUMPED = H.PEDIDO_ID
@@ -41,9 +40,7 @@ WITH ESTOQUE_ENDERECADO AS (
         'L', 'M'
     )
      GROUP BY G.CODFILIALRETIRA,
-              G.CODPROD,
-              G.QT,
-              F.NUMPED
+              G.CODPROD
 ), DEVOLUCAO AS (
     SELECT MAX (I.DTMOV) AS MAX_DTMOV,
            I.CODFILIAL,
@@ -53,7 +50,9 @@ WITH ESTOQUE_ENDERECADO AS (
       LEFT JOIN ESTOQUE_GERENCIAL G ON I.CODFILIAL = G.CODFILIAL
        AND I.CODPROD = G.CODPROD
      WHERE I.NUMBONUS IS NULL
-       AND I.CODOPER IN ('ED','ET','ER')
+       AND I.CODOPER IN (
+        'ED', 'ET', 'ER'
+    )
        AND I.DTMOV > G.DTULTINVENT
      GROUP BY I.CODFILIAL,
               I.CODPROD
@@ -113,6 +112,6 @@ SELECT DTULTINVENT,
        AND G.CODFILIAL IN (
         1
     )
-     /*('[FILIAL]')*/
+     /*[FILIAL]*/
      ORDER BY G.CODPROD
 )
