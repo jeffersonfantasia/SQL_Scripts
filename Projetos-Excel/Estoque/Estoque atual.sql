@@ -9,13 +9,23 @@ WITH ESTOQUEFILIAL_7 AS (
     SELECT CODPROD,
            QTCOMPRA
       FROM (
-        SELECT I.CODPROD,
-               SUM (NVL (I.QTPEDIDA, 0)) - SUM (NVL (I.QTENTREGUE, 0)) QTCOMPRA
-          FROM PCITEM I
-         INNER JOIN PCPEDIDO P ON I.NUMPED = P.NUMPED
-         WHERE P.CODFILIAL = 2
-           AND I.QTPEDIDA <> I.QTENTREGUE
-         GROUP BY I.CODPROD
+        SELECT CODPROD,
+               SUM (NVL (QTPEDIDA, 0)) - SUM (NVL (QTENTREGUE, 0)) QTCOMPRA
+          FROM (
+            SELECT I.CODPROD,
+                   I.QTPEDIDA,
+                   (
+                       CASE
+                           WHEN I.QTENTREGUE > I.QTPEDIDA THEN I.QTPEDIDA
+                           ELSE I.QTENTREGUE
+                       END
+                   ) AS QTENTREGUE
+              FROM PCITEM I
+             INNER JOIN PCPEDIDO P ON I.NUMPED = P.NUMPED
+             WHERE P.CODFILIAL = 2
+        ) I
+         WHERE QTPEDIDA <> QTENTREGUE
+         GROUP BY CODPROD
     )
      WHERE QTCOMPRA > 0
 )
