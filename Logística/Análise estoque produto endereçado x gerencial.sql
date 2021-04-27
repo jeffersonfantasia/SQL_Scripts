@@ -110,7 +110,7 @@ SELECT DTULTINVENT,
         97, 98, 99
     )
        AND G.CODFILIAL IN (
-        1
+        2
     )
      /*[FILIAL]*/
      ORDER BY G.CODPROD
