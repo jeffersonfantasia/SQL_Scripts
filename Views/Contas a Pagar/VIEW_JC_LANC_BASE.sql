@@ -3,6 +3,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_BASE AS
            L.RECNUM,
            L.RECNUMPRINC,
            L.VPAGO,
+           L.VPAGOBORDERO,
             /*USADO COMO CONDICIONAL DENTRO DO BI*/
            (
                CASE
@@ -23,6 +24,8 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_BASE AS
                END
            ) AS VALOR,
             /*TRANSFORMAR OS VALORES NEGATIVOS PARA ARQUIVO CONTABILIDADE*/
+           L.TXPERM,
+           L.DESCONTOFIN,
            L.DTCOMPETENCIA,
            L.DTPAGTO,
            M.DTCOMPENSACAO,
@@ -34,7 +37,11 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_BASE AS
            C.GRUPOCONTA,
            L.CODFORNEC,
            L.TIPOPARCEIRO,
-           L.NUMTRANS
+           L.NUMTRANS,
+           L.NUMNOTA,
+           L.DUPLIC,
+           L.HISTORICO,
+           L.HISTORICO2
       FROM PCLANC L
      INNER JOIN PCMOVCR M ON L.NUMTRANS = M.NUMTRANS
       LEFT JOIN PCBANCO B ON M.CODBANCO = B.CODBANCO

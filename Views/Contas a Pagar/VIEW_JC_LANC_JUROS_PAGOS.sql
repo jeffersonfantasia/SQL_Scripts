@@ -4,7 +4,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_JUROS_PAGOS AS
         SELECT B.CODFILIAL,
                B.RECNUM,
                B.VPAGO,
-               L.TXPERM AS VALOR,
+               B.TXPERM AS VALOR,
                B.DTCOMPETENCIA,
                B.DTPAGTO,
                B.DTCOMPENSACAO,
@@ -20,15 +20,14 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_JUROS_PAGOS AS
                'J' AS TIPO,
                (
                    CASE
-                       WHEN L.DUPLIC IS NULL
-                           OR L.DUPLIC = '0' THEN 'JUR Nº ' || L.NUMNOTA || ' - ' || L.HISTORICO
-                       ELSE 'JUR Nº ' || L.NUMNOTA || '-' || L.DUPLIC || ' - ' || L.HISTORICO
+                       WHEN B.DUPLIC IS NULL
+                           OR B.DUPLIC = '0' THEN 'JUR Nº ' || B.NUMNOTA || ' - ' || B.HISTORICO
+                       ELSE 'JUR Nº ' || B.NUMNOTA || '-' || B.DUPLIC || ' - ' || B.HISTORICO
                    END
                ) HISTORICO
-          FROM PCLANC L
-         INNER JOIN VIEW_JC_LANC_BASE B ON L.RECNUM = B.RECNUM
-         INNER JOIN VIEW_JC_LANC_DESCJUR_DEVIDOS D ON L.RECNUM = D.RECNUMBAIXA
-         WHERE L.TXPERM > 0
+          FROM VIEW_JC_LANC_BASE B
+         INNER JOIN VIEW_JC_LANC_DESCJUR_DEVIDOS D ON B.RECNUM = D.RECNUMBAIXA
+         WHERE B.TXPERM > 0
      /*SOMENTE REGISTROS COM JUROS PAGOS*/
            AND D.HISTORICO LIKE 'JUROS%'
      /*PARA TERMOS SOMENTE O LANCAMENTO DE JUROS E NAO DE DESCONTO, IMPEDINDO DUPLICIDADE*/

@@ -24,15 +24,14 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_ALUGUEL_CARTAO AS
            'A' AS TIPO,
            (
                CASE B.TIPOPARCEIRO
-                   WHEN 'F'   THEN (B.RECNUM || ' - ' || F.FORNECEDOR || ' - ' || L.HISTORICO)
-                   WHEN 'C'   THEN (B.RECNUM || ' - ' || C.CLIENTE || ' - ' || L.HISTORICO)
-                   ELSE (B.RECNUM || ' - ' || L.HISTORICO)
+                   WHEN 'F'   THEN (B.RECNUM || ' - ' || F.FORNECEDOR || ' - ' || B.HISTORICO)
+                   WHEN 'C'   THEN (B.RECNUM || ' - ' || C.CLIENTE || ' - ' || B.HISTORICO)
+                   ELSE (B.RECNUM || ' - ' || B.HISTORICO)
                END
            ) AS HISTORICO
-      FROM PCLANC L
-     INNER JOIN VIEW_JC_LANC_BASE B ON L.RECNUM = B.RECNUM
-      LEFT JOIN PCFORNEC F ON L.CODFORNEC = F.CODFORNEC
-      LEFT JOIN PCCLIENT C ON L.CODFORNEC = C.CODCLI
-     WHERE L.CODCONTA = 620105
+      FROM VIEW_JC_LANC_BASE B
+      LEFT JOIN PCFORNEC F ON B.CODFORNEC = F.CODFORNEC
+      LEFT JOIN PCCLIENT C ON B.CODFORNEC = C.CODCLI
+     WHERE B.CODCONTA = 620105
          /*SOMENTE LANCAMENTOS DE TAXAS DE CARTAO*/;
 /
