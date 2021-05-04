@@ -1,0 +1,41 @@
+CREATE OR REPLACE VIEW VIEW_JC_LANC_EMP_CONTA_BANCO AS
+    SELECT B.CODFILIAL,
+           B.RECNUM,
+           B.VPAGO,
+           B.VALOR,
+           B.DTCOMPETENCIA,
+           B.DTPAGTO,
+           B.DTCOMPETENCIA AS DTCOMPENSACAO,
+           B.CODFILIALBANCO,
+           B.CODBANCO,
+           B.CODCONTABILBANCO,
+           B.CODCONTA,
+           B.GRUPOCONTA,
+           B.CODFORNEC,
+           '' AS CODCONTABCLIENTE,
+           B.TIPOPARCEIRO,
+           B.NUMTRANS,
+           'EC' AS TIPO,
+           B.HISTORICO
+      FROM VIEW_JC_LANC_DIF_EMPRESA B
+    UNION ALL
+    SELECT B.CODFILIALBANCO AS CODFILIAL,
+           B.RECNUM,
+           B.VPAGO,
+           B.VALOR,
+           B.DTCOMPETENCIA,
+           B.DTPAGTO,
+           B.DTCOMPETENCIA AS DTCOMPENSACAO,
+           B.CODFILIALBANCO,
+           B.CODBANCO,
+           B.CODCONTABILBANCO,
+           B.CODCONTA,
+           B.GRUPOCONTA,
+           B.CODFORNEC,
+           '' AS CODCONTABCLIENTE,
+           B.TIPOPARCEIRO,
+           B.NUMTRANS,
+           'EB' AS TIPO,
+           (B.RECNUM || ' - ENVIO EMPRESTIMOS A TERCEIROS') AS HISTORICO
+      FROM VIEW_JC_LANC_DIF_EMPRESA B;
+/
