@@ -1,0 +1,42 @@
+CREATE OR REPLACE VIEW VIEW_JC_LANC_COMISSAO_MKT AS
+    SELECT B.CODFILIAL,
+           B.RECNUM,
+           B.VPAGO,
+           (
+               CASE
+                   WHEN B.VPAGO < 0 THEN (B.VPAGO * - 1)
+                   ELSE B.VPAGO
+               END
+           ) AS VALOR,
+           B.DTCOMPETENCIA,
+           B.DTPAGTO,
+           B.DTCOMPETENCIA AS DTCOMPENSACAO,
+           B.CODFILIALBANCO,
+           B.CODBANCO,
+           B.CODCONTABILBANCO,
+           B.CODCONTA,
+           B.GRUPOCONTA,
+           B.CODFORNEC,
+           B.CODCONTABCLIENTE,
+           B.TIPOPARCEIRO,
+           B.NUMTRANS,
+           B.TIPO,
+           B.HISTORICO
+      FROM VIEW_JC_CARTAO_MKT B
+     WHERE B.CODCONTABCLIENTE IS NOT NULL
+     /*PARA TERMOS TODOS OS LANCAMENTOS QUE ENVOLVE COMISSAO DE MKT*/
+       AND ((B.CODBANCO IN (
+        40
+    )
+       AND B.VPAGO < 0)
+        OR (B.NUMTRANS = 0)
+     /* LANCAMENTO DOS IMPOSTOS DAS NOTAS PARA DEDUZIR DO VALOR*/
+        OR (B.CODBANCO IN (
+        36, 39
+    )
+       AND B.CODCONTA = 410104)
+     /*LANCAMENTOS DE ASSINATURA DA AMAZON*/
+        OR (B.CODBANCO = 11
+       AND B.CODCONTA = 620106))
+     /*NOTAS DE GATEWAY DA PAGAR.ME*/;
+/
