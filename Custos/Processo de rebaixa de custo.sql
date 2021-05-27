@@ -12,75 +12,25 @@ SELECT CODFAB,
 /
 
 /*----------------------------ESTOQUE E CUSTO NAS FILIAL 1,2,7----------------*/
-SELECT T.CODPROD,
-       T.QTESTGER,
-       T.VALORULTENT,
-       T.CUSTOFIN,
-       (
-           SELECT QTESTGER
-             FROM PCEST
-            WHERE CODPROD = T.CODPROD
-              AND CODFILIAL = 2
-       ) QT_2,
-       (
-           SELECT VALORULTENT
-             FROM PCEST
-            WHERE CODPROD = T.CODPROD
-              AND CODFILIAL = 2
-       ) VLULT_2,
-       (
-           SELECT CUSTOFIN
-             FROM PCEST
-            WHERE CODPROD = T.CODPROD
-              AND CODFILIAL = 2
-       ) CUSTO_2,
-       (
-           SELECT QTESTGER
-             FROM PCEST
-            WHERE CODPROD = T.CODPROD
-              AND CODFILIAL = 7
-       ) QT_7,
-       (
-           SELECT VALORULTENT
-             FROM PCEST
-            WHERE CODPROD = T.CODPROD
-              AND CODFILIAL = 7
-       ) VLULT_7,
-       (
-           SELECT CUSTOFIN
-             FROM PCEST
-            WHERE CODPROD = T.CODPROD
-              AND CODFILIAL = 7
-       ) CUSTO_7,
-              (
-           SELECT QTESTGER
-             FROM PCEST
-            WHERE CODPROD = T.CODPROD
-              AND CODFILIAL = 3
-       ) QT_3,
-       (
-           SELECT VALORULTENT
-             FROM PCEST
-            WHERE CODPROD = T.CODPROD
-              AND CODFILIAL = 3
-       ) VLULT_3,
-       (
-           SELECT CUSTOFIN
-             FROM PCEST
-            WHERE CODPROD = T.CODPROD
-              AND CODFILIAL = 3
-       ) CUSTO_3
-  FROM PCEST T
- WHERE T.CODFILIAL = 1
-   AND T.CODPROD IN (
-    809243, 807779, 807781, 805833, 809259, 806961, 806629, 806622, 806627, 806625, 809258, 805835, 801921, 806623, 801268, 806632
-    , 806621, 809257, 809261, 797327, 803084, 806964, 806962, 806963
-);
+SELECT *
+  FROM (
+    SELECT T.CODFILIAL,
+           T.CODPROD,
+           NVL (T.QTESTGER, 0) AS QTESTGER,
+           NVL (T.VALORULTENT, 0) AS VALORULTENT,
+           NVL (T.CUSTOFIN, 0) AS CUSTOFIN
+      FROM PCEST T
+     WHERE T.CODPROD IN (
+        797800, 797804, 797802, 796055, 799815, 802956, 808030, 808029
+    )
+) PIVOT (
+    SUM (QTESTGER)
+QTESTGER, SUM (VALORULTENT) VALORULTENT, SUM (CUSTOFIN) CUSTOFIN
+    FOR CODFILIAL
+    IN (1, 2, 7)
+)
+ ORDER BY CODPROD;
 /
-
-
-/*-----------------------ESTOQUE DE TODAS AS FILIAIS-------------------------------------*/
-
 
 
 /*-----------------------------------ANÁLISE DE PEÇAS VENDIDAS POR REDE DE CLIENTES OU CLIENTES----------------------------------*/
@@ -106,5 +56,5 @@ SELECT *
     FOR CODCLI
     IN (7354, 410, 386, 388, 4358, 7644, 8645, 7831)
 )
- ORDER BY CODPROD
+ ORDER BY CODPROD;
 /
