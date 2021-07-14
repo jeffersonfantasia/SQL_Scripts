@@ -325,7 +325,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PCPREST_BAIXADO AS
            (T.DUPLIC || '-' || T.PREST) AS DUPLICATA,
            M.CODBANCO,
            B.CODCONTABIL CODCONTABILBANCO,
-           (NVL(T.VPAGO, T.VALOR) * - 1) AS VALOR,
+           ((NVL(T.VPAGO, T.VALOR) * - 1) - (NVL(T.TXPERM,0) * - 1)) AS VALOR,
            C.CODCONTAB,
            T.CODCLI,
            T.CODCOB,
