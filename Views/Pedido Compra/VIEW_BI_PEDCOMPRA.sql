@@ -1,7 +1,7 @@
 CREATE OR REPLACE VIEW VIEW_BI_PEDCOMPRA AS
     WITH PEDIDOCOMPRA AS (
         SELECT P.CODFILIAL,
-               P.DATALANC AS DATA,
+               P.DTEMISSAO AS DATA,
                I.CODPROD,
                I.QTPEDIDA AS QTCOMPRA,
                (
@@ -10,7 +10,7 @@ CREATE OR REPLACE VIEW VIEW_BI_PEDCOMPRA AS
                        ELSE I.QTENTREGUE
                    END
                ) AS QTENTREGUE,
-               (I.PLIQUIDO + I.VLIPI + I.VLST) AS PCOMPRA,
+               (I.PLIQUIDO + I.VLIPI + I.VLST) AS PUNIT,
                (
                    CASE
                        WHEN P.CODCOMPRADOR = 47 THEN 2
@@ -32,9 +32,9 @@ CREATE OR REPLACE VIEW VIEW_BI_PEDCOMPRA AS
            C.CODPROD,
            C.QTCOMPRA,
            C.QTENTREGUE,
-           C.PCOMPRA,
-           (C.QTCOMPRA * C.PCOMPRA) AS VLCOMPRA,
-           (C.QTENTREGUE * C.PCOMPRA) AS VLENTREGUE,
+           C.PUNIT,
+           (C.QTCOMPRA * C.PUNIT) AS VLCOMPRA,
+           (C.QTENTREGUE * C.PUNIT) AS VLENTREGUE,
            C.CODCOMPRADOR,
            C.TIPOCOMPRA,
            C.CODFORNEC
