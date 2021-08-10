@@ -13,7 +13,7 @@ SELECT CODPROD,
         'F', 'C'
     )
        AND V.CODGERENTE IN (
-        1, 8, 9
+        1, 8, 9, 10
     )
 )
  GROUP BY CODPROD;
