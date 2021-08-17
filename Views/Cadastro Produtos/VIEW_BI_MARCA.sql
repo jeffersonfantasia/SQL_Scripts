@@ -5,7 +5,7 @@ CREATE OR REPLACE VIEW VIEW_BI_MARCA AS
                    WHEN M.CODMARCA IN (
                        165, 166, 167
                    ) THEN 'DOREL'
-                   ELSE M.MARCA
+                   ELSE UPPER(M.MARCA)
                END
            ) AS MARCA
       FROM PCMARCA M
