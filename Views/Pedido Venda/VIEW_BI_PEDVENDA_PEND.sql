@@ -30,6 +30,21 @@ CREATE OR REPLACE VIEW VIEW_BI_PEDVENDAPEND AS
            M.TIPO AS TIPOBLOQUEIO,
            M.MOTIVO AS MOTIVOBLOQUEIO,
            TRIM (C.OBS) AS OBSPEDIDO,
+           (
+               CASE
+                   WHEN I.POSICAO = 'L'
+                      AND C.CODCOB = 'ANTE' THEN 'ANTECIPADO'
+                   WHEN I.POSICAO = 'L' THEN 'LIBERADO'
+                   WHEN I.POSICAO = 'M' THEN 'LOGÍSTICA'
+                   WHEN TRIM (C.OBS) LIKE '%FATURAR%' THEN 'DATA PROGRAMADA'
+                   WHEN I.POSICAO = 'P' THEN 'PENDENTE'
+                   WHEN (I.POSICAO = 'B'
+                      AND M.TIPO = 'F') THEN 'BLOQUEADO FINANCEIRO'
+                   WHEN (I.POSICAO = 'B'
+                      AND M.TIPO = 'C') THEN 'BLOQUEADO COMERCIAL'
+                   ELSE 'VERIFICAR'
+               END
+           ) AS MOTIVOPENDENTE,
            C.CONDVENDA,
            I.CODCLI
       FROM PCPEDI I
