@@ -1,113 +1,68 @@
-SELECT CODPROD,
-       DESCRICAO,
-       DTULTENT_7,
-       VALORULTENT_7_2,
-       QTDISPONIVEL_7,
-       QTDISPONIVEL_2,
-       QTDISPONIVEL_1,
-       QTVENDIDA_1
-  FROM (
-    SELECT CODPROD,
-           DESCRICAO,
-           (QTVENDMES + QTVENDMES1 + QTVENDMES2 + QTVENDMES3) QTVENDIDA_1,
-           DTULTENT_7,
+WITH ESTOQUE_F7 AS (
+    SELECT E.CODPROD AS CODPROD_F7,
+           E.DTULTENT AS DTULTENT_F7,
+           ROUND (NVL (E.VALORULTENT, 0), 2) AS VLULTENT_F7,
+           (NVL (E.QTESTGER, 0) - NVL (E.QTRESERV, 0) - NVL (E.QTBLOQUEADA, 0)) AS QTDISP_F7,
+           (NVL (E.QTVENDMES, 0) + NVL (E.QTVENDMES1, 0) + NVL (E.QTVENDMES2, 0) + NVL (E.QTVENDMES3, 0)) AS QTVENDIDA_F7
+      FROM PCEST E
+     WHERE E.CODFILIAL = 7
+), ESTOQUE_OUTRALOJA AS (
+    SELECT E.CODPROD AS CODPROD_OUTRALOJA,
+           (NVL (E.QTESTGER, 0) - NVL (E.QTRESERV, 0) - NVL (E.QTBLOQUEADA, 0)) AS QTDISP_OUTRALOJA,
+           (NVL (E.QTVENDMES, 0) + NVL (E.QTVENDMES1, 0) + NVL (E.QTVENDMES2, 0) + NVL (E.QTVENDMES3, 0)) AS QTVENDIDA_OUTRALOJA
+      FROM PCEST E
+     WHERE E.CODFILIAL = 8
+), ESTOQUE_F2 AS (
+    SELECT E.CODPROD AS CODPROD_F2,
+           ROUND (NVL (E.VALORULTENT, 0), 2) AS VLULTENT_F2,
+           NVL (E.QTESTGER, 0) - NVL (E.QTRESERV, 0) - NVL (E.QTBLOQUEADA, 0) AS QTDISP_F2
+      FROM PCEST E
+     WHERE E.CODFILIAL = 2
+), ESTOQUE_LOJAATUAL AS (
+    SELECT E.CODFILIAL AS CODFILIAL_LOJAATUAL,
+           E.CODPROD AS CODPROD_LOJAATUAL,
+           (NVL (E.QTESTGER, 0) - NVL (E.QTRESERV, 0) - NVL (E.QTBLOQUEADA, 0)) AS QTDISP_LOJAATUAL,
+           (NVL (E.QTVENDMES, 0) + NVL (E.QTVENDMES1, 0) + NVL (E.QTVENDMES2, 0) + NVL (E.QTVENDMES3, 0)) AS QTVENDIDA_LOJAATUAL
+      FROM PCEST E
+     WHERE E.CODFILIAL = 1
+)
+    SELECT P.CODPROD,
+           P.DESCRICAO,
+           O.DTULTENT_F7,
            (
                CASE
-                   WHEN VALORULTENT_7 IS NULL THEN VALORULTENT_2
-                   ELSE VALORULTENT_7
+                   WHEN  VLULTENT_F7 IS NULL THEN VLULTENT_F2
+                   ELSE  VLULTENT_F7
                END
-           ) VALORULTENT_7_2,
-           (QTESTGER_7 - QTRESERV_7 - QTBLOQUEADA_7) QTDISPONIVEL_7,
-           (QTESTGER - QTRESERV - QTBLOQUEADA) QTDISPONIVEL_1,
-           (QTESTGER_2 - QTRESERV_2 - QTBLOQUEADA_2) QTDISPONIVEL_2
-      FROM (
-        SELECT P.CODPROD,
-               P.DESCRICAO,
-               P.CODCATEGORIA,
-               NVL (E.QTESTGER, 0) QTESTGER,
-               NVL (E.QTRESERV, 0) QTRESERV,
-               NVL (E.QTBLOQUEADA, 0) QTBLOQUEADA,
-               E.QTVENDMES,
-               E.QTVENDMES1,
-               E.QTVENDMES2,
-               E.QTVENDMES3,
-               (
-                   SELECT PCEST.DTULTENT
-                     FROM PCEST
-                    WHERE PCEST.CODPROD = P.CODPROD
-                      AND PCEST.CODFILIAL = 7
-               ) DTULTENT_7,
-               (
-                   SELECT ROUND (PCEST.VALORULTENT, 2)
-                     FROM PCEST
-                    WHERE PCEST.CODPROD = P.CODPROD
-                      AND PCEST.CODFILIAL = 7
-               ) VALORULTENT_7,
-               (
-                   SELECT NVL (PCEST.QTESTGER, 0)
-                     FROM PCEST
-                    WHERE PCEST.CODPROD = P.CODPROD
-                      AND PCEST.CODFILIAL = 7
-               ) QTESTGER_7,
-               (
-                   SELECT NVL (PCEST.QTRESERV, 0)
-                     FROM PCEST
-                    WHERE PCEST.CODPROD = P.CODPROD
-                      AND PCEST.CODFILIAL = 7
-               ) QTRESERV_7,
-               (
-                   SELECT NVL (PCEST.QTBLOQUEADA, 0)
-                     FROM PCEST
-                    WHERE PCEST.CODPROD = P.CODPROD
-                      AND PCEST.CODFILIAL = 7
-               ) QTBLOQUEADA_7,
-               (
-                   SELECT ROUND (PCEST.VALORULTENT, 2)
-                     FROM PCEST
-                    WHERE PCEST.CODPROD = P.CODPROD
-                      AND PCEST.CODFILIAL = 2
-               ) VALORULTENT_2,
-               (
-                   SELECT NVL (PCEST.QTESTGER, 0)
-                     FROM PCEST
-                    WHERE PCEST.CODPROD = P.CODPROD
-                      AND PCEST.CODFILIAL = 2
-               ) QTESTGER_2,
-               (
-                   SELECT NVL (PCEST.QTRESERV, 0)
-                     FROM PCEST
-                    WHERE PCEST.CODPROD = P.CODPROD
-                      AND PCEST.CODFILIAL = 2
-               ) QTRESERV_2,
-               (
-                   SELECT NVL (PCEST.QTBLOQUEADA, 0)
-                     FROM PCEST
-                    WHERE PCEST.CODPROD = P.CODPROD
-                      AND PCEST.CODFILIAL = 2
-               ) QTBLOQUEADA_2
-          FROM PCPRODUT P,
-               PCEST E
-         WHERE E.CODPROD = P.CODPROD
-           AND P.CODCATEGORIA NOT IN (
-            4000, 4011, 4012, 4013, 4014, 4015, 4030
-        )
-     /*PUERICULTURA PESADA*/
-           AND P.CODSEC NOT IN (
-            300, 301
-        )
-     /*BOLSAS E MOCHILAS , LANCHEIRAS E ESTOJOS*/
-           AND P.CODEPTO NOT IN (
-            97
-        )
-     /*MATERIAL EMBALAGENS*/
-           AND E.CODFILIAL = 1
+           ) VLULTENT_F7_F2,
+           O.QTDISP_F7,      
+           A.QTDISP_F2,
+           B.QTDISP_OUTRALOJA,
+           F.QTDISP_LOJAATUAL,
+           O.QTVENDIDA_F7,
+           B.QTVENDIDA_OUTRALOJA,    
+           F.QTVENDIDA_LOJAATUAL
+      FROM PCEST E
+     INNER JOIN PCPRODUT P ON E.CODPROD = P.CODPROD
+     INNER JOIN ESTOQUE_LOJAATUAL F ON E.CODPROD = F.CODPROD_LOJAATUAL
+       AND E.CODFILIAL = F.CODFILIAL_LOJAATUAL
+      LEFT JOIN ESTOQUE_F7 O ON E.CODPROD = O.CODPROD_F7
+      LEFT JOIN ESTOQUE_OUTRALOJA B ON E.CODPROD = B.CODPROD_OUTRALOJA
+      LEFT JOIN ESTOQUE_F2 A ON E.CODPROD = A.CODPROD_F2
+       /*PUERICULTURA PESADA -- para loja do shopping acrescentar puericultura leve */
+       AND P.CODCATEGORIA NOT IN (
+        4000, 4011, 4012, 4013, 4014, 4015, 4030
     )
-)
- WHERE QTDISPONIVEL_1 <= 0
-   AND (QTDISPONIVEL_7 >= 1
-    OR QTDISPONIVEL_2 > 0)
-   AND QTVENDIDA_1 >= 0
- ORDER BY QTVENDIDA_1 DESC,
-          QTDISPONIVEL_7 DESC,
-          QTDISPONIVEL_2 DESC;
-/
+      /*BOLSAS E MOCHILAS , LANCHEIRAS E ESTOJOS*/
+       AND P.CODSEC NOT IN (
+        300, 301
+    )
+    /*MATERIAL EMBALAGENS*/
+       AND P.CODEPTO NOT IN (
+        97
+    )
+ WHERE (O.QTDISP_F7 > 0 OR A.QTDISP_F2 > 0)
+   AND F.QTDISP_LOJAATUAL <= 0
+ ORDER BY F.QTVENDIDA_LOJAATUAL DESC,
+          O.QTDISP_F7 DESC,
+          A.QTDISP_F2 DESC;
