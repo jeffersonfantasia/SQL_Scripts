@@ -85,6 +85,21 @@ SELECT E.CODFILIAL,
    AND QTEST < 0;
 /
 
+/*Estoque contabil menor que zero - Filial 8*/
+SELECT E.CODFILIAL,
+       E.CODPROD,
+       P.DESCRICAO,
+       E.QTEST,
+       E.QTESTGER
+  FROM PCEST E,
+       PCPRODUT P
+ WHERE E.CODFILIAL IN (
+  '8'
+)
+   AND E.CODPROD = P.CODPROD
+   AND QTEST < 0;
+/
+
 /*Estoque Contábil diferente que zero - Simples Nacional*/
 SELECT E.CODFILIAL,
        E.CODPROD,
