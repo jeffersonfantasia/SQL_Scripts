@@ -53,7 +53,7 @@ WITH CUSTO_COMPRA AS (
            NVL (E.QTINDENIZ, 0) AS QTAVARIA
       FROM PCEST E
      WHERE E.CODFILIAL IN (
-        1, 2, 7
+        1, 2, 7, 8
     )
 ), PENDENTE_COMPRAS AS (
     SELECT CODPROD,
@@ -123,6 +123,6 @@ SELECT *
     AVG (QTDISPONIVEL)
 QTDISP, AVG (QTAVARIA) QTAVARIA
     FOR CODFILIAL
-    IN (1, 2, 7)
+    IN (1, 2, 7, 8)
 );
 /
