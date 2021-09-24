@@ -1,10 +1,12 @@
 SELECT DTMOV,
+       CODFILIAL,
        CODMARCA,
        CODUSUR,
        SUM (VALOR) AS VALOR
   FROM (
     SELECT M.DTMOV,
            P.CODMARCA,
+           M.CODFILIAL,
            E.CODUSURDEVOL AS CODUSUR,
            M.QTCONT * (M.PUNITCONT + NVL (M.VLFRETE, 0) + NVL (M.VLOUTROS, 0)) AS VALOR
       FROM PCMOV M
@@ -21,6 +23,7 @@ SELECT DTMOV,
        AND M.DTCANCEL IS NULL
 )
  GROUP BY DTMOV,
+          CODFILIAL,
           CODMARCA,
           CODUSUR;
 /

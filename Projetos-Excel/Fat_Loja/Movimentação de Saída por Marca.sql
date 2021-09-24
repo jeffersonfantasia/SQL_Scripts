@@ -1,10 +1,12 @@
 SELECT DTMOV,
+       CODFILIAL,
        CODMARCA,
        CODUSUR,
        COUNT (CODPROD) AS PEÇAS,
        SUM (VALOR) AS VALOR
   FROM (
     SELECT M.DTMOV,
+           M.CODFILIAL,
            P.CODMARCA,
            S.CODUSUR,
            M.CODPROD,
@@ -23,6 +25,7 @@ SELECT DTMOV,
        AND M.DTCANCEL IS NULL
 )
  GROUP BY DTMOV,
+          CODFILIAL,
           CODMARCA,
           CODUSUR;
 /
