@@ -9,7 +9,7 @@ SELECT *
            M.CODPROD,
            P.DESCRICAO,
            M.CODUSUR,
-           SUBSTR (U.NOME, 1, 7) VENDEDOR,
+           U.USURDIRFV AS VENDEDOR,
            V.CODGERENTE,
            M.PERCOM,
            (
@@ -47,6 +47,7 @@ SELECT *
               M.CODPROD,
               P.DESCRICAO,
               M.CODUSUR,
+              U.USURDIRFV,
               U.NOME,
               V.CODGERENTE,
               M.PERCOM
