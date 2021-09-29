@@ -28,9 +28,17 @@ CREATE OR REPLACE VIEW VIEW_JC_CUSTOLIQ_240 AS
     ), CUSTO_COMPRA AS (
         SELECT P.CODFILIAL,
                P.CODPROD,
-               NVL (ROUND ((NVL (P.CUSTOREP, 0) * ((100 - P.PERCDESC) / 100)), 4), 0) AS PCOMPRA,
-               NVL (ROUND ((NVL (P.CUSTOREP, 0) * ((100 - P.PERCDESC) / 100)), 6), 0) AS PLIQCOMPRA
-          FROM PCPRODFILIAL P
+               ROUND (NVL ((P.CUSTOREP * (1 - P.PERCDESC)), 0), 4) AS PCOMPRA,
+               ROUND (NVL ((P.CUSTOREP * (1 - P.PERCDESC)), 0), 6) AS PLIQCOMPRA
+          FROM (
+            SELECT P.CODFILIAL,
+                   P.CODPROD,
+                   P.CUSTOREP,
+                   1 - ((1 - P.PERCDESC1 / 100) * (1 - P.PERCDESC2 / 100) * (1 - P.PERCDESC3 / 100) * (1 - P.PERCDESC4 / 100) * (
+                   1 - P.PERCDESC5 / 100) * (1 - P.PERCDESC6 / 100) * (1 - P.PERCDESC7 / 100) * (1 - P.PERCDESC8 / 100) * (1 - P.
+                   PERCDESC9 / 100) * (1 - P.PERCDESC10 / 100)) PERCDESC
+              FROM PCPRODFILIAL P
+        ) P
     ), CALCULOS_CUSTO AS (
         SELECT E.CODFILIAL,
                P.CODPROD,
