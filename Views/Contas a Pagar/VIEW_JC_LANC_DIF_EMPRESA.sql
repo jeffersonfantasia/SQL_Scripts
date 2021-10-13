@@ -4,7 +4,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_DIF_EMPRESA AS
                (
                    CASE
                        WHEN B.CODFILIAL IN (
-                           1, 2, 7, 99
+                           1, 2, 7, 8, 99
                        ) THEN '1'
                        ELSE B.CODFILIAL
                    END
@@ -15,7 +15,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_DIF_EMPRESA AS
                (
                    CASE
                        WHEN L.CODFILIAL IN (
-                           1, 2, 7
+                           1, 2, 7, 8
                        ) THEN '1'
                        ELSE L.CODFILIAL
                    END
