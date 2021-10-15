@@ -10,7 +10,7 @@ SELECT *
            E.QTBLOQUEADA,
            E.QTINDENIZ
       FROM PCEST E,
-           PCPRODUT P
+           PCPRODUT P   
      WHERE E.CODPROD = P.CODPROD
        AND E.CODFILIAL = 1
 )
