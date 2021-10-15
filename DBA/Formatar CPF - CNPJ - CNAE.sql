@@ -1,0 +1,11 @@
+SELECT DECODE (CPF, NULL, NULL, TRANSLATE (TO_CHAR (CPF / 100, '000,000,000.00'), ',.', '.-')) CPF_COM_MASCARA,
+       REGEXP_REPLACE (CNPJ, '([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{4})', '\1.\2.\3/\4-') CPF_COM_MASCARA_REGEXP,
+       REGEXP_REPLACE (CNAE, '([0-9]{4})([0-9]{1})([0-9]{2})', '\1-\2/\3') CNAE_COM_MASCARA_REGEXP
+  FROM ((
+    SELECT '12345678912' CPF,
+           '12345678000189' CNPJ,
+           '2834567' CNAE
+     /* 2833000*/
+      FROM DUAL
+));
+/
