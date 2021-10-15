@@ -14,9 +14,9 @@ SELECT M.DTCOMPENSACAO,
                SELECT SUM (M.VALOR) ENTRADAS
                  FROM PCMOVCR M
                 WHERE M.TIPO <> 'C'
-                  AND M.DTCOMPENSACAO < TO_DATE ('01/04/2021', 'DD/MM/YYYY')
+                  AND M.DTCOMPENSACAO < TO_DATE ('01/09/2021', 'DD/MM/YYYY')
                   AND M.CONCILIACAO = 'OK'
-                  AND M.CODBANCO = 48
+                  AND M.CODBANCO = 1
                   AND M.CODCOB IN (
                    'D'
                )
@@ -25,18 +25,18 @@ SELECT M.DTCOMPENSACAO,
                       SELECT (SUM (M.VALOR) * - 1) SAIDAS
                         FROM PCMOVCR M
                        WHERE M.TIPO = 'C'
-                         AND M.DTCOMPENSACAO < TO_DATE ('01/04/2021', 'DD/MM/YYYY')
+                         AND M.DTCOMPENSACAO < TO_DATE ('01/09/2021', 'DD/MM/YYYY')
                          AND M.CONCILIACAO = 'OK'
-                         AND M.CODBANCO = 48
+                         AND M.CODBANCO = 1
                          AND M.CODCOB IN (
                           'D'
                       )
                   ) SAIDAS
        ) SI
  WHERE M.CONCILIACAO = 'OK'
-   AND TRUNC (M.DTCOMPENSACAO) >= TO_DATE ('01/04/2021', 'DD/MM/YYYY')
-   AND TRUNC (M.DTCOMPENSACAO) <= TO_DATE ('30/04/2021', 'DD/MM/YYYY')
-   AND M.CODBANCO = 48
+   AND TRUNC (M.DTCOMPENSACAO) >= TO_DATE ('01/09/2021', 'DD/MM/YYYY')
+   AND TRUNC (M.DTCOMPENSACAO) <= TO_DATE ('30/09/2021', 'DD/MM/YYYY')
+   AND M.CODBANCO = 1
    AND M.CODCOB IN (
     'D'
 )
