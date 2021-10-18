@@ -14,13 +14,10 @@ SELECT *
            M.PERCOM,
            (
                CASE
-                   WHEN (M.CODUSUR = 18
-                       OR M.CODUSUR = 34
-                       OR M.CODUSUR = 17) THEN 0
+                   WHEN M.CODUSUR IN (18, 34, 17, 56, 64)
+                   THEN 0
                    WHEN V.CODGERENTE = 1 THEN 3.2
-                   WHEN V.CODGERENTE = 2 THEN 0
                    WHEN V.CODGERENTE = 3 THEN 0.5
-                   WHEN V.CODGERENTE = 4 THEN 0
                    ELSE 0
                END
            ) PERCORRETO
