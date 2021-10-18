@@ -72,7 +72,7 @@ SELECT *
        AND E.CODFILIAL = F.CODFILIAL
        AND P.DTEXCLUSAO IS NULL
        AND F.CODFILIAL IN (
-        1, 2, 3, 4, 7, 8
+        1, 7, 8
     )
 )
  WHERE (PERCDESC <> PERCDESC_MASTER
@@ -143,7 +143,7 @@ SELECT *
        AND E.CODFILIAL = F.CODFILIAL
        AND P.DTEXCLUSAO IS NULL
        AND F.CODFILIAL IN (
-        1, 2, 3, 4, 7
+        1, 7, 8
     )
 )
  WHERE (PERCDESC <> PERCDESC_MASTER
@@ -214,7 +214,7 @@ SELECT CODMASTER,
        AND E.CODFILIAL = F.CODFILIAL
        AND P.DTEXCLUSAO IS NULL
        AND F.CODFILIAL IN (
-        1, 2, 3, 4, 7, 8
+        1, 7, 8
     )
 )
  WHERE (PERCDESC <> PERCDESC_MASTER
