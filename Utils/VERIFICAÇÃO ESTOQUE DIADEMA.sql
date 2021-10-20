@@ -33,8 +33,6 @@ SELECT A.CODFILIAL,
           CODPROD;
 /
 
-
-
 /*-------VERIFICAÇÃO ESTOQUE JABAQUARA--------------*/
 SELECT A.CODFILIAL,
        A.CODPROD,
