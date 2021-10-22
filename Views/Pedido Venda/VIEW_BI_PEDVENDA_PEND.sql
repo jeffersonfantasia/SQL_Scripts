@@ -33,18 +33,18 @@ CREATE OR REPLACE VIEW VIEW_BI_PEDVENDAPEND AS
            (
                CASE
                    WHEN I.POSICAO = 'L'
-                      AND C.CODCOB = 'ANTE' THEN 'ANTECIPADO'
-                   WHEN I.POSICAO = 'L' THEN 'LIBERADO'
-                   WHEN I.POSICAO = 'M' THEN 'LOGÍSTICA'
-                   WHEN TRIM (C.OBS) LIKE '%FATURAR%' THEN 'DATA PROGRAMADA'
-                   WHEN I.POSICAO = 'P' THEN 'PENDENTE'
+                      AND C.CODCOB = 'ANTE' THEN 1 --'ANTECIPADO'
+                   WHEN I.POSICAO = 'L' THEN 2 --'LIBERADO'
+                   WHEN I.POSICAO = 'M' THEN 3 --'LOGÍSTICA'
+                   WHEN TRIM (C.OBS) LIKE '%FATURAR%' THEN 4 --'DATA PROGRAMADA'
+                   WHEN I.POSICAO = 'P' THEN 5 --'PENDENTE'
                    WHEN (I.POSICAO = 'B'
-                      AND M.TIPO = 'F') THEN 'BLOQUEADO FINANCEIRO'
+                      AND M.TIPO = 'F') THEN 6 --'BLOQUEADO FINANCEIRO'
                    WHEN (I.POSICAO = 'B'
-                      AND M.TIPO = 'C') THEN 'BLOQUEADO COMERCIAL'
-                   ELSE 'VERIFICAR'
+                      AND M.TIPO = 'C') THEN 7 --'BLOQUEADO COMERCIAL'
+                   ELSE 99
                END
-           ) AS MOTIVOPENDENTE,
+           ) AS CODMOTIVOPENDENTE,
            C.CONDVENDA,
            I.CODCLI
       FROM PCPEDI I
