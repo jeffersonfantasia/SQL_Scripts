@@ -34,5 +34,10 @@ CREATE OR REPLACE VIEW VIEW_BI_CLIENTE AS
           FROM PCNFENT E
          WHERE E.CODFORNEC = C.CODCLI
            AND E.TIPODESCARGA = 'DF'
+    )
+        OR EXISTS (
+        SELECT P.CODCLI
+          FROM PCPEDC P
+         WHERE P.CODCLI = C.CODCLI
     );
 /
