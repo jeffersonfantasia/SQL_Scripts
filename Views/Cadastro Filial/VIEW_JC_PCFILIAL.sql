@@ -8,7 +8,7 @@ SELECT CODIGO AS CODFILIAL,
        END) AS FILIAIS,
        (CASE
          WHEN NOMEREMETENTE IS NULL THEN
-          'FILIAL 99'
+          'JC BROTHERS'
          ELSE
           NOMEREMETENTE
        END) AS EMPRESAS
