@@ -1,0 +1,46 @@
+CREATE OR REPLACE VIEW VIEW_JC_BASE_PREST AS
+    SELECT (T.DUPLIC || '-' || T.PREST || '-' || T.NUMTRANSVENDA) AS CODDUPLIC,
+           T.CODFILIAL,
+           T.DTEMISSAO,
+           T.DTBAIXA,
+           T.DTPAG,
+           T.DTVENC,
+           T.DTINCLUSAOMANUAL,
+           (T.DUPLIC || '-' || T.PREST) AS DUPLICATA,
+           M.CODBANCO,
+           B.CODCONTABIL AS CODCONTABILBANCO,
+           T.VALORDESC,
+           T.VALOR,
+           T.TXPERM,
+           T.VPAGO,
+           C.CODCONTAB,
+           T.CODCLI,
+           T.CODCOB,
+           T.CODUSUR,
+           T.NUMTRANSVENDA,
+           T.NUMTRANS,
+           (
+               CASE NVL (T.CARTORIO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
+                   ELSE T.CARTORIO
+               END
+           ) AS CARTORIO,
+           (
+               CASE NVL (T.PROTESTO, 'N')
+                   WHEN 'S'   THEN 'SIM'
+                   WHEN 'N'   THEN 'NÃO'
+                   ELSE T.PROTESTO
+               END
+           ) AS PROTESTO,
+           COALESCE (TRIM (C.CLIENTE), TRIM (D.CLIENTE)) AS CLIENTE
+      FROM PCPREST T
+      /*RETIRAR COBRANÇAS RELACIONADOS NA VIEW*/
+     INNER JOIN VIEW_JC_PREST_COB A ON A.CODDUPLIC = (T.DUPLIC || '-' || T.PREST || '-' || T.NUMTRANSVENDA)
+      /*RETIRAR BANCOS RELACIONADOS NA VIEW E LANÇAMENTOS ESTORNADOS*/
+      /*PARA TRAZER SOMENTE DUPLICATAS QUE MOVIMENTARAM NUMERARIOS, OU SEJA, QUE FORAM PAGAS*/
+     INNER JOIN VIEW_JC_PREST_BANCOS M ON M.NUMTRANS = T.NUMTRANS
+      LEFT JOIN PCNFSAID D ON T.NUMTRANSVENDA = D.NUMTRANSVENDA
+      LEFT JOIN PCCLIENT C ON T.CODCLI = C.CODCLI
+      LEFT JOIN PCBANCO B ON M.CODBANCO = B.CODBANCO;
+/
