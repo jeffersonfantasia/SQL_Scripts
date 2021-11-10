@@ -84,6 +84,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LOGISTICA_CORP AS
     SELECT CAST (P.CODFILIAL AS NUMBER) AS CODFILIAL,
            P.CODCLI,
            P.NUMPED,
+           P.NUMPEDCLI,
            P.DATA,
            P.VLATEND,
            (
