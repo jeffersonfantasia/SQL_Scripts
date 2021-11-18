@@ -45,8 +45,63 @@ SELECT C.CODCLI,
        P.DESCRICAO AS PRODUTO,
        P.NBM AS NCM,
        L.ORIGEMMERTRIB AS ORIGEM,
-       B.CST,
-       B.CFOP,
+       (
+           CASE
+               WHEN C.CONDVENDA = 5         THEN B.CST_BONIF
+               WHEN C.CONDVENDA = 7
+                  AND C.CONTAORDEM = 'N' THEN B.CST_ENTFUT
+               WHEN C.CONDVENDA = 8
+                  AND C.CONTAORDEM = 'N' THEN B.CST_ENTREGA_ENTFUT
+               WHEN C.CONDVENDA = 7
+                  AND C.CONTAORDEM = 'S' THEN B.CST_CONTAORDEM
+               WHEN C.CONDVENDA = 8
+                  AND C.CONTAORDEM = 'S' THEN B.CST_ENTREGA_CONTAORDEM
+               WHEN T.CONSUMIDORFINAL = 'S' THEN CST_PF
+               ELSE B.CST
+           END
+       ) AS CST,
+       (
+           CASE
+               WHEN C.CONDVENDA = 5
+                  AND T.ESTCOB = 'SP' THEN B.CFOP_BONIF
+               WHEN C.CONDVENDA = 5
+                  AND T.ESTCOB <> 'SP' THEN B.CFOP_BONIF_INTER
+               WHEN C.CONDVENDA = 7
+                  AND C.CONTAORDEM = 'N'
+                  AND T.ESTCOB = 'SP' THEN B.CFOP_ENT_FUT
+               WHEN C.CONDVENDA = 7
+                  AND C.CONTAORDEM = 'N'
+                  AND T.ESTCOB <> 'SP' THEN B.CFOP_ENT_FUT_INTER
+               WHEN C.CONDVENDA = 8
+                  AND C.CONTAORDEM = 'N'
+                  AND T.ESTCOB = 'SP' THEN B.CFOP_ENTREGA_ENT_FUT
+               WHEN C.CONDVENDA = 8
+                  AND C.CONTAORDEM = 'N'
+                  AND T.ESTCOB <> 'SP' THEN B.CFOP_ENTREGA_ENT_FUT_INTER
+               WHEN C.CONDVENDA = 7
+                  AND C.CONTAORDEM = 'S'
+                  AND T.ESTCOB = 'SP' THEN B.CFOP_CONTA_ORDEM
+               WHEN C.CONDVENDA = 7
+                  AND C.CONTAORDEM = 'S'
+                  AND T.ESTCOB <> 'SP' THEN B.CFOP_CONTA_ORDEM_INTER
+               WHEN C.CONDVENDA = 8
+                  AND C.CONTAORDEM = 'S'
+                  AND T.ESTCOB = 'SP' THEN B.CFOP_ENTREGA_CONTA_ORDEM
+               WHEN C.CONDVENDA = 8
+                  AND C.CONTAORDEM = 'S'
+                  AND T.ESTCOB <> 'SP' THEN B.CFOP_ENTREGA_CONTA_ORDEM_INTER
+               WHEN C.CONDVENDA = 1
+                  AND T.CONSUMIDORFINAL = 'S'
+                  AND T.ESTCOB = 'SP' THEN B.CFOP_PF
+               WHEN C.CONDVENDA = 1
+                  AND T.CONSUMIDORFINAL = 'S'
+                  AND T.ESTCOB <> 'SP' THEN B.CFOP_PF_INTER
+               WHEN C.CONDVENDA = 1
+                  AND T.CONSUMIDORFINAL = 'N'
+                  AND T.ESTCOB = 'SP' THEN B.CFOP
+               ELSE B.CFOP_INTER
+           END
+       ) AS CFOP,
        I.QT,
        ROUND ((I.PVENDA - I.ST), 4) AS PLIQ,
        I.ST AS VLST,
