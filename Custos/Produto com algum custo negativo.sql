@@ -1,6 +1,7 @@
 SELECT E.CODFILIAL,
        E.CODPROD,
        P.DESCRICAO,
+       E.DTULTENT,
        E.VALORULTENT,
        E.CUSTOULTENT,
        E.CUSTOFIN,
