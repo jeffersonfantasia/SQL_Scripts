@@ -55,6 +55,6 @@ CREATE OR REPLACE VIEW VIEW_BI_PEDVENDAPEND AS
         'C', 'F'
     )
        AND C.CONDVENDA NOT IN (
-        8, 10
+        5, 8, 10
     );
 /
