@@ -20,6 +20,7 @@ CREATE OR REPLACE VIEW VIEW_JC_TAXA_CARTAO_LOJA AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           T.NUMTRANSVENDA,
            T.CARTORIO,
            T.PROTESTO,
            'T' AS TIPO,
