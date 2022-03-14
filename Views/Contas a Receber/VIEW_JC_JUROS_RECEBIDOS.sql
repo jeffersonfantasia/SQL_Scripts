@@ -13,6 +13,7 @@ CREATE OR REPLACE VIEW VIEW_JC_JUROS_RECEBIDOS AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           T.NUMTRANSVENDA,
            T.CARTORIO,
            T.PROTESTO,
            'J' AS TIPO,
