@@ -1,6 +1,7 @@
 CREATE OR REPLACE VIEW VIEW_JC_BASE_PREST AS
     SELECT (T.DUPLIC || '-' || T.PREST || '-' || T.NUMTRANSVENDA) AS CODDUPLIC,
            T.CODFILIAL,
+           T.DTESTORNO,
            T.DTEMISSAO,
            T.DTBAIXA,
            T.DTPAG,
