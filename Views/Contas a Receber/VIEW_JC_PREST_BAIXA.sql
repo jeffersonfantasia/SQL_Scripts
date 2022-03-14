@@ -32,6 +32,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PREST_BAIXA AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           T.NUMTRANSVENDA,
            T.CARTORIO,
            T.PROTESTO,
            'B' AS TIPO,
