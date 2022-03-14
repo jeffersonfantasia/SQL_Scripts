@@ -13,6 +13,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PREST_ESTORNO_JUROS AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           T.NUMTRANSVENDA,
            T.CARTORIO,
            T.PROTESTO,
            'EJ' AS TIPO,
