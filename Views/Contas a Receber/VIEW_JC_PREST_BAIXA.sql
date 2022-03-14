@@ -35,7 +35,12 @@ CREATE OR REPLACE VIEW VIEW_JC_PREST_BAIXA AS
            T.NUMTRANSVENDA,
            T.CARTORIO,
            T.PROTESTO,
-           (CASE WHEN T.DTESTORNO IS NOT NULL THEN 'BE' ELSE 'B' END) AS TIPO,
+           (
+               CASE
+                   WHEN T.DTESTORNO IS NOT NULL THEN 'BE'
+                   ELSE 'B'
+               END
+           ) AS TIPO,
            (
                CASE
                    WHEN T.CODCOB = 'DESC' THEN ('DESC DUP ' || T.DUPLICATA || ' - ' || TRIM (T.CLIENTE))
