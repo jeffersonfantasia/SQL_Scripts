@@ -9,6 +9,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PCMOV_SAID AS
            S.NUMNOTA,
            M.CODPROD,
            M.DESCRICAO AS PRODUTO,
+           I.NCM,
            M.QTCONT,
            M.PUNITCONT,
            (
