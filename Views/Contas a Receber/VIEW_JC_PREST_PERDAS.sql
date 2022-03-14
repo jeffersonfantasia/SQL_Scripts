@@ -19,6 +19,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PREST_PERDAS AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           T.NUMTRANSVENDA,
            T.CARTORIO,
            T.PROTESTO,
            'P' AS TIPO,
