@@ -24,6 +24,7 @@ CREATE OR REPLACE VIEW VIEW_JC_DESC_CONCEDIDOS AS
            T.CODCOB,
            T.CODUSUR,
            T.NUMTRANS,
+           T.NUMTRANSVENDA,
            T.CARTORIO,
            T.PROTESTO,
            'D' AS TIPO,
