@@ -1,7 +1,13 @@
 CREATE OR REPLACE VIEW VIEW_JC_BASE_PREST AS
     SELECT (T.DUPLIC || '-' || T.PREST || '-' || T.NUMTRANSVENDA) AS CODDUPLIC,
            T.CODFILIAL,
-           T.DTESTORNO,
+           (
+               CASE
+                   WHEN (T.DTESTORNO IS NOT NULL
+                      AND ROTINAPAG NOT LIKE '%1207%') THEN 'ESTORNO'
+                   ELSE 'NORMAL'
+               END
+           ) AS STATUS,
            T.DTEMISSAO,
            T.DTBAIXA,
            T.DTPAG,
