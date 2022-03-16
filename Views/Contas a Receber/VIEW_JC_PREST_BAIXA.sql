@@ -37,7 +37,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PREST_BAIXA AS
            T.PROTESTO,
            (
                CASE
-                   WHEN T.DTESTORNO IS NOT NULL THEN 'BE'
+                   WHEN T.STATUS = 'ESTORNO' THEN 'BE'
                    ELSE 'B'
                END
            ) AS TIPO,
