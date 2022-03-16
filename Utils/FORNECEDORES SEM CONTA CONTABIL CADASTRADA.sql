@@ -41,20 +41,20 @@ WITH FORNEC_CONTABIL AS (
       LEFT JOIN PCCONTA C ON E.CODCONTA = C.CODCONTA
       LEFT JOIN PCFORNEC R ON E.CODFORNEC = R.CODFORNEC
     UNION ALL
-    SELECT E.CODFILIAL,
-           M.DATA,
-           M.NUMTRANSACAO AS NUMTRANS,
-           100001 AS CODCONTA,
-           'COMPRA MERCADORIA' AS CONTA,
-           100 AS GRUPOCONTA,
-           E.NUMNOTA,
-           M.VLTOTALNF AS VALOR,
-           E.ESPECIE,
-           TO_NUMBER(M.CODFISCAL) AS CODFISCAL,
-           M.CODFORCLI AS CODFORNEC,
-           F.FORNECEDOR,
-           F.CGC,
-           F.ESTADO
+    SELECT DISTINCT E.CODFILIAL,
+                    M.DATA,
+                    M.NUMTRANSACAO AS NUMTRANS,
+                    100001 AS CODCONTA,
+                    'COMPRA MERCADORIA' AS CONTA,
+                    100 AS GRUPOCONTA,
+                    E.NUMNOTA,
+                    E.VLTOTAL AS VALOR,
+                    E.ESPECIE,
+                    TO_NUMBER (M.CODFISCAL) AS CODFISCAL,
+                    M.CODFORCLI AS CODFORNEC,
+                    F.FORNECEDOR,
+                    F.CGC,
+                    F.ESTADO
       FROM VIEW_BI_MOVPROD M
      INNER JOIN PCNFENT E ON M.NUMTRANSACAO = E.NUMTRANSENT
      INNER JOIN PCFORNEC F ON M.CODFORCLI = F.CODFORNEC
@@ -77,7 +77,7 @@ SELECT ROWID,
        F.*
   FROM PCFORNEC F
  WHERE CODFORNEC IN (
-    9880, 9886, 9887
+    10071,10067
 );
 /
 SELECT F.CGC,
