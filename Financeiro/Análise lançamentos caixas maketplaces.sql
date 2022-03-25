@@ -7,8 +7,9 @@ WITH FORNECEDOR AS (
            CLIENTE
       FROM PCCLIENT
 )
-SELECT L.CODFILIAL,
-       L.RECNUM,
+SELECT /*json*/ L.CODFILIAL,
+       L.RECNUM,       
+       L.DTCANCEL,
        L.DTLANC,
        L.TIPOPARCEIRO AS TIPO,
        L.CODFORNEC,
