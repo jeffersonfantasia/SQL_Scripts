@@ -3,6 +3,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PCMOV_SAID AS
            M.CODFILIAL,
            M.CODFISCAL,
            M.CODOPER,
+           I.TIPOPROCESSO,
            'S' AS TIPOCONTABIL,
            NVL (F.CODFORNEC, S.CODCLI) AS CODIGO,
            ('NF' || ' ' || S.NUMNOTA || ' - ' || S.CLIENTE) AS CLIENTE_FORNECEDOR,
