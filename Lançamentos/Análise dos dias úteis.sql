@@ -33,7 +33,19 @@ SELECT P.DATA,
              FROM PCDIASUTEIS
             WHERE DATA = P.DATA
               AND CODFILIAL = 8
-       ) FILIAL_8
+       ) FILIAL_8,
+              (
+           SELECT DIAFINANCEIRO
+             FROM PCDIASUTEIS
+            WHERE DATA = P.DATA
+              AND CODFILIAL = 9
+       ) FILIAL_9,
+              (
+           SELECT DIAFINANCEIRO
+             FROM PCDIASUTEIS
+            WHERE DATA = P.DATA
+              AND CODFILIAL = 10
+       ) FILIAL_10
   FROM PCDIASUTEIS P
  WHERE P.DATA BETWEEN TRUNC (SYSDATE) AND TRUNC (SYSDATE) + 30
    AND P.CODFILIAL = 1
