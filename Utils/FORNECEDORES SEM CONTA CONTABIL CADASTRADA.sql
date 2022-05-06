@@ -156,8 +156,11 @@ SELECT *
             WHEN E.CODFILIAL IN (
                 1, 2, 7, 8
             ) THEN 'JC BROTHERS'
+            WHEN E.CODFILIAL = 5 THEN 'JFF'
             WHEN E.CODFILIAL = 6 THEN 'BROKER CORP'
-            ELSE 'JFF'
+            WHEN E.CODFILIAL = 9 THEN 'CFF CLOUD'
+            WHEN E.CODFILIAL = 10 THEN 'FFJ CORP'
+            ELSE NULL
         END
     ) AS FILIAL,
            E.CODFORNEC,
