@@ -493,7 +493,7 @@ CREATE OR REPLACE VIEW VIEW_JC_ITEM_NOTAFISCAL AS
            CASE
                WHEN (NVL (M.CODOPER, 'X') <> 'SD') THEN ROUND (M.QTCONT * (M.PUNITCONT + NVL (M.VLFRETE, 0) + NVL (M.VLOUTROS, 0)
                ), 2)
-               ELSE ROUND (M.QTCONT * (M.PUNITCONT + NVL (M.VLOUTRASDESP, 0)), 2)
+               ELSE ROUND (M.QTCONT * M.PUNITCONT, 2)
            END VLCONTABIL,
            M.PUNITCONT,
            M.PTABELA,
