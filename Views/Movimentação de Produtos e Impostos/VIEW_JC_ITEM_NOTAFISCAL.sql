@@ -3,13 +3,16 @@ CREATE OR REPLACE VIEW VIEW_JC_ITEM_NOTAFISCAL AS
         WHEN (N.TIPODESCARGA IN (
             '6', '8', 'C', 'T'
         )) THEN 'D'
-      /* Notas de Devolução*/
+      -- Notas de Devolução
+
         WHEN N.TIPODESCARGA IN (
             'N', 'F', 'I'
         ) THEN 'I'
-      /* Notas de Importação*/
+      -- Notas de Importação
+
         ELSE 'NC'
-     /* Notas Normais ou Complementares com itens*/
+     -- Notas Normais ou Complementares com itens
+
     END TIPOPROCESSO,
            NVL (N.CODFILIALNF, N.CODFILIAL) CODFILIAL,
            M.NUMTRANSENT NUMTRANSACAO,
@@ -180,10 +183,13 @@ CREATE OR REPLACE VIEW VIEW_JC_ITEM_NOTAFISCAL AS
        AND M.QTCONT > 0
        AND (M.PUNITCONT > 0
         OR N.TIPODESCARGA = 'G')
-/*---------------------------------------------------------------------------------*/
+-----------------------------------------------------------------------------------
+
     UNION ALL
-/*---------------------------------------------------------------------------------*/
-/* TIPO 'E' = Entrada - TIPOMOV 'C' = CIAP => NFs com Entradas de CIAP*/
+-----------------------------------------------------------------------------------
+
+-- TIPO 'E' = Entrada - TIPOMOV 'C' = CIAP => NFs com Entradas de CIAP
+
     SELECT 'C' TIPOPROCESSO,
            NVL (N.CODFILIALNF, N.CODFILIAL) CODFILIAL,
            M.NUMTRANSENT NUMTRANSACAO,
@@ -267,10 +273,13 @@ CREATE OR REPLACE VIEW VIEW_JC_ITEM_NOTAFISCAL AS
        AND NVL (NVL (M.TIPOMERC, P.TIPOMERC), 'X') <> 'FR'
        AND N.ESPECIE = 'NF'
        AND NVL (N.MODELO, 'X') <> '22'
-/*---------------------------------------------------------------------------------*/
+-----------------------------------------------------------------------------------
+
     UNION ALL
-/*---------------------------------------------------------------------------------*/
-/* TIPO 'E' = Entrada - TIPOMOV 'IC' = Item Complementar => NFs com Entradas Complementar*/
+-----------------------------------------------------------------------------------
+
+-- TIPO 'E' = Entrada - TIPOMOV 'IC' = Item Complementar => NFs com Entradas Complementar
+
     SELECT 'IC' TIPOPROCESSO,
            NVL (N.CODFILIALNF, N.CODFILIAL) CODFILIAL,
            L.NUMTRANSENT NUMTRANSACAO,
@@ -461,13 +470,19 @@ CREATE OR REPLACE VIEW VIEW_JC_ITEM_NOTAFISCAL AS
               N.VLPIS,
               N.VLCOFINS,
               N.CODFORNEC
-/*---------------------------------------------------------------------------------*/
-/*----------------------------- SAÍDAS --------------------------------------------*/
-/*---------------------------------------------------------------------------------*/
+-----------------------------------------------------------------------------------
+
+------------------------------- SAÍDAS --------------------------------------------
+
+-----------------------------------------------------------------------------------
+
     UNION ALL
-/*---------------------------------------------------------------------------------*/
-/* TIPOPROCESSO 'N' = Normal => NFs com Saidas Normais*/
-/* TIPOPROCESSO 'D' = Devolução de Compras => NFs com Saídas de Devolução*/
+-----------------------------------------------------------------------------------
+
+-- TIPOPROCESSO 'N' = Normal => NFs com Saidas Normais
+
+-- TIPOPROCESSO 'D' = Devolução de Compras => NFs com Saídas de Devolução
+
     SELECT CASE
         WHEN (NVL (M.CODOPER, 'X') <> 'SD') THEN 'N'
         ELSE 'D'
@@ -493,7 +508,8 @@ CREATE OR REPLACE VIEW VIEW_JC_ITEM_NOTAFISCAL AS
            CASE
                WHEN (NVL (M.CODOPER, 'X') <> 'SD') THEN ROUND (M.QTCONT * (M.PUNITCONT + NVL (M.VLFRETE, 0) + NVL (M.VLOUTROS, 0)
                ), 2)
-               ELSE ROUND (M.QTCONT * M.PUNITCONT, 2)
+               WHEN (M.PUNITCONT <> M.PTABELA AND M.VLOUTRASDESP > 0) THEN ROUND (M.QTCONT * (M.PTABELA + NVL (M.VLOUTRASDESP, 0)), 2)
+               ELSE ROUND (M.QTCONT * (M.PUNITCONT + NVL (M.VLOUTRASDESP, 0)), 2)
            END VLCONTABIL,
            M.PUNITCONT,
            M.PTABELA,
@@ -545,12 +561,16 @@ CREATE OR REPLACE VIEW VIEW_JC_ITEM_NOTAFISCAL AS
            M.IMPORTADO,
            PF.ORIGMERCTRIB,
            M.CODFISCAL,
-       /*ALTERADO JEFF 16.10.2019 POIS NAO TRAZ O VALOR DE FRETE NA BASE*/
-       /*ROUND(M.QTCONT * M.BASEICMS, 2) VLBASEICMS,*/
+       --ALTERADO JEFF 16.10.2019 POIS NAO TRAZ O VALOR DE FRETE NA BASE
+
+       --ROUND(M.QTCONT * M.BASEICMS, 2) VLBASEICMS,
+
            ROUND (M.QTCONT * (NVL (M.BASEICMS, 0) + NVL (MC.VLBASEFRETE, 0) + NVL (MC.VLBASEOUTROS, 0)), 2) VLBASEICMS,
            NVL (M.PERCICM, 0) PERCICM,
-       /*ALTERADO JEFF 16.10.2019 POIS NAO TRAZ O VALOR DE FRETE NA BASE*/
-       /*ROUND(NVL(M.QTCONT * MC.VLICMS, ROUND(M.QTCONT * NVL(M.BASEICMS, 0) * NVL(M.PERCICM, 0) / 100, 2)), 2) VLICMS, */
+       --ALTERADO JEFF 16.10.2019 POIS NAO TRAZ O VALOR DE FRETE NA BASE
+
+       --ROUND(NVL(M.QTCONT * MC.VLICMS, ROUND(M.QTCONT * NVL(M.BASEICMS, 0) * NVL(M.PERCICM, 0) / 100, 2)), 2) VLICMS, 
+
            ROUND (NVL (M.QTCONT * MC.VLICMS, ROUND (M.QTCONT * (NVL (M.BASEICMS, 0) + NVL (MC.VLBASEFRETE, 0) + NVL (MC.VLBASEOUTROS
            , 0)) * NVL (M.PERCICM, 0) / 100, 2)), 2) VLICMS,
            ROUND (M.QTCONT * NVL (M.BASEICST, 0), 2) VLBASEICMSST,
@@ -609,10 +629,13 @@ CREATE OR REPLACE VIEW VIEW_JC_ITEM_NOTAFISCAL AS
         'A', 'AB'
     )
        AND DECODE (NVL (MC.BONIFIC, 'X'), 'S', M.PBONIFIC, M.PUNITCONT) > 0
-/*---------------------------------------------------------------------------------*/
+-----------------------------------------------------------------------------------
+
     UNION ALL
-/*---------------------------------------------------------------------------------*/
-/* TIPOPROCESSO 'C' = CIAP => NFs com Saídas de CIAP*/
+-----------------------------------------------------------------------------------
+
+-- TIPOPROCESSO 'C' = CIAP => NFs com Saídas de CIAP
+
     SELECT 'C' TIPOPROCESSO,
            M.CODFILIAL,
            M.NUMTRANSVENDA NUMTRANSACAO,
@@ -696,10 +719,13 @@ CREATE OR REPLACE VIEW VIEW_JC_ITEM_NOTAFISCAL AS
            AND NUMNOTA = M.NUMNOTA
            AND ROWNUM = 1
     )
-/*---------------------------------------------------------------------------------*/
+-----------------------------------------------------------------------------------
+
     UNION ALL
-/*---------------------------------------------------------------------------------*/
-/* TIPOPROCESSO 'IC' = Item Complementar => NFs com Saídas Complementar*/
+-----------------------------------------------------------------------------------
+
+-- TIPOPROCESSO 'IC' = Item Complementar => NFs com Saídas Complementar
+
     SELECT 'IC' TIPOPROCESSO,
            NVL (N.CODFILIALNF, N.CODFILIAL) CODFILIAL,
            L.NUMTRANSVENDA NUMTRANSACAO,
