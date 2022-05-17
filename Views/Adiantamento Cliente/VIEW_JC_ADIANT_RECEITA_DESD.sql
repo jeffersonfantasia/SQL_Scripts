@@ -12,7 +12,7 @@ SELECT C.CODFILIAL,
           C.VALOR * -1
          ELSE
           C.VALOR
-       END) AS VLPAGO,
+       END) AS VALOR,
        'RD' AS TIPO,
        ('RECEITA CRED ' || C.NUMCRED || ' - ' || T.CLIENTE) AS HISTORICO
   FROM PCCRECLI C
