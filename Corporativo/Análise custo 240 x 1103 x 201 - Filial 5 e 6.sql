@@ -78,7 +78,7 @@ SELECT *
            AND P.TIPOMERC = 'L'
            AND P.REVENDA = 'S'
            AND E.CODFILIAL IN (
-            5, 6
+            5, 6, 10
         )
            AND T.NUMREGIAO = 5
     ) C
@@ -86,7 +86,8 @@ SELECT *
      /*and CODPROD IN(808869 )*/
        AND (PBRUTO_240 <> PROXCOMPRA_240
         OR PROXCOMPRA_240 <> CUSTOFIN
-        OR CUSTOFIN <> PVENDA_R5)
+       -- OR CUSTOFIN <> PVENDA_R5
+        )
 ) D
  WHERE (ABS (1 - (NVL (CUSTOFIN, PVENDA_R5) / NVL (PVENDA_R5, CUSTOFIN))) > 0.001
        /*OR PBRUTO_240 <> PROXCOMPRA_240 */
@@ -175,7 +176,7 @@ SELECT CODFILIAL,
        AND P.TIPOMERC = 'L'
        AND P.REVENDA = 'S'
        AND E.CODFILIAL IN (
-        5, 6
+        5, 6, 10
     )
        AND T.NUMREGIAO = 5
 ) C
