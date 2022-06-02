@@ -90,11 +90,14 @@ COBRANCAS AS
          I.NUMTRANSVENDA,
          I.PREST,
          I.ATRASO,
-         COALESCE(B.OBS3, B.OBS2, B.OBS1) OBSERVACAO
+         I.CODSTATUSCOB,
+         COALESCE(B.OBS3, C.STATUSCOB, B.OBS2, B.OBS1) OBSERVACAO
     FROM PCHISTCOB B
    INNER JOIN COBRANCA_MAIS_RECENTE M ON B.NUMREGCOB = M.NUMREGCOB_MAX
    INNER JOIN PCHISTCOBI I ON B.NUMREGCOB = I.NUMREGCOB
-                          AND I.NUMTRANSVENDA = M.NUMTRANSVENDA)
+                          AND I.NUMTRANSVENDA = M.NUMTRANSVENDA
+                          AND I.PREST = M.PREST
+    LEFT JOIN PCSTATUSCOBCLI C ON I.CODSTATUSCOB = C.CODSTATUSCOB)
 SELECT *
   FROM (SELECT C.CLIENTE_REDE,
                C.CLIENTE,
@@ -108,26 +111,46 @@ SELECT *
                (NVL(P.VALOR, 0) - NVL(P.VALORDESC, 0)) AS VALOR,
                (TRUNC(SYSDATE) - P.DTVENC) DIAS_VENCIDO,
                (CASE
-                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 200 AND P.CODCOB = 'JUR' THEN
-                  '09-BAIXAR DO JUROS PENDENTE E BLOQUEAR DEFINITIVO CLIENTE'
-                WHEN (TRUNC(SYSDATE) - P.DTVENC) > 200 THEN
-                  '08-VERIFICAR BAIXA COMO PERDA'
+                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 360 AND P.CODCOB = 'JUR' THEN
+                  '19-BAIXAR JUROS PENDENTE E BLOQUEAR DEFINITIVO CLIENTE'
+                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 180 AND P.CODCOB = 'JUR' THEN
+                  '18-JUROS ABAIXO DE 360 DIAS'
+                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 90 AND P.CODCOB = 'JUR' THEN
+                  '17-JUROS ABAIXO DE 180 DIAS'
+                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 60 AND P.CODCOB = 'JUR' THEN
+                  '16-JUROS ABAIXO DE 90 DIAS'
+                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 30 AND P.CODCOB = 'JUR' THEN
+                  '15-JUROS ABAIXO DE 60 DIAS'
+                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 15 AND P.CODCOB = 'JUR' THEN
+                  '14-JUROS ABAIXO DE 30 DIAS'
+                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 0 AND P.CODCOB = 'JUR' THEN
+                  '13-JUROS ABAIXO DE 15 DIAS'
+                 WHEN B.CODSTATUSCOB = 42 THEN
+                  '10-TITULO COM O JURÍDICO'
+                 WHEN B.CODSTATUSCOB = 41 THEN
+                  '09-TITULO ENVIADO PARA COBRANÇA EXTERNA'
+                 WHEN B.CODSTATUSCOB = 43 THEN
+                  '11-TITULO NEGOCIADO COM DATA PARA RECEBIMENTO'
+                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 270 THEN
+                  '12-VERIFICAR BAIXA COMO PERDA E BLOQUEAR DEFINITIVO CLIENTE'
                  WHEN (TRUNC(SYSDATE) - P.DTVENC) > 75 THEN
-                  '07-VERIFICAR ENVIO ÁREA JURIDICA'
+                  '08-VERIFICAR ENVIO ÁREA JURIDICA'
                  WHEN (TRUNC(SYSDATE) - P.DTVENC) > 45 THEN
-                  '06-ENVIAR PARA COBRANÇA EXTERNA'
-                  WHEN O.CODOCORRENCIA = '32' THEN
-                  '05-NEGOCIAR COM CLIENTE APÓS PROTESTO'                
-                   WHEN NVL(P.PROTESTO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
-                  '04-TITULO PROTESTADO'              
-                   WHEN NVL(P.CARTORIO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
-                  '03-TITULO EM CARTÓRIO'  
+                  '07-ENVIAR PARA COBRANÇA EXTERNA'
+                 WHEN O.CODOCORRENCIA = '32'THEN
+                  '06-NEGOCIAR COM CLIENTE APÓS PROTESTO'
+                 WHEN NVL(P.PROTESTO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
+                  '05-TITULO PROTESTADO'
+                 WHEN NVL(P.CARTORIO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
+                  '04-TITULO EM CARTÓRIO'
+                 WHEN O.CODOCORRENCIA = '21' THEN
+                  '03-NEGOCIAR COM CLIENTE - TIT. NÃO PROTESTADO'
                  WHEN (TRUNC(SYSDATE) - P.DTVENC) > 5 AND P.CODCOB = 'BK' THEN
                   '02-PRESTES A ENTRAR EM CARTORIO'
-                 WHEN (TRUNC(SYSDATE) - P.DTVENC) > 0 THEN
-                  '01-TITULO VENCIDO RECENTE'
+                 WHEN ((TRUNC(SYSDATE) - P.DTVENC) > 0 OR P.CODCOB = 'C') THEN
+                  '01-ENTRAR EM CONTATO COM CLIENTE'
                  ELSE
-                  '10-ERRO'
+                  '99-FALTA PARAMETRIZAR'
                END) STATUS,
                DECODE(NVL(P.CARTORIO, 'N'), 'N', 'NÃO', 'SIM') CARTORIO,
                DECODE(NVL(P.PROTESTO, 'N'), 'N', 'NAO', 'SIM') PROTESTO,
@@ -149,6 +172,5 @@ SELECT *
                                AND P.PREST = B.PREST
          WHERE P.DTPAG IS NULL
            AND P.DTVENC < TRUNC(SYSDATE)
-           AND (TRUNC(SYSDATE) - P.DTVENC) > 1
-         ORDER BY C.CLIENTE_REDE, P.DTVENC)
- ORDER BY STATUS;
+           AND (TRUNC(SYSDATE) - P.DTVENC) > 0)
+ ORDER BY STATUS, CLIENTE_REDE, DTVENC;
