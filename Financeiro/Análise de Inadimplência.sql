@@ -28,17 +28,11 @@ CLIENTES AS
 DIAS_UTEIS AS
  (SELECT D.DATA,
          D.DIAFINANCEIRO,
-         COALESCE(CASE
-                    WHEN D.DIAFINANCEIRO = 'N' THEN
-                     NULL
-                    ELSE
-                     D.DATA
-                  END,
-                  (SELECT MIN(D2.DATA) DATA
-                     FROM PCDIASUTEIS D2
-                    WHERE D2.DIAFINANCEIRO = 'S'
-                      AND D.DATA < D2.DATA
-                      AND D2.DATA IS NOT NULL)) AS DTVENC_UTIL
+         (SELECT MIN(D2.DATA) DATA
+            FROM PCDIASUTEIS D2
+           WHERE D2.DIAFINANCEIRO = 'S'
+             AND D.DATA < D2.DATA
+             AND D2.CODFILIAL = D.CODFILIAL) AS DTVENC_UTIL
     FROM PCDIASUTEIS D
    WHERE CODFILIAL = 1),
 TITULOS AS
