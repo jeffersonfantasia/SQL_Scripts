@@ -1,5 +1,5 @@
 CREATE OR REPLACE VIEW VIEW_BI_CLIENTE AS
-    SELECT C.CODCLI,
+  SELECT C.CODCLI,
            (
                CASE
                    WHEN R.DESCRICAO IS NULL THEN ('C' || C.CODCLI)
@@ -8,7 +8,7 @@ CREATE OR REPLACE VIEW VIEW_BI_CLIENTE AS
            ) AS CODCLIREDE,
            (
                CASE
-                   WHEN R.DESCRICAO IS NULL THEN ('C' || C.CODCLI || ' - ' || C.CLIENTE)
+                   WHEN R.DESCRICAO IS NULL THEN ('C' || C.CODCLI || ' - ' || UPPER(C.CLIENTE))
                    ELSE ('R' || C.CODREDE || ' - ' || UPPER (R.DESCRICAO))
                END
            ) AS CLIENTE_REDE,
@@ -17,8 +17,10 @@ CREATE OR REPLACE VIEW VIEW_BI_CLIENTE AS
            C.ESTENT AS UF,
            P.PRACA,
            C.BLOQUEIODEFINITIVO AS BLOQUEADO,
+           C.BLOQUEIO AS BLOQ_ATUAL,
            C.CODUSUR1 AS CODUSUR,
            C.LIMCRED,
+           (TRUNC(SYSDATE) - C.DTCADASTRO) DIAS_CADASTRO,   
            C.DTCADASTRO AS DTCADASTROCLI,
            C.DTULTALTER AS DTULTALTERCLI
       FROM PCCLIENT C
