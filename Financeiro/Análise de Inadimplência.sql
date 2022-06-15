@@ -117,7 +117,7 @@ COBRANCAS AS
 SELECT *
   FROM (SELECT C.CLIENTE_REDE,
                C.CLIENTE,
-               DECODE(C.BLOQ_DEFINITIVO, 'S', 'SIM', 'NÃO') BLOQ_DEFINITIVO,
+               DECODE(C.BLOQ_DEFINITIVO, 'S', 'SIM', 'NAO') BLOQ_DEFINITIVO,
                C.CODUSUR,
                C.VENDEDOR,
                (P.DUPLIC || '-' || P.PREST) DUPLICATA,
@@ -126,6 +126,38 @@ SELECT *
                P.CODCOB,
                (NVL(P.VALOR, 0) - NVL(P.VALORDESC, 0)) AS VALOR,
                (TRUNC(SYSDATE) - D.DTVENC_UTIL) DIAS_VENCIDO,
+               (CASE
+                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 720 AND
+                      P.CODCOB = 'JUR' THEN
+                  13
+                 WHEN B.CODSTATUSCOB = 42 THEN
+                  11
+                 WHEN B.CODSTATUSCOB = 41 THEN
+                  10
+                 WHEN B.CODSTATUSCOB = 43 THEN
+                  9
+                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 720 THEN
+                  12
+                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 75 THEN
+                  8
+                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 45 THEN
+                  7
+                 WHEN O.CODOCORRENCIA = '32' THEN
+                  6
+                 WHEN NVL(P.PROTESTO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
+                  5
+                 WHEN NVL(P.CARTORIO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
+                  4
+                 WHEN O.CODOCORRENCIA = '21' THEN
+                  3
+                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 5 AND
+                      P.CODCOB = 'BK' THEN
+                  2
+                 WHEN ((TRUNC(SYSDATE) - D.DTVENC_UTIL) > 0 OR P.CODCOB = 'C') THEN
+                  1
+                 ELSE
+                  99
+               END) CODSTATUS,
                (CASE
                  WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 720 AND
                       P.CODCOB = 'JUR' THEN
@@ -139,17 +171,17 @@ SELECT *
                  WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 720 THEN
                   '12-VERIFICAR BAIXA COMO PERDA E BLOQUEAR DEFINITIVO CLIENTE'
                  WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 75 THEN
-                  '08-VERIFICAR ENVIO ÁREA JURIDICA'
+                  '08-VERIFICAR ENVIO AREA JURIDICA'
                  WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 45 THEN
-                  '07-ENVIAR PARA COBRANÇA EXTERNA'
+                  '07-VERIFICAR ENVIO PARA COBRANÇA EXTERNA'
                  WHEN O.CODOCORRENCIA = '32' THEN
-                  '06-NEGOCIAR COM CLIENTE APÓS PROTESTO'
+                  '06-NEGOCIAR COM CLIENTE APOS PROTESTO'
                  WHEN NVL(P.PROTESTO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
                   '05-TITULO PROTESTADO'
                  WHEN NVL(P.CARTORIO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
                   '04-TITULO EM CARTÓRIO'
                  WHEN O.CODOCORRENCIA = '21' THEN
-                  '03-NEGOCIAR COM CLIENTE - TIT. NÃO PROTESTADO'
+                  '03-NEGOCIAR COM CLIENTE - TIT. NAO PROTESTADO'
                  WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 5 AND
                       P.CODCOB = 'BK' THEN
                   '02-PRESTES A ENTRAR EM CARTORIO'
@@ -158,7 +190,7 @@ SELECT *
                  ELSE
                   '99-FALTA PARAMETRIZAR'
                END) STATUS,
-               DECODE(NVL(P.CARTORIO, 'N'), 'N', 'NÃO', 'SIM') CARTORIO,
+               DECODE(NVL(P.CARTORIO, 'N'), 'N', 'NAO', 'SIM') CARTORIO,
                DECODE(NVL(P.PROTESTO, 'N'), 'N', 'NAO', 'SIM') PROTESTO,
                B.DATAHORA,
                B.OBSERVACAO,
@@ -179,4 +211,4 @@ SELECT *
          WHERE P.DTPAG IS NULL
            AND D.DTVENC_UTIL < TRUNC(SYSDATE)
            AND (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 0)
- ORDER BY STATUS, CLIENTE_REDE, DTVENC;
+ ORDER BY CODSTATUS, CLIENTE_REDE, DTVENC;
