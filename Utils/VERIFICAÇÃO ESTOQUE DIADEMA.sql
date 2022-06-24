@@ -69,18 +69,38 @@ SELECT A.CODFILIAL,
 /
 
 /*Estoque contabil menor que zero - Filial 7*/
-SELECT E.CODFILIAL,
-       E.CODPROD,
-       P.DESCRICAO,
-       E.QTEST,
-       E.QTESTGER
-  FROM PCEST E,
-       PCPRODUT P
- WHERE E.CODFILIAL IN (
-  '7'
+SELECT A.CODFILIAL,
+       A.CODPROD,
+       C.CODPRODMASTER,
+       C.DESCRICAO,
+       A.QTEST,
+       (
+         SELECT SUM (B.QTESTGER)
+           FROM PCEST B
+          WHERE B.CODFILIAL IN (
+           7, 9
+         )
+            AND B.CODPROD = A.CODPROD
+       ) QTESTGERSOMA
+  FROM PCEST A,
+       PCPRODUT C
+ WHERE A.CODPROD = C.CODPROD
+   AND A.CODFILIAL IN (
+  7
 )
-   AND E.CODPROD = P.CODPROD
-   AND QTEST < 0;
+   AND C.CODEPTO NOT IN (
+  97
+)
+   AND A.QTEST <> (
+  SELECT SUM (B.QTESTGER)
+    FROM PCEST B
+   WHERE B.CODFILIAL IN (
+    7, 9
+  )
+     AND B.CODPROD = A.CODPROD
+)
+ ORDER BY C.CODPRODMASTER,
+          CODPROD;
 /
 
 /*Estoque contabil menor que zero - Filial 8*/
