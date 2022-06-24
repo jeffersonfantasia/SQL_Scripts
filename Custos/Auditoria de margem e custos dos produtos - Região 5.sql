@@ -1,8 +1,11 @@
+--RODAR A 507 FILIAL 3 PARAMETRO 14 REGIAO 5
+--DEPOIS RODAR 552 PARAMETRO 1 REGIAO 5
 SELECT *
   FROM (SELECT P.CODFILIAL,
                P.CODPROD,
                P.DESCRICAO,
                T.IMPORTADO,
+               P.CODFORNEC,
                T.CODMARCA,
                M.MARCA,
                P.NUMREGIAO,
@@ -44,10 +47,9 @@ SELECT *
            AND T.DTEXCLUSAO IS NULL
            AND T.CODMARCA != 255 --KITS
            AND L.PBRUTO > 0
-           AND L.PLIQUIDO > 0
+           AND L.PLIQUIDO > 0 --AND P.CODPROD = 801134
          ORDER BY T.CODMARCA)
- WHERE MIDEAL <> MSUGERIDA
-    OR PSUGERIDO <> PVENDA;
+ WHERE PSUGERIDO <> PVENDA;
 /
 
 /*
