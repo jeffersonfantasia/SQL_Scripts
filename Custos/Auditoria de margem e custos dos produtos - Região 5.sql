@@ -4,6 +4,7 @@ SELECT *
   FROM (SELECT P.CODFILIAL,
                P.CODPROD,
                P.DESCRICAO,
+               (SELECT SUM(QTEST) FROM PCEST WHERE CODPROD = E.CODPROD) QT,
                T.IMPORTADO,
                P.CODFORNEC,
                T.CODMARCA,
@@ -42,7 +43,7 @@ SELECT *
           LEFT JOIN PCEST E ON T.CODPROD = E.CODPROD
                            AND P.CODFILIAL = E.CODFILIAL
           LEFT JOIN PCMARCA M ON T.CODMARCA = M.CODMARCA
-         WHERE P.CODFILIAL IN (7)
+         WHERE P.CODFILIAL IN ('7')
            AND P.NUMREGIAO IN (5)
            AND T.DTEXCLUSAO IS NULL
            AND T.CODMARCA != 255 --KITS
