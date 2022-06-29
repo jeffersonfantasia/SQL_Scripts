@@ -138,22 +138,22 @@ SELECT *
                   9
                  WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 720 THEN
                   12
-                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 75 THEN
+                 WHEN O.CODOCORRENCIA = '21' THEN
+                  3
+                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 75 AND P.CODCOB <> 'JUR' THEN
                   8
-                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 45 THEN
+                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 45 AND P.CODCOB <> 'JUR' THEN
                   7
                  WHEN O.CODOCORRENCIA = '32' THEN
                   6
-                 WHEN NVL(P.PROTESTO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
+                 WHEN NVL(P.PROTESTO, 'N') = 'S' AND O.CODOCORRENCIA <> '32' AND P.CODCOB <> 'JUR' THEN
                   5
-                 WHEN NVL(P.CARTORIO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
+                 WHEN NVL(P.CARTORIO, 'N') = 'S' AND O.CODOCORRENCIA <> '32' AND P.CODCOB <> 'JUR' THEN
                   4
-                 WHEN O.CODOCORRENCIA = '21' THEN
-                  3
                  WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 5 AND
                       P.CODCOB = 'BK' THEN
                   2
-                 WHEN ((TRUNC(SYSDATE) - D.DTVENC_UTIL) > 0 OR P.CODCOB = 'C') THEN
+                 WHEN (((TRUNC(SYSDATE) - D.DTVENC_UTIL) > 0 OR P.CODCOB = 'C')) AND P.CODCOB <> 'JUR' THEN
                   1
                  ELSE
                   99
@@ -170,22 +170,22 @@ SELECT *
                   '09-TITULO NEGOCIADO COM DATA PARA RECEBIMENTO'
                  WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 720 THEN
                   '12-VERIFICAR BAIXA COMO PERDA E BLOQUEAR DEFINITIVO CLIENTE'
-                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 75 THEN
-                  '08-VERIFICAR ENVIO AREA JURIDICA'
-                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 45 THEN
-                  '07-VERIFICAR ENVIO PARA COBRANÇA EXTERNA'
-                 WHEN O.CODOCORRENCIA = '32' THEN
-                  '06-NEGOCIAR COM CLIENTE APOS PROTESTO'
-                 WHEN NVL(P.PROTESTO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
-                  '05-TITULO PROTESTADO'
-                 WHEN NVL(P.CARTORIO, 'N') = 'S' AND O.CODOCORRENCIA != '32' THEN
-                  '04-TITULO EM CARTÓRIO'
                  WHEN O.CODOCORRENCIA = '21' THEN
                   '03-NEGOCIAR COM CLIENTE - TIT. NAO PROTESTADO'
+                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 75 AND P.CODCOB <> 'JUR' THEN
+                  '08-VERIFICAR ENVIO AREA JURIDICA'
+                 WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 45 AND P.CODCOB <> 'JUR' THEN
+                  '07-VERIFICAR ENVIO PARA COBRANÇA EXTERNA'
+                 WHEN O.CODOCORRENCIA = '32' AND P.CODCOB <> 'JUR' THEN
+                  '06-NEGOCIAR COM CLIENTE APOS PROTESTO'
+                 WHEN NVL(P.PROTESTO, 'N') = 'S' AND O.CODOCORRENCIA <> '32' AND P.CODCOB <> 'JUR' THEN
+                  '05-TITULO PROTESTADO'
+                 WHEN NVL(P.CARTORIO, 'N') = 'S' AND O.CODOCORRENCIA <> '32' AND P.CODCOB <> 'JUR' THEN
+                  '04-TITULO EM CARTÓRIO'
                  WHEN (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 5 AND
                       P.CODCOB = 'BK' THEN
                   '02-PRESTES A ENTRAR EM CARTORIO'
-                 WHEN ((TRUNC(SYSDATE) - D.DTVENC_UTIL) > 0 OR P.CODCOB = 'C') THEN
+                 WHEN (((TRUNC(SYSDATE) - D.DTVENC_UTIL) > 0 OR P.CODCOB = 'C')) AND P.CODCOB <> 'JUR' THEN
                   '01-ENTRAR EM CONTATO COM CLIENTE'
                  ELSE
                   '99-FALTA PARAMETRIZAR'
@@ -211,4 +211,4 @@ SELECT *
          WHERE P.DTPAG IS NULL
            AND D.DTVENC_UTIL < TRUNC(SYSDATE)
            AND (TRUNC(SYSDATE) - D.DTVENC_UTIL) > 0)
- ORDER BY CODSTATUS, CLIENTE_REDE, DTVENC;
+ ORDER BY CODSTATUS, DTVENC DESC, CLIENTE_REDE;
