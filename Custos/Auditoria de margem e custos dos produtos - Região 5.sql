@@ -44,8 +44,8 @@ SELECT *
           LEFT JOIN PCEST E ON T.CODPROD = E.CODPROD
                            AND P.CODFILIAL = E.CODFILIAL
          
-         WHERE P.CODFILIAL IN ('7')
-           AND P.NUMREGIAO IN (5)
+         WHERE P.CODFILIAL = '7'
+           AND P.NUMREGIAO = 5 
            AND T.DTEXCLUSAO IS NULL
            AND T.CODMARCA <> 255 --KITS
            AND L.PBRUTO > 0
