@@ -33,15 +33,15 @@ SELECT CODFILIAL,
                (SELECT ENVIARFORCAVENDAS
                   FROM PCPRODFILIAL
                  WHERE CODPROD = F.CODPROD
-                   AND CODFILIAL = 6) ENVIAFV_6,
+                   AND CODFILIAL = '6') ENVIAFV_6,
                (SELECT ROUND(CUSTOPROXIMACOMPRA, 4)
                   FROM PCEST
                  WHERE CODPROD = E.CODPROD
-                   AND CODFILIAL = 3) CUSTOPROXIMA_3,
+                   AND CODFILIAL = '3') CUSTOPROXIMA_3,
                (SELECT ROUND((NVL(CUSTOREP, 0) * ((100 - PERCDESC) / 100)), 4)
                   FROM PCPRODFILIAL
                  WHERE CODPROD = E.CODPROD
-                   AND CODFILIAL = 3) PBRUTO_FIL_3,
+                   AND CODFILIAL = '3') PBRUTO_FIL_3,
                ROUND((NVL(F.CUSTOREP, 0) * ((100 - F.PERCDESC) / 100)), 4) PBRUTO_240,
                ROUND(NVL(E.CUSTOPROXIMACOMPRA, 0), 4) PROXCOMPRA_240,
                ROUND(NVL(E.CUSTOFIN, 0), 4) CUSTOFIN
@@ -54,7 +54,7 @@ SELECT CODFILIAL,
            AND P.DTEXCLUSAO IS NULL
            AND P.TIPOMERC = 'L'
            AND P.REVENDA = 'S'
-           AND E.CODFILIAL IN (5, 6, 10)) C
+           AND E.CODFILIAL IN ('5', '6')) C
  WHERE ENVIAFV_6 = 'S'
    AND (PBRUTO_240 <> PROXCOMPRA_240 OR PROXCOMPRA_240 <> CUSTOFIN)
    AND (ABS(PBRUTO_240 - PROXCOMPRA_240) > 0.01 OR CUSTOFIN = 0 OR
