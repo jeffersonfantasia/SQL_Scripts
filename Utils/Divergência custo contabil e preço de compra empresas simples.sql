@@ -36,7 +36,7 @@ SELECT T.CODFILIAL,
                M.QTCONT,
                M.CUSTOCONT
           FROM PCMOV M
-          LEFT JOIN PCPRODUT P
+          JOIN PCPRODUT P
             ON M.CODPROD = P.CODPROD
           LEFT JOIN MOVENTRADA E
             ON E.CODFILIAL = M.CODFILIAL
