@@ -4,7 +4,6 @@ SELECT *
   FROM (SELECT P.CODFILIAL,
                P.CODPROD,
                P.DESCRICAO,
-              -- (SELECT SUM(QTEST) FROM PCEST WHERE CODPROD = E.CODPROD) QT,
                T.IMPORTADO,
                P.CODFORNEC,
                T.CODMARCA,
@@ -26,7 +25,7 @@ SELECT *
                         4)
                END AS MSUGERIDA,
                ROUND(L.PBRUTO, 4) PBRUTO,
-               ROUND(E.CUSTOPROXIMACOMPRA, 4) CUSTOPROXCOMPRA,
+               ROUND(NVL(E.CUSTOPROXIMACOMPRA,0), 4) CUSTOPROXCOMPRA,
                ROUND(L.PLIQUIDO, 4) AS CUSTOLIQAPLIC,
                P.CODICMTAB,
                CASE
@@ -40,9 +39,9 @@ SELECT *
          JOIN PCPRODUT T ON P.CODPROD = T.CODPROD
          JOIN PCMARCA M ON T.CODMARCA = M.CODMARCA
          JOIN VIEW_JC_CUSTOLIQ_240 L ON P.CODPROD = L.CODPROD
-                                          AND P.CODFILIAL = L.CODFILIAL
-          LEFT JOIN PCEST E ON T.CODPROD = E.CODPROD
-                           AND P.CODFILIAL = E.CODFILIAL
+                                    AND P.CODFILIAL = L.CODFILIAL
+         JOIN PCEST E ON T.CODPROD = E.CODPROD
+                     AND P.CODFILIAL = E.CODFILIAL
          
          WHERE P.CODFILIAL = '7'
            AND P.NUMREGIAO = 5 
