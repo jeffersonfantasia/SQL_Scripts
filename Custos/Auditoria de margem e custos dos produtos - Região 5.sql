@@ -25,7 +25,7 @@ SELECT *
                         4)
                END AS MSUGERIDA,
                ROUND(L.PBRUTO, 4) PBRUTO,
-               ROUND(NVL(E.CUSTOPROXIMACOMPRA,0), 4) CUSTOPROXCOMPRA,
+            --   ROUND(NVL(E.CUSTOPROXIMACOMPRA,0), 4) CUSTOPROXCOMPRA,
                ROUND(L.PLIQUIDO, 4) AS CUSTOLIQAPLIC,
                P.CODICMTAB,
                CASE
@@ -40,7 +40,7 @@ SELECT *
          JOIN PCMARCA M ON T.CODMARCA = M.CODMARCA
          JOIN VIEW_JC_CUSTOLIQ_240 L ON P.CODPROD = L.CODPROD
                                     AND P.CODFILIAL = L.CODFILIAL
-         JOIN PCEST E ON T.CODPROD = E.CODPROD
+         JOIN PCEST E ON P.CODPROD = E.CODPROD
                      AND P.CODFILIAL = E.CODFILIAL
          
          WHERE P.CODFILIAL = '7'
