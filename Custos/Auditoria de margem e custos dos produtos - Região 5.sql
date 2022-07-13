@@ -39,7 +39,6 @@ SELECT *
                ROUND(NVL(E.CUSTOPROXIMACOMPRA, 0), 4) CUSTOPROXCOMPRA,
                ROUND(L.PLIQUIDO, 4) AS CUSTOLIQAPLIC,
                B.CODICMTAB,
-               B.CODST,
                CASE
                  WHEN B.CODICMTAB = 0 THEN
                   ROUND(L.PBRUTO, 4)
