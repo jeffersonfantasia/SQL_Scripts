@@ -92,6 +92,7 @@ USING (SELECT *
                          ROUND((L.PBRUTO - L.PLIQUIDO) / (B.CODICMTAB / 100),
                                4)
                       END AS PSUGERIDO,
+                      NVL(T.PTABELA,0) PTABELA,
                       ROUND(NVL(T.PVENDA,0), 4) AS PVENDA
                  FROM PCEST E
                  JOIN PCPRODUT P ON P.CODPROD = E.CODPROD
@@ -109,7 +110,7 @@ USING (SELECT *
                   AND P.CODMARCA <> 255 --KITS
                   AND L.PBRUTO > 0
                   AND L.PLIQUIDO > 0)
-        WHERE PSUGERIDO <> PVENDA) X
+        WHERE PSUGERIDO <> PVENDA AND PSUGERIDO <> PTABELA) X
 ON (P.CODPROD = X.CODPROD AND P.NUMREGIAO = 5)
 WHEN MATCHED THEN
   UPDATE SET P.MARGEM = X.MSUGERIDA, P.PTABELA = X.PSUGERIDO;
