@@ -168,10 +168,51 @@ SELECT CODFILIAL,
        AND P.TIPOMERC = 'L'
        AND P.REVENDA = 'S'
        AND E.CODFILIAL IN (
-        5, 6
+        '2', '5', '6'
     )
 ) C
  WHERE CODPROD IN (
-    813321, 813327, 802135, 810433, 812170, 804216, 813323, 813324, 813322, 813328, 798063
+    814923
 );
+/
+
+--UPDATE NA FILIAL 2--
+MERGE INTO PCEST E
+USING (SELECT CODFILIAL,
+              CODPROD,
+              DESCRICAO,
+              ENVIAFV_6,
+              PBRUTO_240,
+              PROXCOMPRA_240,
+              CUSTOFIN
+         FROM (SELECT E.CODFILIAL,
+                      E.CODPROD,
+                      P.DESCRICAO,
+                      (SELECT ENVIARFORCAVENDAS
+                         FROM PCPRODFILIAL
+                        WHERE CODPROD = F.CODPROD
+                          AND CODFILIAL = '6') ENVIAFV_6,
+                      ROUND((NVL(F.CUSTOREP, 0) * ((100 - F.PERCDESC) / 100)),
+                            4) PBRUTO_240,
+                      ROUND(NVL(E.CUSTOPROXIMACOMPRA, 0), 4) PROXCOMPRA_240,
+                      ROUND(NVL(E.CUSTOFIN, 0), 4) CUSTOFIN
+                 FROM PCEST E, PCPRODUT P, PCPRODFILIAL F, PCFORNEC D
+                WHERE P.CODFORNEC = D.CODFORNEC
+                  AND E.CODPROD = P.CODPROD
+                  AND F.CODPROD = P.CODPROD
+                  AND E.CODFILIAL = F.CODFILIAL
+                  AND P.CODPROD = P.CODPRODMASTER
+                  AND P.DTEXCLUSAO IS NULL
+                  AND P.TIPOMERC = 'L'
+                  AND P.REVENDA = 'S'
+                  AND E.CODFILIAL IN ('6')) C
+        WHERE ENVIAFV_6 = 'S'
+        AND CODPROD = 814923) X --INSERIR O CODIGO DO PRODUTO
+ON (E.CODPROD = X.CODPROD AND E.CODFILIAL = '2')
+WHEN MATCHED THEN
+  UPDATE
+     SET E.CUSTOREAL = X.PROXCOMPRA_240,
+         E.CUSTOFIN  = X.PROXCOMPRA_240,
+         E.CUSTOREP  = X.PROXCOMPRA_240,
+         E.CUSTOCONT = X.PROXCOMPRA_240;
 /
