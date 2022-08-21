@@ -1,4 +1,4 @@
-SELECT M.DATA,
+  SELECT M.DATA,
        M.CODBANCO,
        L.NUMNOTA,
        CASE
