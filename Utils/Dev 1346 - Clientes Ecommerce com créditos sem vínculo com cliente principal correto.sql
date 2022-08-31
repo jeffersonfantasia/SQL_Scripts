@@ -103,7 +103,7 @@ SELECT ROWID,
        C.CODCLIPRINC,
        C.*
   FROM PCCLIENT C
- WHERE C.CODCLI IN (412178);
+ WHERE C.CODCLI IN (411256);
 /
 
 --MYAUDIT --Clientes Ecommerce com créditos sem vínculo com cliente principal correto
