@@ -80,3 +80,31 @@ UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('2') 
                                                                                                       WHERE CODAUXILIAR =
                                                                                                             PCEMBALAGEM.CODAUXILIAR);
 /
+
+
+SELECT *
+  FROM PCPRODFILIAL
+ WHERE CODFILIAL = '6'
+   AND ENVIARFORCAVENDAS = 'S'
+   AND CODPROD IN (808614,
+                   814883,
+                   815279,
+                   814884,
+                   815280,
+                   808612,
+                   808615,
+                   813847,
+                   808613);
+
+UPDATE PCPRODFILIAL
+   SET ENVIARFORCAVENDAS = 'N'
+ WHERE CODFILIAL = '6'
+   AND CODPROD IN (808614,
+                   814883,
+                   815279,
+                   814884,
+                   815280,
+                   808612,
+                   808615,
+                   813847,
+                   808613)
