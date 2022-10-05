@@ -6,6 +6,7 @@ SELECT *
                C.CLIENTE,
                C.IEENT,
                M.NUMNOTA,
+               M.NUMTRANSVENDA,
                M.DTMOV,
                M.CODPROD,
                P.DESCRICAO,
