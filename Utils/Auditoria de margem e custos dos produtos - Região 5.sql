@@ -1,0 +1,230 @@
+--RODAR A 507 FILIAL 3 PARAMETRO 14 REGIAO 5
+--DEPOIS RODAR 552 PARAMETRO 1 REGIAO 5
+
+/*
+----------CALCULO DE MARGEM------------
+PrecoVenda = (PrecoCompra - CustoLiq) / CMV;
+PercCustoLiq =   (CustoLiq/PrecoVenda);
+Margem =  1 - (PercCustoLiq + CMV);
+*/
+WITH PRODUTOS_7 AS
+ (SELECT *
+    FROM (SELECT E.CODFILIAL,
+                 E.CODPROD,
+                 P.DESCRICAO,
+                 P.IMPORTADO,
+                 P.CODFORNEC,
+                 P.CODMARCA,
+                 M.MARCA,
+                 T.NUMREGIAO,
+                 R.REGIAO,
+                 T.MARGEM MIDEAL,
+                 ROUND((((NVL(T.PVENDA, 0) - NVL(E.CUSTOPROXIMACOMPRA, 0) -
+                       (NVL(T.PVENDA, 0) * (B.CODICMTAB / 100))) /
+                       (DECODE(NVL(T.PVENDA, 0), 0, 1, NVL(T.PVENDA, 0)))) * 100),
+                       2) MPRECO,
+                 CASE
+                   WHEN (B.CODICMTAB = 0 OR (L.PBRUTO - L.PLIQUIDO) = 0) THEN
+                    0
+                   ELSE
+                    ROUND((1 -
+                          (( --% CUSTO LIQUIDO
+                           L.PLIQUIDO --CUSTO LIQUIDO
+                           / ((L.PBRUTO - L.PLIQUIDO) / (B.CODICMTAB / 100)) --PRECO DE VENDA
+                          ) + (B.CODICMTAB / 100)) --%CMV
+                          ),
+                          4)
+                 END AS MSUGERIDA,
+                 ROUND(L.PBRUTO, 4) PBRUTO,
+                 ROUND(NVL(E.CUSTOPROXIMACOMPRA, 0), 4) CUSTOPROXCOMPRA,
+                 ROUND(L.PLIQUIDO, 4) AS CUSTOLIQAPLIC,
+                 B.CODICMTAB,
+                 CASE
+                   WHEN B.CODICMTAB = 0 THEN
+                    ROUND(L.PBRUTO, 4)
+                   ELSE
+                    ROUND((L.PBRUTO - L.PLIQUIDO) / (B.CODICMTAB / 100), 4)
+                 END AS PSUGERIDO,
+                 T.PTABELA,
+                 ROUND(NVL(T.PVENDA, 0), 4) AS PVENDA
+            FROM PCEST E
+            JOIN PCPRODUT P ON P.CODPROD = E.CODPROD
+            JOIN PCMARCA M ON M.CODMARCA = P.CODMARCA
+            LEFT JOIN PCTABPR T ON T.CODPROD = E.CODPROD
+            JOIN PCREGIAO R ON R.NUMREGIAO = T.NUMREGIAO
+            JOIN PCTABTRIB I ON I.UFDESTINO = R.UF
+                            AND I.CODFILIALNF = E.CODFILIAL
+                            AND I.CODPROD = E.CODPROD
+            JOIN PCTRIBUT B ON B.CODST = I.CODST
+            JOIN VIEW_JC_CUSTOLIQ_240 L ON L.CODPROD = E.CODPROD
+                                       AND L.CODFILIAL = E.CODFILIAL
+           WHERE E.CODFILIAL IN ('7')
+             AND T.NUMREGIAO = 5
+             AND P.DTEXCLUSAO IS NULL
+             AND P.CODMARCA <> 255 --KITS
+             AND L.PBRUTO > 0
+             AND L.PLIQUIDO > 0 --AND P.CODPROD = 814410
+          )
+   WHERE PSUGERIDO <> PVENDA),
+PRODUTOS_2 AS
+ (SELECT *
+    FROM (SELECT E.CODFILIAL,
+                 E.CODPROD,
+                 P.DESCRICAO,
+                 P.IMPORTADO,
+                 P.CODFORNEC,
+                 P.CODMARCA,
+                 M.MARCA,
+                 T.NUMREGIAO,
+                 R.REGIAO,
+                 T.MARGEM MIDEAL,
+                 ROUND((((NVL(T.PVENDA, 0) - NVL(E.CUSTOPROXIMACOMPRA, 0) -
+                       (NVL(T.PVENDA, 0) * (B.CODICMTAB / 100))) /
+                       (DECODE(NVL(T.PVENDA, 0), 0, 1, NVL(T.PVENDA, 0)))) * 100),
+                       2) MPRECO,
+                 CASE
+                   WHEN (B.CODICMTAB = 0 OR (L.PBRUTO - L.PLIQUIDO) = 0) THEN
+                    0
+                   ELSE
+                    ROUND((1 -
+                          (( --% CUSTO LIQUIDO
+                           L.PLIQUIDO --CUSTO LIQUIDO
+                           / ((L.PBRUTO - L.PLIQUIDO) / (B.CODICMTAB / 100)) --PRECO DE VENDA
+                          ) + (B.CODICMTAB / 100)) --%CMV
+                          ),
+                          4)
+                 END AS MSUGERIDA,
+                 ROUND(L.PBRUTO, 4) PBRUTO,
+                 ROUND(NVL(E.CUSTOPROXIMACOMPRA, 0), 4) CUSTOPROXCOMPRA,
+                 ROUND(L.PLIQUIDO, 4) AS CUSTOLIQAPLIC,
+                 B.CODICMTAB,
+                 CASE
+                   WHEN B.CODICMTAB = 0 THEN
+                    ROUND(L.PBRUTO, 4)
+                   ELSE
+                    ROUND((L.PBRUTO - L.PLIQUIDO) / (B.CODICMTAB / 100), 4)
+                 END AS PSUGERIDO,
+                 T.PTABELA,
+                 ROUND(NVL(T.PVENDA, 0), 4) AS PVENDA
+            FROM PCEST E
+            JOIN PCPRODUT P ON P.CODPROD = E.CODPROD
+            JOIN PCMARCA M ON M.CODMARCA = P.CODMARCA
+            LEFT JOIN PCTABPR T ON T.CODPROD = E.CODPROD
+            JOIN PCREGIAO R ON R.NUMREGIAO = T.NUMREGIAO
+            JOIN PCTABTRIB I ON I.UFDESTINO = R.UF
+                            AND I.CODFILIALNF = E.CODFILIAL
+                            AND I.CODPROD = E.CODPROD
+            JOIN PCTRIBUT B ON B.CODST = I.CODST
+            JOIN VIEW_JC_CUSTOLIQ_240 L ON L.CODPROD = E.CODPROD
+                                       AND L.CODFILIAL = E.CODFILIAL
+            LEFT JOIN PRODUTOS_7 F7 ON F7.CODPROD = P.CODPROD
+           WHERE E.CODFILIAL IN ('2')
+             AND T.NUMREGIAO = 5
+             AND P.DTEXCLUSAO IS NULL
+             AND P.CODMARCA <> 255 --KITS
+             AND L.PBRUTO > 0
+             AND L.PLIQUIDO > 0 --AND P.CODPROD = 814410
+             AND NVL(T.PVENDA,0) = 0
+             AND F7.CODPROD IS NULL
+          )
+   WHERE PSUGERIDO <> PVENDA)
+SELECT *
+  FROM PRODUTOS_7
+UNION ALL
+SELECT * FROM PRODUTOS_2;
+/
+ 
+--UPDATE---
+MERGE INTO PCTABPR P
+USING (
+  WITH PRODUTOS_7 AS
+   (SELECT *
+      FROM (SELECT E.CODPROD,
+                   CASE
+                     WHEN (B.CODICMTAB = 0 OR (L.PBRUTO - L.PLIQUIDO) = 0) THEN
+                      0
+                     ELSE
+                      ROUND((1 -
+                            (( --% CUSTO LIQUIDO
+                             L.PLIQUIDO --CUSTO LIQUIDO
+                             / ((L.PBRUTO - L.PLIQUIDO) / (B.CODICMTAB / 100)) --PRECO DE VENDA
+                            ) + (B.CODICMTAB / 100)) --%CMV
+                            ),
+                            4)
+                   END AS MSUGERIDA,
+                   CASE
+                     WHEN B.CODICMTAB = 0 THEN
+                      ROUND(L.PBRUTO, 4)
+                     ELSE
+                      ROUND((L.PBRUTO - L.PLIQUIDO) / (B.CODICMTAB / 100), 4)
+                   END AS PSUGERIDO,
+                   NVL(T.PTABELA, 0) PTABELA,
+                   ROUND(NVL(T.PVENDA, 0), 4) AS PVENDA
+              FROM PCEST E
+              JOIN PCPRODUT P ON P.CODPROD = E.CODPROD
+              LEFT JOIN PCTABPR T ON T.CODPROD = E.CODPROD
+              JOIN PCREGIAO R ON R.NUMREGIAO = T.NUMREGIAO
+              JOIN PCTABTRIB I ON I.UFDESTINO = R.UF
+                              AND I.CODFILIALNF = E.CODFILIAL
+                              AND I.CODPROD = E.CODPROD
+              JOIN PCTRIBUT B ON B.CODST = I.CODST
+              JOIN VIEW_JC_CUSTOLIQ_240 L ON L.CODPROD = E.CODPROD
+                                         AND L.CODFILIAL = E.CODFILIAL              
+             WHERE E.CODFILIAL IN ('7')
+               AND T.NUMREGIAO = 5
+               AND P.DTEXCLUSAO IS NULL
+               AND P.CODMARCA <> 255 --KITS
+               AND L.PBRUTO > 0
+               AND L.PLIQUIDO > 0)
+     WHERE PSUGERIDO <> PVENDA),
+  PRODUTOS_2 AS
+   (SELECT *
+      FROM (SELECT E.CODPROD,
+                   CASE
+                     WHEN (B.CODICMTAB = 0 OR (L.PBRUTO - L.PLIQUIDO) = 0) THEN
+                      0
+                     ELSE
+                      ROUND((1 -
+                            (( --% CUSTO LIQUIDO
+                             L.PLIQUIDO --CUSTO LIQUIDO
+                             / ((L.PBRUTO - L.PLIQUIDO) / (B.CODICMTAB / 100)) --PRECO DE VENDA
+                            ) + (B.CODICMTAB / 100)) --%CMV
+                            ),
+                            4)
+                   END AS MSUGERIDA,
+                   CASE
+                     WHEN B.CODICMTAB = 0 THEN
+                      ROUND(L.PBRUTO, 4)
+                     ELSE
+                      ROUND((L.PBRUTO - L.PLIQUIDO) / (B.CODICMTAB / 100), 4)
+                   END AS PSUGERIDO,
+                   NVL(T.PTABELA, 0) PTABELA,
+                   ROUND(NVL(T.PVENDA, 0), 4) AS PVENDA
+              FROM PCEST E
+              JOIN PCPRODUT P ON P.CODPROD = E.CODPROD
+              LEFT JOIN PCTABPR T ON T.CODPROD = E.CODPROD
+              JOIN PCREGIAO R ON R.NUMREGIAO = T.NUMREGIAO
+              JOIN PCTABTRIB I ON I.UFDESTINO = R.UF
+                              AND I.CODFILIALNF = E.CODFILIAL
+                              AND I.CODPROD = E.CODPROD
+              JOIN PCTRIBUT B ON B.CODST = I.CODST
+              JOIN VIEW_JC_CUSTOLIQ_240 L ON L.CODPROD = E.CODPROD
+                                         AND L.CODFILIAL = E.CODFILIAL
+              LEFT JOIN PRODUTOS_7 F7 ON F7.CODPROD = P.CODPROD                                         
+             WHERE E.CODFILIAL IN ('2')
+               AND T.NUMREGIAO = 5
+               AND P.DTEXCLUSAO IS NULL
+               AND P.CODMARCA <> 255 --KITS
+               AND L.PBRUTO > 0
+               AND L.PLIQUIDO > 0
+               AND NVL(T.PVENDA,0) = 0
+               AND F7.CODPROD IS NULL)
+     WHERE PSUGERIDO <> PVENDA)
+  SELECT *
+    FROM PRODUTOS_7
+  UNION ALL
+  SELECT *
+    FROM PRODUTOS_2) X 
+ON (P.CODPROD = X.CODPROD AND P.NUMREGIAO = 5) 
+WHEN MATCHED THEN
+    UPDATE SET P.MARGEM = X.MSUGERIDA, P.PTABELA = X.PSUGERIDO;
