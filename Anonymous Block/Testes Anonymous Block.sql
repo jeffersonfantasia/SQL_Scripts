@@ -48,3 +48,16 @@ begin
          ' day '||to_char(l_today,'D')||
          ' of the week.');
 end;
+
+SET SERVEROUTPUT ON;
+DECLARE
+  howmany     INTEGER;
+  num_tables  INTEGER;
+BEGIN
+  -- Begin processing
+  SELECT COUNT(*) INTO howmany
+  FROM USER_OBJECTS
+  WHERE OBJECT_TYPE = 'TABLE'; -- Check number of tables
+  num_tables := howmany;       -- Compute another value
+  return NUM_TABLES;
+END;
