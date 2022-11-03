@@ -14,8 +14,6 @@ SELECT M.*,
            ) T
      WHERE T.NUMVERBA (+) = V.NUMVERBA
        AND V.TIPO = 'D'
-       AND V.NUMVERBA IN (
-        2126
-    )
+       AND V.NUMVERBA IN (6216)
      GROUP BY T.CREDITO
 ) M;
