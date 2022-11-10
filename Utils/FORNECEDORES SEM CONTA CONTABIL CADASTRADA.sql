@@ -76,7 +76,7 @@ SELECT ROWID,
        F.CGC,
        F.*
   FROM PCFORNEC F
- WHERE CODFORNEC IN (10143, 10163, 10165, 10170, 10171);
+ WHERE CODFORNEC IN (10178,10184);
 /
 SELECT F.CGC,
        F.*
@@ -100,7 +100,7 @@ WITH FORNEC_CONTABIL AS (
            750 AS CODFISCAL,
            L.CODFORNEC,
            F.FORNECEDOR,
-           F.CGC,
+           REGEXP_REPLACE (F.CGC, '([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{4})', '\1.\2.\3/\4-') CGC,
            F.ESTADO
       FROM VIEW_JC_LANC_GERENCIAL L
       LEFT JOIN PCLANC C ON L.RECNUM = C.RECNUM
@@ -119,7 +119,7 @@ WITH FORNEC_CONTABIL AS (
            E.CODFISCAL,
            E.CODFORNEC,
            R.FORNECEDOR,
-           R.CGC,
+           REGEXP_REPLACE (R.CGC, '([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{4})', '\1.\2.\3/\4-') CGC,
            R.ESTADO
       FROM VIEW_JC_LANC_FISCAL E
       LEFT JOIN PCNFENT F ON E.NUMTRANSENT = F.NUMTRANSENT
@@ -138,7 +138,7 @@ WITH FORNEC_CONTABIL AS (
            M.CODFISCAL,
            M.CODFORCLI AS CODFORNEC,
            F.FORNECEDOR,
-           F.CGC,
+           REGEXP_REPLACE (F.CGC, '([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{4})', '\1.\2.\3/\4-') CGC,
            F.ESTADO
       FROM VIEW_BI_MOVPROD M
      INNER JOIN PCNFENT E ON M.NUMTRANSACAO = E.NUMTRANSENT
@@ -184,14 +184,12 @@ SELECT *
 /*ANALISE DE CONTAS CONTABEIS DE FORNECEDORES*/
 SELECT DISTINCT F.CODFORNEC,
                 F.FORNECEDOR,
-                F.CGC,
+                REGEXP_REPLACE (F.CGC, '([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{4})', '\1.\2.\3/\4-') CGC,
                 F.ESTADO,
                 B.CODCONTAB
   FROM PCFORNEC F
   LEFT JOIN BROKERCONTABIL B ON F.CODFORNEC = B.CODFORNEC
- WHERE NVL (B.CODFILIAL, 0) IN (
-    0, 1, 2, 7, 8
-)
+ WHERE NVL (B.CODFILIAL, 0) IN ( 0, 1, 2, 7, 8 )
    AND F.CODFORNEC IN (
     9985
 )
