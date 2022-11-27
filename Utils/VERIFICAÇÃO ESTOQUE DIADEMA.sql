@@ -49,7 +49,6 @@ SELECT A.CODFILIAL,
  ORDER BY C.CODPRODMASTER, CODPROD;
 /
 
-
 /*Estoque contabil menor que zero - Filial 7*/
 SELECT A.CODFILIAL,
        A.CODPROD,
