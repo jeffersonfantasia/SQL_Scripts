@@ -9,7 +9,7 @@ WITH REGISTRO_UNICO_ESTORNADO AS
      AND M.ROTINALANCAMENTO LIKE '[PCSIS604%')
 SELECT *
   FROM (SELECT DISTINCT L.CODFILIAL,
-                        M.DTESTORNO,
+                        --M.DTESTORNO,
                         L.RECNUM,
                         L.VPAGO,
                         --USADO COMO CONDICIONAL DENTRO DO BI
