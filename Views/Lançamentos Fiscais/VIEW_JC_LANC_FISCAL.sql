@@ -57,6 +57,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_FISCAL AS
                    END
                ) AS CODCONTA,
                B.CODFISCAL,
+               E.NUMNOTA,
                E.CODFORNEC,
                (E.ESPECIE || ' ' || E.NUMNOTA || ' - CNPJ: ' || E.CGC || ' - ' || E.FORNECEDOR) AS HISTORICO,
                B.VLCONTABIL AS VALOR,
@@ -100,6 +101,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_FISCAL AS
            N.CODCONTA,
            C.CONTACONTABIL,
            N.CODFISCAL,
+           N.NUMNOTA,
            N.CODFORNEC,
            N.HISTORICO,
            N.VALOR,
