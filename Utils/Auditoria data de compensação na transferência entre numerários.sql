@@ -4,7 +4,7 @@ SELECT M.DTCOMPENSACAO,
        M.DATA,
        M.CODBANCO,
        M.VALOR,
-       M.TIPO,
+       M.TIPO, 
        M.HISTORICO,
        M.DTCONCIL,
        M.CODFUNCCONCIL AS CODFUNC
