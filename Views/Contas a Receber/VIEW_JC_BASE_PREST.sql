@@ -52,7 +52,7 @@ STATUS_PREST AS
             'NORMAL'
          END) STATUS
     FROM STATUS_DUP_ATUAL P)
-    SELECT (T.DUPLIC || '-' || T.PREST || '-' || T.NUMTRANSVENDA) AS CODDUPLIC,
+    SELECT --(T.DUPLIC || '-' || T.PREST || '-' || T.NUMTRANSVENDA) AS CODDUPLIC,
            T.CODFILIAL,
            E.STATUS,
            T.DUPLIC NUMNOTA,

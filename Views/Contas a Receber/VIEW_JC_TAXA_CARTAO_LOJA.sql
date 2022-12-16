@@ -6,11 +6,15 @@ CREATE OR REPLACE VIEW VIEW_JC_TAXA_CARTAO_LOJA AS
          WHERE CODCLICC IS NOT NULL
            AND CODCONTACC = 620105
     )
-    SELECT T.CODDUPLIC,
-           T.CODFILIAL,
+    SELECT T.CODFILIAL,
            T.DATA,
            T.DTVENC,
            T.DTEMISSAO,
+           T.NUMNOTA,
+           T.CPF_CNPJ,
+           T.VLJUROS,
+           T.VLMULTA,
+           T.VALORDESC,
            T.DUPLICATA,
            T.CODBANCO,
            T.CODCONTABILBANCO,
