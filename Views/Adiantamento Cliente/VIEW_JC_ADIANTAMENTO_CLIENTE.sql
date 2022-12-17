@@ -1,5 +1,7 @@
 CREATE OR REPLACE VIEW VIEW_JC_ADIANTAMENTO_CLIENTE AS
     SELECT CODFILIAL,
+           NUMNOTA,
+           CPF_CNPJ,
            DATA,
            CODCRED,
            CODCONTAB,

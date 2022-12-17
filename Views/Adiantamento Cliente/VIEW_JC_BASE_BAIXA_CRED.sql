@@ -38,6 +38,7 @@ CREATE OR REPLACE VIEW VIEW_JC_BASE_BAIXA_CRED AS
                END
            ) AS VALOR,
            C.NUMNOTADESC,
+           T.CGCENT CPF_CNPJ,
            T.CLIENTE,
            A.VERIFICAR_DATA
       FROM PCCRECLI C
