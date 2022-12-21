@@ -29,14 +29,14 @@ UPDATE PCEMBALAGEM SET ENVIAFV = 'S' WHERE ENVIAFV = 'N' AND CODFILIAL IN ('2', 
    WHERE B.UNIDADE = 'UN'
      AND B.ENVIAFV = 'N'
      AND B.CODFILIAL IN ('7');
-     
+/     
 --UPDATE
 UPDATE PCEMBALAGEM B
    SET B.ENVIAFV = 'S'
  WHERE B.UNIDADE = 'UN'
    AND B.ENVIAFV = 'N'
    AND B.CODFILIAL IN ('7');
-
+/
 /*ANALISE DOS QUE NAO SÃO PARA ENVIAR PARA FORCA DE VENDAS */
 SELECT B.CODFILIAL, B.CODPROD, P.DESCRICAO, B.ENVIAFV ENVIAFV_2014
   FROM PCEMBALAGEM B, PCPRODUT P, PCFORNEC F
@@ -53,7 +53,6 @@ SELECT B.CODFILIAL, B.CODPROD, P.DESCRICAO, B.ENVIAFV ENVIAFV_2014
            AND CODPROD = B.CODPROD)
  ORDER BY B.CODPROD, B.CODFILIAL;
 /
-
 /*UPDATE*/
 UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('5', '6') AND EXISTS(
   SELECT CODPROD
@@ -64,7 +63,7 @@ UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('5', 
                                                                FROM PCPRODUT
                                                               WHERE CODAUXILIAR =
                                                                     PCEMBALAGEM.CODAUXILIAR);
-                                                                    
+/                                                                 
 UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('2') AND CODPROD = (
   SELECT CODPROD
     FROM PCPRODUT P, PCFORNEC F
@@ -80,8 +79,6 @@ UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('2') 
                                                                                                       WHERE CODAUXILIAR =
                                                                                                             PCEMBALAGEM.CODAUXILIAR);
 /
-
-
 SELECT *
   FROM PCPRODFILIAL
  WHERE CODFILIAL = '6'
@@ -95,7 +92,7 @@ SELECT *
                    808615,
                    813847,
                    808613);
-
+/
 UPDATE PCPRODFILIAL
    SET ENVIARFORCAVENDAS = 'N'
  WHERE CODFILIAL = '6'
@@ -108,3 +105,4 @@ UPDATE PCPRODFILIAL
                    808615,
                    813847,
                    808613)
+/
