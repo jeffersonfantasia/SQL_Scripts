@@ -11,7 +11,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PREST_ESTORNO AS
            T.DUPLICATA,
            T.CODBANCO,
            T.CODCONTABILBANCO,
-           ((NVL (T.VPAGO, T.VALOR) * - 1) - (NVL (T.VLMULTA, 0) * - 1)) AS VALOR,
+           ((NVL (T.VPAGO, T.VALOR) * - 1) - (NVL (T.VLMULTA, 0) * - 1) - (NVL (T.VLJUROS, 0) * - 1)) AS VALOR,
            T.CODCONTAB,
            T.CODCLI,
            T.CODCOB,
