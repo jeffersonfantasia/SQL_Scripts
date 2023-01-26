@@ -124,8 +124,9 @@ PRODUTOS_2 AS
              AND P.CODMARCA <> 255 --KITS
              AND L.PBRUTO > 0
              AND L.PLIQUIDO > 0 --AND P.CODPROD = 814410
-             AND NVL(T.PVENDA, 0) = 0
-             AND F7.CODPROD IS NULL)
+             AND NVL(T.PVENDA,0) = 0
+             AND F7.CODPROD IS NULL
+          )
    WHERE PSUGERIDO <> PVENDA)
 SELECT *
   FROM PRODUTOS_7
@@ -133,9 +134,8 @@ UNION ALL
 SELECT * FROM PRODUTOS_2;
 /
 --UPDATE---
-MERGE
-  INTO PCTABPR P
-  USING (
+MERGE INTO PCTABPR P
+USING (
   WITH PRODUTOS_7 AS
    (SELECT *
       FROM (SELECT E.CODPROD,
@@ -168,7 +168,7 @@ MERGE
                               AND I.CODPROD = E.CODPROD
               JOIN PCTRIBUT B ON B.CODST = I.CODST
               JOIN VIEW_JC_CUSTOLIQ_240 L ON L.CODPROD = E.CODPROD
-                                         AND L.CODFILIAL = E.CODFILIAL
+                                         AND L.CODFILIAL = E.CODFILIAL              
              WHERE E.CODFILIAL IN ('7')
                AND T.NUMREGIAO = 5
                AND P.DTEXCLUSAO IS NULL
@@ -209,20 +209,22 @@ MERGE
               JOIN PCTRIBUT B ON B.CODST = I.CODST
               JOIN VIEW_JC_CUSTOLIQ_240 L ON L.CODPROD = E.CODPROD
                                          AND L.CODFILIAL = E.CODFILIAL
-              LEFT JOIN PRODUTOS_7 F7 ON F7.CODPROD = P.CODPROD
+              LEFT JOIN PRODUTOS_7 F7 ON F7.CODPROD = P.CODPROD                                         
              WHERE E.CODFILIAL IN ('2')
                AND T.NUMREGIAO = 5
                AND P.DTEXCLUSAO IS NULL
                AND P.CODMARCA <> 255 --KITS
                AND L.PBRUTO > 0
                AND L.PLIQUIDO > 0
-               AND NVL(T.PVENDA, 0) = 0
+               AND NVL(T.PVENDA,0) = 0
                AND F7.CODPROD IS NULL)
      WHERE PSUGERIDO <> PVENDA)
   SELECT *
     FROM PRODUTOS_7
   UNION ALL
   SELECT *
-    FROM PRODUTOS_2) X ON (P.CODPROD = X.CODPROD AND P.NUMREGIAO = 5) WHEN
-   MATCHED THEN UPDATE SET P.MARGEM = X.MSUGERIDA, P.PTABELA = X.PSUGERIDO;
+    FROM PRODUTOS_2) X 
+ON (P.CODPROD = X.CODPROD AND P.NUMREGIAO = 5) 
+WHEN MATCHED THEN
+    UPDATE SET P.MARGEM = X.MSUGERIDA, P.PTABELA = X.PSUGERIDO;
 /
