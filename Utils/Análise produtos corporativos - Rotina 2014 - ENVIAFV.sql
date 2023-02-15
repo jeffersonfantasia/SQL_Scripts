@@ -59,7 +59,7 @@ UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('5', 
                                                                FROM PCPRODUT
                                                               WHERE CODAUXILIAR =
                                                                     PCEMBALAGEM.CODAUXILIAR);
-/ UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('2') AND CODPROD = (
+UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('2') AND CODPROD = (
   SELECT CODPROD
     FROM PCPRODUT P, PCFORNEC F
    WHERE P.CODFORNEC = F.CODFORNEC
