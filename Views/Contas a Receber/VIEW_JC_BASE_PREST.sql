@@ -62,12 +62,13 @@ STATUS_PREST AS
            T.DTPAG,
            T.DTVENC,
            T.DTINCLUSAOMANUAL,
-           (
+           /*(
                CASE
                    WHEN B.CODBACEN = 'MARKETPLACE' THEN T.DTBAIXA
                    ELSE T.DTPAG
                END
-           ) AS DATA,
+           ) AS DATA,*/
+           T.DTPAG DATA,
            (T.DUPLIC || '-' || T.PREST) AS DUPLICATA,
            M.CODBANCO,
            B.CODCONTABIL AS CODCONTABILBANCO,
