@@ -4,6 +4,7 @@ SELECT *
                R.DESCRICAO AS REDE,
                M.CODCLI,
                C.CLIENTE,
+               C.CGCENT,
                C.IEENT,
                M.NUMNOTA,
                M.NUMTRANSVENDA,
