@@ -59,15 +59,15 @@ CREATE OR REPLACE VIEW VIEW_JC_MOVNOTAS_FRETE AS
             1
          END) TIPOFAT,
          (CASE
-           WHEN E.TOTPESO >= 150000 THEN
+           WHEN E.TOTPESO >= 150 THEN
             6
-           WHEN E.TOTPESO >= 100000 THEN
+           WHEN E.TOTPESO >= 100 THEN
             5
-           WHEN E.TOTPESO >= 60000 THEN
+           WHEN E.TOTPESO >= 60 THEN
             4
-           WHEN E.TOTPESO >= 40000 THEN
+           WHEN E.TOTPESO >= 40 THEN
             3
-           WHEN E.TOTPESO >= 20000 THEN
+           WHEN E.TOTPESO >= 20 THEN
             2
            ELSE
             1
@@ -102,15 +102,15 @@ CREATE OR REPLACE VIEW VIEW_JC_MOVNOTAS_FRETE AS
             1
          END) TIPOFAT,
          (CASE
-           WHEN E.TOTPESO >= 150000 THEN
+           WHEN E.TOTPESO >= 150 THEN
             6
-           WHEN E.TOTPESO >= 100000 THEN
+           WHEN E.TOTPESO >= 100 THEN
             5
-           WHEN E.TOTPESO >= 60000 THEN
+           WHEN E.TOTPESO >= 60 THEN
             4
-           WHEN E.TOTPESO >= 40000 THEN
+           WHEN E.TOTPESO >= 40 THEN
             3
-           WHEN E.TOTPESO >= 20000 THEN
+           WHEN E.TOTPESO >= 20 THEN
             2
            ELSE
             1
@@ -145,15 +145,15 @@ CREATE OR REPLACE VIEW VIEW_JC_MOVNOTAS_FRETE AS
             1
          END) TIPOFAT,
          (CASE
-           WHEN E.TOTPESO >= 150000 THEN
+           WHEN E.TOTPESO >= 150 THEN
             6
-           WHEN E.TOTPESO >= 100000 THEN
+           WHEN E.TOTPESO >= 100 THEN
             5
-           WHEN E.TOTPESO >= 60000 THEN
+           WHEN E.TOTPESO >= 60 THEN
             4
-           WHEN E.TOTPESO >= 40000 THEN
+           WHEN E.TOTPESO >= 40 THEN
             3
-           WHEN E.TOTPESO >= 20000 THEN
+           WHEN E.TOTPESO >= 20 THEN
             2
            ELSE
             1
@@ -189,15 +189,15 @@ CREATE OR REPLACE VIEW VIEW_JC_MOVNOTAS_FRETE AS
             1
          END) TIPOFAT,
          (CASE
-           WHEN S.TOTPESO >= 150000 THEN
+           WHEN S.TOTPESO >= 150 THEN
             6
-           WHEN S.TOTPESO >= 100000 THEN
+           WHEN S.TOTPESO >= 100 THEN
             5
-           WHEN S.TOTPESO >= 60000 THEN
+           WHEN S.TOTPESO >= 60 THEN
             4
-           WHEN S.TOTPESO >= 40000 THEN
+           WHEN S.TOTPESO >= 40 THEN
             3
-           WHEN S.TOTPESO >= 20000 THEN
+           WHEN S.TOTPESO >= 20 THEN
             2
            ELSE
             1
@@ -244,15 +244,15 @@ CREATE OR REPLACE VIEW VIEW_JC_MOVNOTAS_FRETE AS
             1
          END) TIPOFAT,
          (CASE
-           WHEN S.TOTPESO >= 150000 THEN
+           WHEN S.TOTPESO >= 150 THEN
             6
-           WHEN S.TOTPESO >= 100000 THEN
+           WHEN S.TOTPESO >= 100 THEN
             5
-           WHEN S.TOTPESO >= 60000 THEN
+           WHEN S.TOTPESO >= 60 THEN
             4
-           WHEN S.TOTPESO >= 40000 THEN
+           WHEN S.TOTPESO >= 40 THEN
             3
-           WHEN S.TOTPESO >= 20000 THEN
+           WHEN S.TOTPESO >= 20 THEN
             2
            ELSE
             1
@@ -287,15 +287,15 @@ CREATE OR REPLACE VIEW VIEW_JC_MOVNOTAS_FRETE AS
             1
          END) TIPOFAT,
          (CASE
-           WHEN S.TOTPESO >= 150000 THEN
+           WHEN S.TOTPESO >= 150 THEN
             6
-           WHEN S.TOTPESO >= 100000 THEN
+           WHEN S.TOTPESO >= 100 THEN
             5
-           WHEN S.TOTPESO >= 60000 THEN
+           WHEN S.TOTPESO >= 60 THEN
             4
-           WHEN S.TOTPESO >= 40000 THEN
+           WHEN S.TOTPESO >= 40 THEN
             3
-           WHEN S.TOTPESO >= 20000 THEN
+           WHEN S.TOTPESO >= 20 THEN
             2
            ELSE
             1
@@ -330,15 +330,15 @@ CREATE OR REPLACE VIEW VIEW_JC_MOVNOTAS_FRETE AS
             1
          END) TIPOFAT,
          (CASE
-           WHEN S.TOTPESO >= 150000 THEN
+           WHEN S.TOTPESO >= 150 THEN
             6
-           WHEN S.TOTPESO >= 100000 THEN
+           WHEN S.TOTPESO >= 100 THEN
             5
-           WHEN S.TOTPESO >= 60000 THEN
+           WHEN S.TOTPESO >= 60 THEN
             4
-           WHEN S.TOTPESO >= 40000 THEN
+           WHEN S.TOTPESO >= 40 THEN
             3
-           WHEN S.TOTPESO >= 20000 THEN
+           WHEN S.TOTPESO >= 20 THEN
             2
            ELSE
             1
@@ -373,15 +373,15 @@ CREATE OR REPLACE VIEW VIEW_JC_MOVNOTAS_FRETE AS
             1
          END) TIPOFAT,
          (CASE
-           WHEN S.TOTPESO >= 150000 THEN
+           WHEN S.TOTPESO >= 150 THEN
             6
-           WHEN S.TOTPESO >= 100000 THEN
+           WHEN S.TOTPESO >= 100 THEN
             5
-           WHEN S.TOTPESO >= 60000 THEN
+           WHEN S.TOTPESO >= 60 THEN
             4
-           WHEN S.TOTPESO >= 40000 THEN
+           WHEN S.TOTPESO >= 40 THEN
             3
-           WHEN S.TOTPESO >= 20000 THEN
+           WHEN S.TOTPESO >= 20 THEN
             2
            ELSE
             1
