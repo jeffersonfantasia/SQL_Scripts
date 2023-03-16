@@ -1,56 +1,142 @@
---VERIFICACAO DIVERGENCIAS
-WITH MOVENTRADA AS
+/*****CORRECAO CUSTO NA VENDA ******/
+--CONSULTA
+WITH MOV_COMPRA AS
+ (SELECT M.DTMOV DTCOMPRA,
+         M.NUMTRANSITEM NUMITEMCOMPRA,
+         M.CODFISCAL CODCOMPRA,
+         M.PUNITCONT
+    FROM PCMOV M
+   WHERE M.DTCANCEL IS NULL
+     AND M.STATUS IN ('A', 'AB')
+     AND M.CODFILIAL IN ('5', '6', '9', '10')
+     AND M.CODOPER = 'E'),
+MOV_VENDA AS
  (SELECT M.CODFILIAL,
-         M.DTMOV,
+         M.NUMTRANSITEM NUMITEMVENDA,
+         (SELECT MIN(C.NUMTRANSITEM)
+            FROM PCMOV C
+           WHERE C.CODPROD = M.CODPROD
+             AND C.CODFILIAL = M.CODFILIAL
+             AND C.DTMOV >= M.DTMOV
+             AND C.CODOPER = 'E'
+             AND C.DTCANCEL IS NULL) NUMITEMCOMPRA,
+         M.DTMOV DTVENDA,
+         M.CODFISCAL CODVENDA,
          M.CODPROD,
-         M.PUNITCONT,
-         M.CUSTOCONT,
-         M.CODFISCAL,
-         M.QTCONT
+         M.DESCRICAO,
+         M.CUSTOCONT CUSTOCONT_VENDA,
+         M.CUSTOFINEST CUSTOFINEST_VENDA
+    FROM PCMOV M
+   WHERE M.DTCANCEL IS NULL
+     AND M.STATUS IN ('A', 'AB')
+     AND M.CODFILIAL IN ('5', '6', '9', '10')
+     AND M.CODOPER IN ('S', 'SB')
+     AND M.CODFISCAL NOT IN (5117, 6117, 5923, 6923))
+
+SELECT V.CODFILIAL,
+       V.NUMITEMVENDA,
+       V.DTVENDA,
+       C.DTCOMPRA,
+       V.CODVENDA,
+       C.CODCOMPRA,
+       V.CODPROD,
+       V.DESCRICAO,
+       V.CUSTOFINEST_VENDA,
+       V.CUSTOCONT_VENDA,
+       C.PUNITCONT
+  FROM MOV_VENDA V
+  LEFT JOIN MOV_COMPRA C ON C.NUMITEMCOMPRA = V.NUMITEMCOMPRA
+ WHERE V.CUSTOCONT_VENDA <> C.PUNITCONT
+    OR V.CUSTOFINEST_VENDA <> C.PUNITCONT;
+
+--UPDATE
+MERGE INTO PCMOV M
+USING (
+  WITH MOV_COMPRA AS
+   (SELECT M.NUMTRANSITEM NUMITEMCOMPRA, M.PUNITCONT
+      FROM PCMOV M
+     WHERE M.DTCANCEL IS NULL
+       AND M.STATUS IN ('A', 'AB')
+       AND M.CODFILIAL IN ('5', '6', '9', '10')
+       AND M.CODOPER = 'E'),
+  MOV_VENDA AS
+   (SELECT M.NUMTRANSITEM NUMITEMVENDA,
+           (SELECT MIN(C.NUMTRANSITEM)
+              FROM PCMOV C
+             WHERE C.CODPROD = M.CODPROD
+               AND C.CODFILIAL = M.CODFILIAL
+               AND C.DTMOV >= M.DTMOV
+               AND C.CODOPER = 'E'
+               AND C.DTCANCEL IS NULL) NUMITEMCOMPRA,
+           M.CUSTOCONT CUSTOCONT_VENDA,
+           M.CUSTOFINEST CUSTOFINEST_VENDA
+      FROM PCMOV M
+     WHERE M.DTCANCEL IS NULL
+       AND M.STATUS IN ('A', 'AB')
+       AND M.CODFILIAL IN ('5', '6', '9', '10')
+       AND M.CODOPER IN ('S', 'SB')
+       AND M.CODFISCAL NOT IN (5117, 6117, 5923, 6923))
+  
+  SELECT V.NUMITEMVENDA, C.PUNITCONT
+    FROM MOV_VENDA V
+    LEFT JOIN MOV_COMPRA C ON C.NUMITEMCOMPRA = V.NUMITEMCOMPRA
+   WHERE V.CUSTOCONT_VENDA <> C.PUNITCONT
+      OR V.CUSTOFINEST_VENDA <> C.PUNITCONT) X 
+      ON (M.NUMTRANSITEM = X.NUMITEMVENDA) 
+   WHEN MATCHED THEN
+    UPDATE
+       SET M.CUSTOCONT   = X.PUNITCONT,
+           M.CUSTOFINEST = X.PUNITCONT,
+           M.CUSTOFIN    = X.PUNITCONT,
+           M.CUSTOULTENT = X.PUNITCONT,
+           M.VALORULTENT = X.PUNITCONT;
+/***************************************/
+
+/*****CORRECAO CUSTO DEVOLUCOES DE CLIENTES ******/
+--CUSTO DAS DEVOLUCOES DE CLIENTES--
+WITH MOVENTRADA AS
+ (SELECT CODFILIAL, DTMOV, CODPROD, PUNITCONT, CODFISCAL, QTCONT
     FROM PCMOV M
    WHERE M.DTCANCEL IS NULL
      AND M.STATUS IN ('A', 'AB')
      AND M.CODFILIAL IN ('5', '6', '9', '10')
      AND M.CODOPER LIKE 'E%'
      AND M.CODOPER NOT IN ('ED')
-     AND M.DTMOV BETWEEN TO_DATE('01/01/2023', 'DD/MM/YYYY') AND
+     AND M.DTMOV BETWEEN TO_DATE('01/01/2022', 'DD/MM/YYYY') AND
          TO_DATE('31/12/2023', 'DD/MM/YYYY'))
-SELECT DISTINCT T.CODFILIAL,
-                T.NUMTRANSITEM,
-                T.DTMOV,
-                T.DTCOMPRA,
-                T.CODFISCAL,
-                T.CODCOMPRA,
-                T.CODPROD,
-                T.DESCRICAO,
-                T.QTCONT,
-                T.CUSTOFINEST,
-                T.CUSTOCONT,
-                A.PUNITCONT
+SELECT T.CODFILIAL,
+       T.NUMTRANSITEM,
+       T.DTMOV,
+       T.DTCOMPRA,
+       T.CODFISCAL,
+       T.CODCOMPRA,
+       T.CODPROD,
+       T.DESCRICAO,
+       T.QTCONT,
+       T.CUSTOCONT,
+       A.PUNITCONT
   FROM (SELECT M.CODFILIAL,
                M.NUMTRANSITEM,
                M.DTMOV,
-               MIN(E.DTMOV) AS DTCOMPRA,
+               MAX(E.DTMOV) AS DTCOMPRA,
                M.CODFISCAL,
                E.CODFISCAL AS CODCOMPRA,
                M.CODPROD,
                P.DESCRICAO,
                M.QTCONT,
-               M.CUSTOCONT,
-               M.CUSTOFINEST
+               M.CUSTOCONT
           FROM PCMOV M
-          JOIN PCPRODUT P ON M.CODPROD = P.CODPROD
+          LEFT JOIN PCPRODUT P ON M.CODPROD = P.CODPROD
           LEFT JOIN MOVENTRADA E ON E.CODFILIAL = M.CODFILIAL
                                 AND E.CODPROD = M.CODPROD
-                                AND E.DTMOV >= M.DTMOV
+                                AND E.DTMOV <= M.DTMOV
          WHERE M.DTCANCEL IS NULL
            AND M.DTMOV BETWEEN TO_DATE('01/01/2023', 'DD/MM/YYYY') AND
                TO_DATE('31/12/2023', 'DD/MM/YYYY')
            AND M.STATUS IN ('A', 'AB')
            AND M.CODFILIAL IN ('5', '6', '9', '10')
-           AND M.CODOPER LIKE 'S%'
-           AND M.CODOPER NOT IN ('SD')
-           AND M.CODFISCAL NOT IN (5117, 6117, 5923, 6923)
+           AND M.CODOPER IN ('ED')
+           AND M.CODFISCAL NOT IN (1117, 2117, 1923, 2923)
          GROUP BY M.CODFILIAL,
                   M.NUMTRANSITEM,
                   M.DTMOV,
@@ -59,147 +145,14 @@ SELECT DISTINCT T.CODFILIAL,
                   M.CODPROD,
                   P.DESCRICAO,
                   M.QTCONT,
-                  M.CUSTOCONT,
-                  M.CUSTOFINEST
+                  M.CUSTOCONT
          ORDER BY M.CODPROD, M.DTMOV) T
   LEFT JOIN MOVENTRADA A ON T.CODFILIAL = A.CODFILIAL
                         AND T.CODPROD = A.CODPROD
                         AND T.DTCOMPRA = A.DTMOV
  WHERE T.CUSTOCONT <> A.PUNITCONT
-    OR T.CUSTOFINEST <> A.PUNITCONT;
-/
----UPDATE --
-MERGE
-  INTO PCMOV M
-  USING (
-  WITH MOVENTRADA AS
-   (SELECT M.CODFILIAL,
-           M.DTMOV,
-           M.CODPROD,
-           M.PUNITCONT,
-           M.CUSTOCONT,
-           M.CODFISCAL,
-           M.QTCONT
-      FROM PCMOV M
-     WHERE M.DTCANCEL IS NULL
-       AND M.STATUS IN ('A', 'AB')
-       AND M.CODFILIAL IN ('5', '6', '9', '10')
-       AND M.CODOPER LIKE 'E%'
-       AND M.CODOPER NOT IN ('ED')
-       AND M.DTMOV BETWEEN TO_DATE('01/01/2023', 'DD/MM/YYYY') AND
-           TO_DATE('31/12/2023', 'DD/MM/YYYY'))
-  SELECT DISTINCT T.CODFILIAL,
-                  T.NUMTRANSITEM,
-                  T.DTMOV,
-                  T.DTCOMPRA,
-                  T.CODFISCAL,
-                  T.CODCOMPRA,
-                  T.CODPROD,
-                  T.DESCRICAO,
-                  T.QTCONT,
-                  T.CUSTOFINEST,
-                  T.CUSTOCONT,
-                  A.PUNITCONT
-    FROM (SELECT M.CODFILIAL,
-                 M.NUMTRANSITEM,
-                 M.DTMOV,
-                 MIN(E.DTMOV) AS DTCOMPRA,
-                 M.CODFISCAL,
-                 E.CODFISCAL AS CODCOMPRA,
-                 M.CODPROD,
-                 P.DESCRICAO,
-                 M.QTCONT,
-                 M.CUSTOCONT,
-                 M.CUSTOFINEST
-            FROM PCMOV M
-            JOIN PCPRODUT P ON M.CODPROD = P.CODPROD
-            LEFT JOIN MOVENTRADA E ON E.CODFILIAL = M.CODFILIAL
-                                  AND E.CODPROD = M.CODPROD
-                                  AND E.DTMOV >= M.DTMOV
-           WHERE M.DTCANCEL IS NULL
-             AND M.DTMOV BETWEEN TO_DATE('01/01/2023', 'DD/MM/YYYY') AND
-                 TO_DATE('31/12/2023', 'DD/MM/YYYY')
-             AND M.STATUS IN ('A', 'AB')
-             AND M.CODFILIAL IN ('5', '6', '9', '10')
-             AND M.CODOPER LIKE 'S%'
-             AND M.CODOPER NOT IN ('SD')
-             AND M.CODFISCAL NOT IN (5117, 6117, 5923, 6923)
-           GROUP BY M.CODFILIAL,
-                    M.NUMTRANSITEM,
-                    M.DTMOV,
-                    M.CODFISCAL,
-                    E.CODFISCAL,
-                    M.CODPROD,
-                    P.DESCRICAO,
-                    M.QTCONT,
-                    M.CUSTOCONT,
-                    M.CUSTOFINEST) T
-    LEFT JOIN MOVENTRADA A ON T.CODFILIAL = A.CODFILIAL
-                          AND T.CODPROD = A.CODPROD
-                          AND T.DTCOMPRA = A.DTMOV
-   WHERE T.CUSTOCONT <> A.PUNITCONT
-      OR T.CUSTOFINEST <> A.PUNITCONT) X ON (M.NUMTRANSITEM = X.NUMTRANSITEM) WHEN MATCHED THEN UPDATE SET M.CUSTOCONT = X.PUNITCONT, M.CUSTOFINEST = X.PUNITCONT, M.CUSTOFIN = X.PUNITCONT, M.CUSTOULTENT = X.PUNITCONT, M.VALORULTENT = X.PUNITCONT;
-/
---CUSTO DAS DEVOLUCOES DE CLIENTES--
-  WITH MOVENTRADA AS
-   (SELECT CODFILIAL, DTMOV, CODPROD, PUNITCONT, CODFISCAL, QTCONT
-      FROM PCMOV M
-     WHERE M.DTCANCEL IS NULL
-       AND M.STATUS IN ('A', 'AB')
-       AND M.CODFILIAL IN ('5', '6', '9', '10')
-       AND M.CODOPER LIKE 'E%'
-       AND M.CODOPER NOT IN ('ED')
-       AND M.DTMOV BETWEEN TO_DATE('01/01/2022', 'DD/MM/YYYY') AND
-           TO_DATE('31/12/2023', 'DD/MM/YYYY'))
-  SELECT T.CODFILIAL,
-         T.NUMTRANSITEM,
-         T.DTMOV,
-         T.DTCOMPRA,
-         T.CODFISCAL,
-         T.CODCOMPRA,
-         T.CODPROD,
-         T.DESCRICAO,
-         T.QTCONT,
-         T.CUSTOCONT,
-         A.PUNITCONT
-    FROM (SELECT M.CODFILIAL,
-                 M.NUMTRANSITEM,
-                 M.DTMOV,
-                 MAX(E.DTMOV) AS DTCOMPRA,
-                 M.CODFISCAL,
-                 E.CODFISCAL AS CODCOMPRA,
-                 M.CODPROD,
-                 P.DESCRICAO,
-                 M.QTCONT,
-                 M.CUSTOCONT
-            FROM PCMOV M
-            LEFT JOIN PCPRODUT P ON M.CODPROD = P.CODPROD
-            LEFT JOIN MOVENTRADA E ON E.CODFILIAL = M.CODFILIAL
-                                  AND E.CODPROD = M.CODPROD
-                                  AND E.DTMOV <= M.DTMOV
-           WHERE M.DTCANCEL IS NULL
-             AND M.DTMOV BETWEEN TO_DATE('01/01/2023', 'DD/MM/YYYY') AND
-                 TO_DATE('31/12/2023', 'DD/MM/YYYY')
-             AND M.STATUS IN ('A', 'AB')
-             AND M.CODFILIAL IN ('5', '6', '9', '10')
-             AND M.CODOPER IN ('ED')
-             AND M.CODFISCAL NOT IN (1117, 2117, 1923, 2923)
-           GROUP BY M.CODFILIAL,
-                    M.NUMTRANSITEM,
-                    M.DTMOV,
-                    M.CODFISCAL,
-                    E.CODFISCAL,
-                    M.CODPROD,
-                    P.DESCRICAO,
-                    M.QTCONT,
-                    M.CUSTOCONT
-           ORDER BY M.CODPROD, M.DTMOV) T
-    LEFT JOIN MOVENTRADA A ON T.CODFILIAL = A.CODFILIAL
-                          AND T.CODPROD = A.CODPROD
-                          AND T.DTCOMPRA = A.DTMOV
-   WHERE T.CUSTOCONT <> A.PUNITCONT
-  --WHERE T.CODPROD IN (795556, 799277)
-  ;
+--WHERE T.CODPROD IN (795556, 799277)
+;
 /
 ---UPDATE DEVOLUCOES DE CLIENTES--
 MERGE
@@ -263,138 +216,3 @@ MERGE
                           AND T.DTCOMPRA = A.DTMOV
    WHERE T.CUSTOCONT <> A.PUNITCONT) X ON (M.NUMTRANSITEM = X.NUMTRANSITEM) WHEN MATCHED THEN UPDATE SET M.CUSTOCONT = X.PUNITCONT, M.CUSTOFINEST = X.PUNITCONT, M.CUSTOFIN = X.PUNITCONT, M.CUSTOULTENT = X.PUNITCONT, M.VALORULTENT = X.PUNITCONT;
 /
---CUSTO DEVOLUCAO FORNECEDORES--
-  WITH MOVENTRADA AS
-   (SELECT CODFILIAL,
-           DTMOV,
-           CODPROD,
-           PUNITCONT,
-           CUSTOCONT,
-           CODFISCAL,
-           QTCONT
-      FROM PCMOV M
-     WHERE M.DTCANCEL IS NULL
-       AND M.STATUS IN ('A', 'AB')
-       AND M.CODFILIAL IN ('5', '6', '9', '10')
-       AND M.CODOPER LIKE 'E%'
-       AND M.CODOPER NOT IN ('ED')
-       AND M.DTMOV BETWEEN TO_DATE('01/01/2023', 'DD/MM/YYYY') AND
-           TO_DATE('31/12/2023', 'DD/MM/YYYY'))
-  SELECT T.CODFILIAL,
-         T.NUMTRANSITEM,
-         T.DTMOV,
-         T.DTCOMPRA,
-         T.CODFISCAL,
-         T.CODCOMPRA,
-         T.CODPROD,
-         T.DESCRICAO,
-         T.QTCONT,
-         T.CUSTOCONT,
-         A.PUNITCONT
-    FROM (SELECT M.CODFILIAL,
-                 M.NUMTRANSITEM,
-                 M.DTMOV,
-                 MAX(E.DTMOV) AS DTCOMPRA,
-                 M.CODFISCAL,
-                 E.CODFISCAL AS CODCOMPRA,
-                 M.CODPROD,
-                 P.DESCRICAO,
-                 M.QTCONT,
-                 M.CUSTOCONT
-            FROM PCMOV M
-            LEFT JOIN PCPRODUT P ON M.CODPROD = P.CODPROD
-            LEFT JOIN MOVENTRADA E ON E.CODFILIAL = M.CODFILIAL
-                                  AND E.CODPROD = M.CODPROD
-                                  AND E.DTMOV <= M.DTMOV
-           WHERE M.DTCANCEL IS NULL
-             AND M.DTMOV BETWEEN TO_DATE('01/01/2023', 'DD/MM/YYYY') AND
-                 TO_DATE('31/12/2023', 'DD/MM/YYYY')
-             AND M.STATUS IN ('A', 'AB')
-             AND M.CODFILIAL IN ('5', '6', '9', '10')
-                --AND M.CODOPER LIKE 'S%'
-             AND M.CODOPER IN ('SD')
-             AND M.CODFISCAL NOT IN (5117, 6117, 5923, 6923)
-           GROUP BY M.CODFILIAL,
-                    M.NUMTRANSITEM,
-                    M.DTMOV,
-                    M.CODFISCAL,
-                    E.CODFISCAL,
-                    M.CODPROD,
-                    P.DESCRICAO,
-                    M.QTCONT,
-                    M.CUSTOCONT
-           ORDER BY M.CODPROD, M.DTMOV) T
-    LEFT JOIN MOVENTRADA A ON T.CODFILIAL = A.CODFILIAL
-                          AND T.CODPROD = A.CODPROD
-                          AND T.DTCOMPRA = A.DTMOV
-   WHERE T.CUSTOCONT <> A.PUNITCONT
-   ORDER BY DTMOV;
-/
----UPDATE DEVOLUCAO FORNECEDORES--
-MERGE
-  INTO PCMOV M
-  USING (
-  WITH MOVENTRADA AS
-   (SELECT CODFILIAL,
-           DTMOV,
-           CODPROD,
-           PUNITCONT,
-           CUSTOCONT,
-           CODFISCAL,
-           QTCONT
-      FROM PCMOV M
-     WHERE M.DTCANCEL IS NULL
-       AND M.STATUS IN ('A', 'AB')
-       AND M.CODFILIAL IN ('5', '6', '9', '10')
-       AND M.CODOPER LIKE 'E%'
-       AND M.CODOPER NOT IN ('ED')
-       AND M.DTMOV BETWEEN TO_DATE('01/01/2023', 'DD/MM/YYYY') AND
-           TO_DATE('31/12/2023', 'DD/MM/YYYY'))
-  SELECT T.CODFILIAL,
-         T.NUMTRANSITEM,
-         T.DTMOV,
-         T.DTCOMPRA,
-         T.CODFISCAL,
-         T.CODCOMPRA,
-         T.CODPROD,
-         T.DESCRICAO,
-         T.QTCONT,
-         T.CUSTOCONT,
-         A.PUNITCONT
-    FROM (SELECT M.CODFILIAL,
-                 M.NUMTRANSITEM,
-                 M.DTMOV,
-                 MAX(E.DTMOV) AS DTCOMPRA,
-                 M.CODFISCAL,
-                 E.CODFISCAL AS CODCOMPRA,
-                 M.CODPROD,
-                 P.DESCRICAO,
-                 M.QTCONT,
-                 M.CUSTOCONT
-            FROM PCMOV M
-            LEFT JOIN PCPRODUT P ON M.CODPROD = P.CODPROD
-            LEFT JOIN MOVENTRADA E ON E.CODFILIAL = M.CODFILIAL
-                                  AND E.CODPROD = M.CODPROD
-                                  AND E.DTMOV <= M.DTMOV
-           WHERE M.DTCANCEL IS NULL
-             AND M.DTMOV BETWEEN TO_DATE('01/01/2023', 'DD/MM/YYYY') AND
-                 TO_DATE('31/12/2023', 'DD/MM/YYYY')
-             AND M.STATUS IN ('A', 'AB')
-             AND M.CODFILIAL IN ('5', '6', '9', '10')
-                --AND M.CODOPER LIKE 'S%'
-             AND M.CODOPER IN ('SD')
-             AND M.CODFISCAL NOT IN (5117, 6117, 5923, 6923)
-           GROUP BY M.CODFILIAL,
-                    M.NUMTRANSITEM,
-                    M.DTMOV,
-                    M.CODFISCAL,
-                    E.CODFISCAL,
-                    M.CODPROD,
-                    P.DESCRICAO,
-                    M.QTCONT,
-                    M.CUSTOCONT
-           ORDER BY M.CODPROD, M.DTMOV) T
-    LEFT JOIN MOVENTRADA A ON T.CODFILIAL = A.CODFILIAL
-                          AND T.CODPROD = A.CODPROD
-                          AND T.DTCOMPRA = A.DTMOV
-   WHERE T.CUSTOCONT <> A.PUNITCONT) X ON (M.NUMTRANSITEM = X.NUMTRANSITEM) WHEN MATCHED THEN UPDATE SET M.CUSTOCONT = X.PUNITCONT, M.CUSTOFINEST = X.PUNITCONT, M.CUSTOFIN = X.PUNITCONT;
