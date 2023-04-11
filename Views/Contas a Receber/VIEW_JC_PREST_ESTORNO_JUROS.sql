@@ -1,34 +1,42 @@
 CREATE OR REPLACE VIEW VIEW_JC_PREST_ESTORNO_JUROS AS
-    SELECT T.CODFILIAL,
-           T.DATA,
-           T.DTVENC,
-           T.DTEMISSAO,
-           T.NUMNOTA,
-           T.CPF_CNPJ,
-           T.VLJUROS,
-           T.VLMULTA,
-           T.VALORDESC,
-           T.DUPLICATA,
-           T.CODBANCO,
-           T.CODCONTABILBANCO,
-           (T.VLJUROS * - 1) AS VALOR,
-           T.CODCONTAB,
-           T.CODCLI,
-           T.CODCOB,
-           T.CODUSUR,
-           T.NUMTRANS,
-           T.NUMTRANSVENDA,
-           T.CARTORIO,
-           T.PROTESTO,
-           CASE WHEN ((B.CODBACEN = 'MARKETPLACE' OR B.CODBANCO = 12) AND T.CODCONTAB IS NOT NULL) THEN 'EJM'
-                 ELSE 'EJ' 
-            END AS TIPO,
-           CASE WHEN ((B.CODBACEN = 'MARKETPLACE' OR B.CODBANCO = 12) AND T.CODCONTAB IS NOT NULL) THEN
-                ('ESTORNO VL PAGO MAIOR DUP ' || T.DUPLICATA || ' - ' || TRIM (T.CLIENTE))
-             ELSE ('ESTORNO JUROS DUP ' || T.DUPLICATA || ' - ' || TRIM(T.CLIENTE)) 
-           END AS HISTORICO
-      FROM VIEW_JC_BASE_PREST T
-     INNER JOIN VIEW_JC_PREST_BANCOS B ON T.CODBANCO = B.CODBANCO
-     WHERE T.CODCOB = 'ESTR'
-       AND NVL (T.VLJUROS, 0) <> 0;
+SELECT T.CODFILIAL,
+       T.DATA,
+       T.DTVENC,
+       T.DTEMISSAO,
+       T.NUMNOTA,
+       T.CPF_CNPJ,
+       T.VLJUROS,
+       T.VLMULTA,
+       T.VALORDESC,
+       T.DUPLICATA,
+       T.CODBANCO,
+       T.CODCONTABILBANCO,
+       NVL((T.VLJUROS * -1) + (NVL(T.VLMULTA, 0) * -1),0) AS VALOR,
+       T.CODCONTAB,
+       T.CODCLI,
+       T.CODCOB,
+       T.CODUSUR,
+       T.NUMTRANS,
+       T.NUMTRANSVENDA,
+       T.CARTORIO,
+       T.PROTESTO,
+       CASE
+         WHEN ((B.CODBACEN = 'MARKETPLACE' OR B.CODBANCO = 12) AND
+              T.CODCONTAB IS NOT NULL) THEN
+          'EJM'
+         ELSE
+          'EJ'
+       END AS TIPO,
+       CASE
+         WHEN ((B.CODBACEN = 'MARKETPLACE' OR B.CODBANCO = 12) AND
+              T.CODCONTAB IS NOT NULL) THEN
+          ('ESTORNO VL PAGO MAIOR DUP ' || T.DUPLICATA || ' - ' ||
+          TRIM(T.CLIENTE))
+         ELSE
+          ('ESTORNO JUROS DUP ' || T.DUPLICATA || ' - ' || TRIM(T.CLIENTE))
+       END AS HISTORICO
+  FROM VIEW_JC_BASE_PREST T
+ INNER JOIN VIEW_JC_PREST_BANCOS B ON T.CODBANCO = B.CODBANCO
+ WHERE T.CODCOB = 'ESTR'
+   AND (NVL(T.VLJUROS, 0) <> 0 OR NVL(T.VLMULTA, 0) <> 0);
 /

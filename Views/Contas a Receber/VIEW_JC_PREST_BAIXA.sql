@@ -5,9 +5,9 @@ CREATE OR REPLACE VIEW VIEW_JC_PREST_BAIXA AS
            T.DTEMISSAO,
            T.NUMNOTA,
            T.CPF_CNPJ,
-           T.VLJUROS,
-           T.VLMULTA,
-           T.VALORDESC,
+           NVL(T.VLJUROS,0) VLJUROS,
+           NVL(T.VLMULTA,0) VLMULTA,
+           NVL(T.VALORDESC,0) VALORDESC,
            T.DUPLICATA,
            T.CODBANCO,
            T.CODCONTABILBANCO,
@@ -18,7 +18,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PREST_BAIXA AS
                    /*PARA QUE NAO TRAGA INFORMACAO DO VALOR DE JUROS*/
                    WHEN T.VPAGO > T.VALOR THEN (
                        CASE
-                           WHEN (NVL (T.VLJUROS, 0) = 0
+                           WHEN (NVL (T.VLJUROS, 0) = 0 AND NVL (T.VLMULTA, 0) = 0
                               AND NVL (T.VALORDESC, 0) = 0) THEN T.VPAGO
                            /*CASO HAJA DESCONTO NA DUPLICATA DEVEMOS TRAZER O VALOR MENOS O DESCONTO*/
                            WHEN NVL (T.VALORDESC, 0) > 0 THEN (T.VALOR - NVL (T.VALORDESC, 0))
