@@ -13,8 +13,10 @@ SELECT ROWID, C.CODCONTAB, C.*
                     63722, --AMAZON SERVIÇOS DE VAREJO DO BRASIL LTDA. 10390
                     8998, --REDE
                     4786, --CLIELO
-                    473516 --GIMBA
-                    
+                    473516, --GIMBA - SUPRICORP SUPRIMENTOS LTDA 10403
+                    477615, --CASA & VIDEO BRASIL S.A
+										477468, --SHOPEE - SHPS TECNOLOGIA E SERVICOS LTDA
+										37484 --FESTALAB FESTAS E EVENTOS LTDA ­ ME
                     );
 
 --TROCAR O CODCLIPRINC DO CLIENTE DEVOLUCAO 
@@ -54,7 +56,10 @@ SELECT ROWID, F.CODCONTAB, F.*
                      10066, --VIA S.A.  33.041.260/1995-72
                      9632, --VIA VAREJO S/A  33.041.260/0652-90
                      9515, --WALMART BRASIL LTDA 00.063.960/0001-09
-                     9197 --WMB COM DE ELETRONICO   14.314.050/0001-58
+                     9197, --WMB COM DE ELETRONICO   14.314.050/0001-58
+										 10248, --CASA & VIDEO BRASIL S.A
+										 10247, --SHOPEE - SHPS TECNOLOGIA E SERVICOS LTDA
+										 10246 -- FESTALAB FESTAS E EVENTOS LTDA
                      );
 /
 --COBRANÇAS
