@@ -78,12 +78,13 @@ PCCRECLI_BASE AS
   )
 SELECT B.CODFILIAL,
        B.NUMNOTA,
-       (CASE
+       /*(CASE
          WHEN V.VERIFICAR_DATA = 1 THEN
           B.DTLANC
          ELSE
           B.DTDESCONTO
-       END) AS DATA,
+       END) AS DATA,*/
+			 B.DTDESCONTO AS DATA,
        B.CODCRED,
        B.NUMLANCBAIXA,
        B.VALOR,
