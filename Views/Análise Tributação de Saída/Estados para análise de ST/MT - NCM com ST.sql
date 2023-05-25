@@ -4,7 +4,7 @@ CREATE OR REPLACE VIEW VIEW_JC_NCMTABELABASE_MT AS
      WHERE UFDESTINO = 'MT'
        AND CODNCMEX IN ('39241000.2',
                         '39269040.',
-												'82130000.',
+                        '82130000.',
                         '82142000.',
                         '84145990.',
                         '84716052.',
@@ -21,5 +21,6 @@ CREATE OR REPLACE VIEW VIEW_JC_NCMTABELABASE_MT AS
                         '90251199.',
                         '95045000.',
                         '96032100.',
+                        '96081000.',
                         '96082000.',
                         '96151900.');
