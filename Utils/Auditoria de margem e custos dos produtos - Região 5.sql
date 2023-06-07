@@ -5,6 +5,7 @@ WITH PRODUTOS AS
          E.CODPROD,
          P.DESCRICAO,
          M.MARCA,
+				 P.NBM,
          T.NUMREGIAO,
          R.REGIAO,
          L.PCOMPRA,
