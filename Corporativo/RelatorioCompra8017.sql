@@ -116,7 +116,7 @@ SELECT T.*,
     LEFT JOIN COMPRA_PENDENTE C ON I.CODPROD = C.CODPROD
    ORDER BY F.FORNECEDOR,
             P.DESCRICAO
-) T;/
+) T;
          
          
 
