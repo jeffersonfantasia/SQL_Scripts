@@ -99,7 +99,7 @@ SELECT ROWID, F.CODCONTAB, F.*
                      );
 /
 --CAIXAS
-  SELECT *
+  SELECT ROWID, B.*
     FROM PCBANCO B
    WHERE B.CODBANCO IN (11, --CAIXA PAGAR.ME
                         24, --CAIXA B2W
@@ -114,8 +114,11 @@ SELECT ROWID, F.CODCONTAB, F.*
                         51, --CAIXA CARREFOUR
                         56, --CAIXA PAYMEE
                         62, --CAIXA RIHAPPY
-                        64 --CAIXA GIMBA
-                        );
+                        64, --CAIXA GIMBA
+                        79, --CAIXA CASA E VIDEO
+                        77, --CAIXA FESTA LAB
+                        78 --CAIXA SHOPEE
+                        ) ORDER BY CODBANCO;
 /
 --TODOS MOVIMENTACOES NO CAIXA
   SELECT *
