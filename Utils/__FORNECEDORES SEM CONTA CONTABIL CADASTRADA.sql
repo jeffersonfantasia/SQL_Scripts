@@ -141,7 +141,7 @@ SELECT *
   FROM (
     SELECT (
         CASE
-            WHEN E.CODFILIAL IN ( 1, 2, 7, 8 ) THEN
+            WHEN E.CODFILIAL IN ( 1, 2, 7, 8, 11 ) THEN
                 'JC BROTHERS'
             WHEN E.CODFILIAL = 5  THEN
                 'JFF'
