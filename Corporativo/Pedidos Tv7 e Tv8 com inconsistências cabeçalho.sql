@@ -20,4 +20,4 @@ SELECT C.DATA,
          ELSE
           0
        END) = 0);
- /
+/
