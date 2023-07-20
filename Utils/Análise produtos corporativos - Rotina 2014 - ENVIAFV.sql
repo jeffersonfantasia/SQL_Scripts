@@ -50,29 +50,37 @@ UPDATE PCEMBALAGEM B SET B.ENVIAFV = 'S' WHERE B.UNIDADE = 'UN' AND B.ENVIAFV = 
    ORDER BY B.CODPROD, B.CODFILIAL;
 /
 /*UPDATE*/
-UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('5', '6') AND EXISTS(
-  SELECT CODPROD
-    FROM PCPRODFILIAL B
-   WHERE B.CODFILIAL = '6'
-     AND B.ENVIARFORCAVENDAS = 'N'
-     AND B.CODPROD = PCEMBALAGEM.CODPROD) AND CODAUXILIAR = (SELECT CODAUXILIAR
-                                                               FROM PCPRODUT
-                                                              WHERE CODAUXILIAR =
-                                                                    PCEMBALAGEM.CODAUXILIAR);
-UPDATE PCEMBALAGEM SET ENVIAFV = 'N' WHERE ENVIAFV = 'S' AND CODFILIAL IN ('2') AND CODPROD = (
-  SELECT CODPROD
-    FROM PCPRODUT P, PCFORNEC F
-   WHERE P.CODFORNEC = F.CODFORNEC
-     AND F.CODFORNECPRINC <> 2
-     AND P.CODPROD = PCEMBALAGEM.CODPROD) AND EXISTS (SELECT CODPROD
-                                                        FROM PCPRODFILIAL B
-                                                       WHERE B.CODFILIAL = '6'
-                                                         AND B.ENVIARFORCAVENDAS = 'N'
-                                                         AND B.CODPROD =
-                                                             PCEMBALAGEM.CODPROD) AND CODAUXILIAR = (SELECT CODAUXILIAR
-                                                                                                       FROM PCPRODUT
-                                                                                                      WHERE CODAUXILIAR =
-                                                                                                            PCEMBALAGEM.CODAUXILIAR);
+UPDATE PCEMBALAGEM
+   SET ENVIAFV = 'N'
+ WHERE ENVIAFV = 'S'
+   AND CODFILIAL IN ('5', '6')
+   AND EXISTS (SELECT CODPROD
+          FROM PCPRODFILIAL B
+         WHERE B.CODFILIAL = '6'
+           AND B.ENVIARFORCAVENDAS = 'N'
+           AND B.CODPROD = PCEMBALAGEM.CODPROD)
+   AND CODAUXILIAR =
+       (SELECT CODAUXILIAR
+          FROM PCPRODUT
+         WHERE CODAUXILIAR = PCEMBALAGEM.CODAUXILIAR);
+UPDATE PCEMBALAGEM
+   SET ENVIAFV = 'N'
+ WHERE ENVIAFV = 'S'
+   AND CODFILIAL IN ('2')
+   AND CODPROD = (SELECT CODPROD
+                    FROM PCPRODUT P, PCFORNEC F
+                   WHERE P.CODFORNEC = F.CODFORNEC
+                     AND F.CODFORNECPRINC <> 2
+                     AND P.CODPROD = PCEMBALAGEM.CODPROD)
+   AND EXISTS (SELECT CODPROD
+          FROM PCPRODFILIAL B
+         WHERE B.CODFILIAL = '6'
+           AND B.ENVIARFORCAVENDAS = 'N'
+           AND B.CODPROD = PCEMBALAGEM.CODPROD)
+   AND CODAUXILIAR =
+       (SELECT CODAUXILIAR
+          FROM PCPRODUT
+         WHERE CODAUXILIAR = PCEMBALAGEM.CODAUXILIAR);
 /
   SELECT *
     FROM PCPRODFILIAL
