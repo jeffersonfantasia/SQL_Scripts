@@ -12,20 +12,20 @@ SELECT B.CODCONTABIL,
                    AND T.CODCOB = M.CODCOB
                    AND T.CODBANCO = M.CODBANCO
                    AND T.DTCOMPENSACAO BETWEEN
-                       TO_DATE(&DTINICIAL, 'DD/MM/YYYY') AND
-                       TO_DATE(&DTFINAL, 'DD/MM/YYYY')) ENTRADA,
+                       TO_DATE(' 01/06/2023 ', 'DD/MM/YYYY') AND
+                       TO_DATE(' 30/06/2023 ', 'DD/MM/YYYY')) ENTRADA,
                (SELECT SUM(T.VALOR)
                   FROM PCMOVCR T
                  WHERE T.TIPO = 'C'
-                   AND T.NUMCARR > 0
+                   AND (T.NUMCARR = 0 OR T.CODROTINALANC = 619)
                    AND T.CODCOB = M.CODCOB
                    AND T.CODBANCO = M.CODBANCO
                    AND T.DTCOMPENSACAO BETWEEN
-                       TO_DATE(&DTINICIAL, 'DD/MM/YYYY') AND
-                       TO_DATE(&DTFINAL, 'DD/MM/YYYY')) SAIDA
+                       TO_DATE(' 01/06/2023 ', 'DD/MM/YYYY') AND
+                       TO_DATE(' 30/06/2023 ', 'DD/MM/YYYY')) SAIDA
           FROM PCMOVCR M
          WHERE M.CODCOB = 'D'
-           AND M.CODBANCO IN (&CODBANCOS)
+           AND M.CODBANCO IN (65,66,23,13)
          GROUP BY M.CODBANCO, M.CODCOB
         UNION ALL
         --CAIXINHA
@@ -36,18 +36,19 @@ SELECT B.CODCONTABIL,
                    AND T.CODCOB = M.CODCOB
                    AND T.CODBANCO = M.CODBANCO
                    AND T.DTCOMPENSACAO BETWEEN
-                       TO_DATE(&DTINICIAL, 'DD/MM/YYYY') AND
-                       TO_DATE(&DTFINAL, 'DD/MM/YYYY')) ENTRADA,
+                       TO_DATE(' 01/06/2023 ', 'DD/MM/YYYY') AND
+                       TO_DATE(' 30/06/2023 ', 'DD/MM/YYYY')) ENTRADA,
                (SELECT SUM(T.VALOR)
                   FROM PCMOVCR T
                  WHERE T.TIPO = 'C'
                    AND T.CODCOB = M.CODCOB
                    AND T.CODBANCO = M.CODBANCO
                    AND T.DTCOMPENSACAO BETWEEN
-                       TO_DATE(&DTINICIAL, 'DD/MM/YYYY') AND
-                       TO_DATE(&DTFINAL, 'DD/MM/YYYY')) SAIDA
+                       TO_DATE(' 01/06/2023 ', 'DD/MM/YYYY') AND
+                       TO_DATE(' 30/06/2023 ', 'DD/MM/YYYY')) SAIDA
           FROM PCMOVCR M
          WHERE M.CODCOB = 'D'
-           AND M.CODBANCO IN (&CODBANCOCAIXINHA)
+           AND M.CODBANCO IN ( 16)
          GROUP BY M.CODBANCO, M.CODCOB) M
-  JOIN PCBANCO B ON M.CODBANCO = B.CODBANCO
+  JOIN PCBANCO B ON M.CODBANCO = B.CODBANCO;
+  
