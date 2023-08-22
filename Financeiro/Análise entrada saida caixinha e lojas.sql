@@ -11,18 +11,20 @@ SELECT B.CODCONTABIL,
                    AND T.NUMCARR > 0
                    AND T.CODCOB = M.CODCOB
                    AND T.CODBANCO = M.CODBANCO
+									 AND T.ESTORNO = 'N'
                    AND T.DTCOMPENSACAO BETWEEN
-                       TO_DATE(' 01/06/2023 ', 'DD/MM/YYYY') AND
-                       TO_DATE(' 30/06/2023 ', 'DD/MM/YYYY')) ENTRADA,
+                       TO_DATE(' 01/07/2023 ', 'DD/MM/YYYY') AND
+                       TO_DATE(' 31/07/2023 ', 'DD/MM/YYYY')) ENTRADA,
                (SELECT SUM(T.VALOR)
                   FROM PCMOVCR T
                  WHERE T.TIPO = 'C'
                    AND (T.NUMCARR = 0 OR T.CODROTINALANC = 619)
                    AND T.CODCOB = M.CODCOB
                    AND T.CODBANCO = M.CODBANCO
+									 AND T.ESTORNO = 'N'
                    AND T.DTCOMPENSACAO BETWEEN
-                       TO_DATE(' 01/06/2023 ', 'DD/MM/YYYY') AND
-                       TO_DATE(' 30/06/2023 ', 'DD/MM/YYYY')) SAIDA
+                       TO_DATE(' 01/07/2023 ', 'DD/MM/YYYY') AND
+                       TO_DATE(' 31/07/2023 ', 'DD/MM/YYYY')) SAIDA
           FROM PCMOVCR M
          WHERE M.CODCOB = 'D'
            AND M.CODBANCO IN (65,66,23,13)
@@ -36,16 +38,16 @@ SELECT B.CODCONTABIL,
                    AND T.CODCOB = M.CODCOB
                    AND T.CODBANCO = M.CODBANCO
                    AND T.DTCOMPENSACAO BETWEEN
-                       TO_DATE(' 01/06/2023 ', 'DD/MM/YYYY') AND
-                       TO_DATE(' 30/06/2023 ', 'DD/MM/YYYY')) ENTRADA,
+                       TO_DATE(' 01/07/2023 ', 'DD/MM/YYYY') AND
+                       TO_DATE(' 31/07/2023 ', 'DD/MM/YYYY')) ENTRADA,
                (SELECT SUM(T.VALOR)
                   FROM PCMOVCR T
                  WHERE T.TIPO = 'C'
                    AND T.CODCOB = M.CODCOB
                    AND T.CODBANCO = M.CODBANCO
                    AND T.DTCOMPENSACAO BETWEEN
-                       TO_DATE(' 01/06/2023 ', 'DD/MM/YYYY') AND
-                       TO_DATE(' 30/06/2023 ', 'DD/MM/YYYY')) SAIDA
+                       TO_DATE(' 01/07/2023 ', 'DD/MM/YYYY') AND
+                       TO_DATE(' 31/07/2023 ', 'DD/MM/YYYY')) SAIDA
           FROM PCMOVCR M
          WHERE M.CODCOB = 'D'
            AND M.CODBANCO IN ( 16)
