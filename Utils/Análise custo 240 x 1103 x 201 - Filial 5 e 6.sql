@@ -151,7 +151,7 @@ MERGE
              AND P.TIPOMERC = 'L'
              AND P.REVENDA = 'S'
              AND E.CODFILIAL IN ('2', '5', '6')) C
-   WHERE CODPROD IN (809260);
+   WHERE CODPROD IN (820338);
 /
 --UPDATE NA FILIAL 2--
 MERGE
