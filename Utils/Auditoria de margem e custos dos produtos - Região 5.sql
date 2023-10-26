@@ -20,7 +20,7 @@ WITH PRODUTOS AS
                             FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)) MSUGERIDA,*/
 				 FN_JF_MARGEM_PRECO(L.CUSTOLIQ,
             FN_JF_PRECO_VENDA(L.CUSTOLIQ,
-                           10,
+                           0.17,
                            FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)),
                             FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)) MSUGERIDA,
         /* FN_JF_PRECO_VENDA(L.CUSTOLIQ,
@@ -29,7 +29,7 @@ WITH PRODUTOS AS
                                               FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)),
                            FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)) PSUGERIDO,*/
 				FN_JF_PRECO_VENDA(L.CUSTOLIQ,
-                           0.10,
+                           0.17,
                            FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)) PSUGERIDO,
          T.PTABELA,
          ROUND(NVL(T.PVENDA, 0), 4) AS PVENDA
@@ -74,11 +74,11 @@ MERGE
            T.NUMREGIAO,
 				 FN_JF_MARGEM_PRECO(L.CUSTOLIQ,
             FN_JF_PRECO_VENDA(L.CUSTOLIQ,
-                           0.10,
+                           0.17,
                            FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)),
                             FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)) MSUGERIDA,
 				FN_JF_PRECO_VENDA(L.CUSTOLIQ,
-                           0.10,
+                           0.17,
                            FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)) PSUGERIDO,
            T.PTABELA,
            ROUND(NVL(T.PVENDA, 0), 4) AS PVENDA
