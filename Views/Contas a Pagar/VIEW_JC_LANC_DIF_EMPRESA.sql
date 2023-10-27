@@ -1,37 +1,32 @@
 CREATE OR REPLACE VIEW VIEW_JC_LANC_DIF_EMPRESA AS
-    WITH BANCOS_EMPRESA AS (
-        SELECT B.CODBANCO,
-               (
-                   CASE
-                       WHEN B.CODFILIAL IN (
-                           1, 2, 7, 8, 99
-                       ) THEN '1'
-                       ELSE B.CODFILIAL
-                   END
-               ) AS CODEMPRESA
-          FROM PCBANCO B
-    ), LANCAMENTOS_EMPRESA AS (
-        SELECT L.RECNUM,
-               (
-                   CASE
-                       WHEN L.CODFILIAL IN (
-                           1, 2, 7, 8
-                       ) THEN '1'
-                       ELSE L.CODFILIAL
-                   END
-               ) AS CODEMPRESA
-          FROM PCLANC L
-         WHERE L.TIPOPARCEIRO = 'F'
-    )
+    WITH BANCOS_EMPRESA AS
+     (SELECT B.CODBANCO,
+             (CASE
+               WHEN B.CODFILIAL IN (1, 2, 7, 8, 11, 12, 13, 99) THEN
+                '1'
+               ELSE
+                B.CODFILIAL
+             END) AS CODEMPRESA
+        FROM PCBANCO B),
+    LANCAMENTOS_EMPRESA AS
+     (SELECT L.RECNUM,
+             (CASE
+               WHEN L.CODFILIAL IN (1, 2, 7, 8, 11, 12, 13, 99) THEN
+                '1'
+               ELSE
+                L.CODFILIAL
+             END) AS CODEMPRESA
+        FROM PCLANC L
+       WHERE L.TIPOPARCEIRO = 'F')
     SELECT B.CODFILIAL,
            B.RECNUM,
            B.VPAGO,
-           (
-               CASE
-                   WHEN B.VPAGO < 0 THEN (B.VPAGO * - 1)
-                   ELSE B.VPAGO
-               END
-           ) AS VALOR,
+           (CASE
+             WHEN B.VPAGO < 0 THEN
+              (B.VPAGO * -1)
+             ELSE
+              B.VPAGO
+           END) AS VALOR,
            B.DTCOMPETENCIA,
            B.DTPAGTO,
            B.DTCOMPETENCIA AS DTCOMPENSACAO,
