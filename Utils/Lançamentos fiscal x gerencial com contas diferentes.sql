@@ -12,10 +12,11 @@ WITH LANC_PCLANC AS
      AND NVL(L.HISTORICO2, '0') NOT IN TRIM('ESTORNO')
         --TIRAR LANCAMENTOS DE IPTU E TAXAS MARKEPLACES
      AND L.CODCONTA NOT IN (530102, 620108)
+     AND L.DTEMISSAO > TO_DATE('01/01/2023', 'DD/MM/YYYY')
    GROUP BY L.NUMNOTA, L.CODFORNEC)
 SELECT E.DTLANCTO,
        E.FUNCLANC,
-			 E.CODFILIALNF AS CODFILIAL,
+       E.CODFILIALNF AS CODFILIAL,
        E.DTEMISSAO,
        E.DTENT,
        E.NUMTRANSENT,
@@ -39,14 +40,23 @@ SELECT E.DTLANCTO,
    AND E.ESPECIE NOT IN ('OE', 'NE', 'TP', 'CT')
       --NÃO TRAZER REMESSAS
    AND NOT (E.ESPECIE = 'NF' AND
-        B.CODFISCAL IN
-        (1911, 1923, 2923, 1949, 2949, 1116, 2116, 1117, 2117))
+        B.CODFISCAL IN (1911,
+                            2911,
+                            1912,
+                            2912,
+                            1923,
+                            2923,
+                            1949,
+                            2949,
+                            1116,
+                            2116,
+                            1117,
+                            2117))
       --RB SERVICOS, NET, TELEFONICA
    AND E.CODFORNEC NOT IN (8549, 143, 15)
    AND (E.CODCONT <> NVL(L.CODCONTA, 0) OR E.CODCONT IN (590101) OR
        E.CODFORNEC <> E.CODFORNECNF)
       --RETIRAR LANCAMENTOS DAS CONTAS DE LUZ*/
    AND NOT (E.DTENT < '01-JAN-2021' AND E.CODFORNEC IN (31))
-   AND E.DTENT > TO_DATE('01/01/2023', 'DD/MM/YYYY')
- ORDER BY E.DTENT;
-/
+   AND E.DTENT > TO_DATE('01/02/2023', 'DD/MM/YYYY')
+ ORDER BY E.DTENT
