@@ -18,7 +18,7 @@ UPDATE PCEMBALAGEM SET ENVIAFV = 'S' WHERE ENVIAFV = 'N' AND CODFILIAL IN ('2', 
     FROM PCPRODFILIAL B
    WHERE B.CODFILIAL = '6'
      AND B.ENVIARFORCAVENDAS = 'S'
-     AND B.CODPROD = PCEMBALAGEM.CODPROD) AND CODAUXILIAR = (SELECT CODAUXILIAR
+     AND B.CODPROD = PCEMBALAGEM.CODPROD) AND CODAUXILIAR = (SELECT MIN(CODAUXILIAR)
                                                                FROM PCPRODUT
                                                               WHERE CODAUXILIAR =
                                                                     PCEMBALAGEM.CODAUXILIAR);

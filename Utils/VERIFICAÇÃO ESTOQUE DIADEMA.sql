@@ -21,7 +21,7 @@ SELECT A.CODFILIAL,
 /*Estoque Contábil diferente que zero - Simples Nacional*/
   SELECT E.CODFILIAL, E.CODPROD, P.DESCRICAO, E.QTEST, E.QTESTGER
     FROM PCEST E, PCPRODUT P
-   WHERE E.CODFILIAL IN ('5', '6', '9', '10')
+   WHERE E.CODFILIAL IN ('5', '6'/*, '9', '10'*/)
      AND E.CODPROD = P.CODPROD
      AND (QTEST <> 0 OR QTESTGER <> 0)
    ORDER BY E.CODFILIAL;
