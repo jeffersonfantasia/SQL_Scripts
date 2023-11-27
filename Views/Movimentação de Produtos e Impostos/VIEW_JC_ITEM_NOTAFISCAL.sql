@@ -1013,4 +1013,3 @@ SELECT 'IC' TIPOPROCESSO,
           N.VLCOFINS,
           N.CODCLI,
           N.PRAZOMEDIO;
-/
