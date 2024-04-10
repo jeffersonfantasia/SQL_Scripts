@@ -2,15 +2,17 @@ CREATE OR REPLACE VIEW VIEW_JC_NCMTABELABASE_MT AS
     SELECT *
       FROM VIEW_JC_TABELABASE
      WHERE UFDESTINO = 'MT'
-       AND CODNCMEX IN ('39241000.2',
+       AND CODNCMEX IN ('33042090.',
+                        '39241000.2',
                         '39269040.',
+                        '48202000.',
                         '82130000.',
                         '82142000.',
                         '84145990.',
                         '84716052.',
                         '84716053.',
                         '85098090.',
-												'85167990.',
+                        '85167990.',
                         '85181090.',
                         '85182100.',
                         '85182200.',
