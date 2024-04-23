@@ -63,6 +63,7 @@ CREATE OR REPLACE VIEW VIEW_JC_NCMTABELABASE_AL AS
                         '90251190.',
                         '90251990.',
                         '94056000.',
+                        '95045000.',
                         '96032900.',
                         '96032900.1',
                         '96033000.',
@@ -73,4 +74,4 @@ CREATE OR REPLACE VIEW VIEW_JC_NCMTABELABASE_AL AS
                         '96083000.',
                         '96151100.',
                         '96151900.');
-/
+
