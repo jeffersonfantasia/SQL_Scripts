@@ -32,39 +32,90 @@ WITH CLIENTES AS
          TRIM(B.SOBRENOME) SOBRENOME_JCCLIENTCLUB,
          LOWER(C.EMAIL) EMAIL,
          REGEXP_REPLACE(C.TELENT, '[^0-9]', '') CELULAR,
-				 C.SEXO, --FAZER TRATAMENTO
-				 B.DTNASCIMENTO,
-				 C.MUNICENT CIDADE, --FAZER TRATAMENTO
-				 C.ESTENT ESTADO, --FAZER TRATAMENTO
-				 REGEXP_REPLACE(C.CEPENT, '[^0-9]', '') CEP, --FAZER TRATAMENTO
-         C.DTEXCLUSAO
+         C.SEXO, --FAZER TRATAMENTO
+         B.DTNASCIMENTO,
+         C.MUNICENT CIDADE, --FAZER TRATAMENTO
+         C.ESTENT ESTADO, --FAZER TRATAMENTO
+         REGEXP_REPLACE(C.CEPENT, '[^0-9]', '') CEP, --FAZER TRATAMENTO
+         C.DTEXCLUSAO,
+         '' Qtd_Filhos_Netos,
+         B.ONDECONHECEU Onde_Conheceu,
+         '' Nome_Filho_1,
+         '' Data_Nascimento_Filho_1,
+         '' Genero_Filho_1,
+         '' Nome_Filho_2,
+         '' Data_Nascimento_Filho_2,
+         '' Genero_Filho_2,
+         '' Nome_Filho_3,
+         '' Data_Nascimento_Filho_3,
+         '' Genero_Filho_3,
+         '' Nome_Filho_4,
+         '' Data_Nascimento_Filho_4,
+         '' Gênero_Filho_4,
+         '' Nome_Filho_5,
+         '' Data_Nascimento_Filho_5,
+         '' Genero_Filho_5,
+         '' Categoria_Cliente,
+         (CASE
+           WHEN (C.CODCLI = B.CODCLI) THEN
+            'LOJA'
+           ELSE
+            'SITE'
+         END) Origem_Cadastro,
+         '' Pontuacao_Cliente,
+         '' Retirou_Mimo_Mes_Atual,
+         '' Retirou_Cinema_Mes_Atual,
+         '' Retirou_Teatro_Mes_Atual,
+         '' Retirou_Brinde_Mes_Atual
     FROM PCCLIENT C
     JOIN DITO_VENDEDORES V ON V.CODIGO_VENDEDOR = C.CODUSUR1
     LEFT JOIN JCCLIENTCLUB B ON B.CODCLI = C.CODCLI)
-SELECT CODIGO_CLIENTE,
+SELECT COUNT(*) OVER() total,
+       CODIGO_CLIENTE,
        CPF_CNPJ,
        DATA_CADASTRO,
        DATA_UPDATE,
        TIPO_PESSOA,
-       /*       CLIENTE,
-       PRIMEIRO_NOME_PCCLIENT,
-       SOBRENOME_PCCLIENT,
-       NOME_JCCLIENTCLUB,
-       SOBRENOME_JCCLIENTCLUB,*/
        NVL(NOME_JCCLIENTCLUB, PRIMEIRO_NOME_PCCLIENT) NOME,
        NVL(SOBRENOME_JCCLIENTCLUB, SOBRENOME_PCCLIENT) SOBRENOME,
        EMAIL,
        CELULAR,
+       SEXO,
        LENGTH(CELULAR) TAMNHO_CEL,
-			 CIDADE,
-			 ESTADO,
-			 CEP
+       CIDADE,
+       ESTADO,
+       CEP,
+       Origem_Cadastro,
+       Onde_Conheceu,
+       Qtd_Filhos_Netos,
+       Nome_Filho_1,
+       Data_Nascimento_Filho_1,
+       Genero_Filho_1,
+       Nome_Filho_2,
+       Data_Nascimento_Filho_2,
+       Genero_Filho_2,
+       Nome_Filho_3,
+       Data_Nascimento_Filho_3,
+       Genero_Filho_3,
+       Nome_Filho_4,
+       Data_Nascimento_Filho_4,
+       Gênero_Filho_4,
+       Nome_Filho_5,
+       Data_Nascimento_Filho_5,
+       Genero_Filho_5,
+       Categoria_Cliente,
+       Pontuacao_Cliente,
+       Retirou_Mimo_Mes_Atual,
+       Retirou_Cinema_Mes_Atual,
+       Retirou_Teatro_Mes_Atual,
+       Retirou_Brinde_Mes_Atual
   FROM CLIENTES
  WHERE LENGTH(CPF_CNPJ) = 11
    AND DTEXCLUSAO IS NULL
-      --AND CODIGO_CLIENTE = 555392
-   AND SOBRENOME_JCCLIENTCLUB IS NOT NULL
-   AND ROWNUM <= 3000;
+--AND CODIGO_CLIENTE = 555392
+--AND SOBRENOME_JCCLIENTCLUB IS NOT NULL
+AND ROWNUM <= 3000
+;
 
 /****************************************************************
 SELECT * FROM JCCLUBCLIENTE WHERE CADASTRADO = 'N' AND CPF IS NOT NULL AND EMAIL IS NOT NULL;
