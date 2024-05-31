@@ -6,14 +6,13 @@ Trazer clientes que são:
 
 Tratamento dos campos:
 1. Trazer o NOME da JCCLIENTCLUB, caso nulo, trazer primeiro nome da PCCLIENT.CLIENTE
-1. Trazer o SOBRENOME da JCCLIENTCLUB, caso nulo, trazer demais nomes da PCCLIENT.CLIENTE
+2. Trazer o SOBRENOME da JCCLIENTCLUB, caso nulo, trazer demais nomes da PCCLIENT.CLIENTE
+3. Trazer o nome da cidade da tabela PCCIDADE pois na PCCLIENT.MUNICENT o nome esta cortado
 **********************************************************/
-WITH CEP_LOJAS AS (
-SELECT REGEXP_REPLACE(F.CEP, '[^0-9]', '') CEP_LOJA
-  FROM PCFILIAL F
- WHERE INSTR(F.FANTASIA, 'LOJA') > 0
- ),
-
+WITH CEP_LOJAS AS
+ (SELECT REGEXP_REPLACE(F.CEP, '[^0-9]', '') CEP_LOJA
+    FROM PCFILIAL F
+   WHERE INSTR(F.FANTASIA, 'LOJA') > 0),
 CLIENTES AS
  (SELECT C.CODCLI CODIGO_CLIENTE,
          REGEXP_REPLACE(C.CGCENT, '[^0-9]', '') CPF_CNPJ,
@@ -40,9 +39,9 @@ CLIENTES AS
          REGEXP_REPLACE(C.TELENT, '[^0-9]', '') CELULAR,
          C.SEXO,
          B.DTNASCIMENTO,
-         C.MUNICENT CIDADE, --FAZER TRATAMENTO
-         C.ESTENT ESTADO, --FAZER TRATAMENTO
-         REGEXP_REPLACE(C.CEPENT, '[^0-9]', '') CEP, --FAZER TRATAMENTO
+         D.NOMECIDADE CIDADE,
+         C.ESTENT ESTADO,
+         REGEXP_REPLACE(C.CEPENT, '[^0-9]', '') CEP,
          C.DTEXCLUSAO,
          '' Qtd_Filhos_Netos,
          B.ONDECONHECEU Onde_Conheceu,
@@ -75,7 +74,8 @@ CLIENTES AS
          '' Retirou_Brinde_Mes_Atual
     FROM PCCLIENT C
     JOIN DITO_VENDEDORES V ON V.CODIGO_VENDEDOR = C.CODUSUR1
-    LEFT JOIN JCCLIENTCLUB B ON B.CODCLI = C.CODCLI)
+    LEFT JOIN JCCLIENTCLUB B ON B.CODCLI = C.CODCLI
+    LEFT JOIN PCCIDADE D ON D.CODIBGE = C.CODMUNICIPIO)
 SELECT COUNT(*) OVER() total,
        CODIGO_CLIENTE,
        CPF_CNPJ,
@@ -88,9 +88,24 @@ SELECT COUNT(*) OVER() total,
        CELULAR,
        SEXO,
        LENGTH(CELULAR) TAMNHO_CEL,
-       (CASE WHEN CEP IN (SELECT CEP_LOJA FROM CEP_LOJAS) THEN NULL ELSE CIDADE END) CIDADE,
-       (CASE WHEN CEP IN (SELECT CEP_LOJA FROM CEP_LOJAS) THEN NULL ELSE ESTADO END) ESTADO,
-       (CASE WHEN CEP IN (SELECT CEP_LOJA FROM CEP_LOJAS) THEN NULL ELSE CEP END) CEP,
+       (CASE
+         WHEN CEP IN (SELECT CEP_LOJA FROM CEP_LOJAS) THEN
+          NULL
+         ELSE
+          CIDADE
+       END) CIDADE,
+       (CASE
+         WHEN CEP IN (SELECT CEP_LOJA FROM CEP_LOJAS) THEN
+          NULL
+         ELSE
+          ESTADO
+       END) ESTADO,
+       (CASE
+         WHEN CEP IN (SELECT CEP_LOJA FROM CEP_LOJAS) THEN
+          NULL
+         ELSE
+          CEP
+       END) CEP,
        Origem_Cadastro,
        Onde_Conheceu,
        Qtd_Filhos_Netos,
@@ -118,10 +133,9 @@ SELECT COUNT(*) OVER() total,
   FROM CLIENTES
  WHERE LENGTH(CPF_CNPJ) = 11
    AND DTEXCLUSAO IS NULL
---AND CODIGO_CLIENTE = 555392
---AND SOBRENOME_JCCLIENTCLUB IS NOT NULL
-AND ROWNUM <= 3000
-;
+      --AND CODIGO_CLIENTE = 555392
+      --AND SOBRENOME_JCCLIENTCLUB IS NOT NULL
+   AND ROWNUM <= 3000;
 
 /****************************************************************
 SELECT * FROM JCCLUBCLIENTE WHERE CADASTRADO = 'N' AND CPF IS NOT NULL AND EMAIL IS NOT NULL;
