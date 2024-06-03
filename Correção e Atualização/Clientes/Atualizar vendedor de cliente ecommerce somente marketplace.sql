@@ -33,6 +33,7 @@ NOVO_VENDEDOR AS
    ORDER BY P.CODCLI)
 SELECT * FROM NOVO_VENDEDOR ; 
 
+--------------------UPDATE--------------------------------
 MERGE INTO PCCLIENT C
 USING (
   WITH CLIENTE_VTEX AS
@@ -61,8 +62,7 @@ USING (
    WHEN MATCHED THEN
     UPDATE SET C.CODUSUR1 = X.NOVO_CODUSUR;
 
---SELECT COUNT(*) FROM NOVO_VENDEDOR --411872
---SELECT COUNT(*) FROM CLIENTES_PARA_MODIFICAR --459298
+-------------------------------------------------------------
 SELECT U.NOME,
        C.*
   FROM PCPEDC C
