@@ -13,6 +13,8 @@ Tratamento dos campos:
 2. Trazer o SOBRENOME da JCCLIENTCLUB, caso nulo, trazer demais nomes da PCCLIENT.CLIENTE
 3. Trazer o nome da cidade da tabela PCCIDADE pois na PCCLIENT.MUNICENT o nome esta cortado
 4. Para clientes cadastrados nas lojas, trazer CIDADE, UF, CEP nulos
+5. Para trazer a origem do cadastro é feito um check na tabela JCCLIENTCLUB, se houve 
+   registro do cliente, será LOJA senão SITE
 **********************************************************/
 WITH CEP_LOJAS AS
  (SELECT REGEXP_REPLACE(F.CEP, '[^0-9]', '') CEP_LOJA
