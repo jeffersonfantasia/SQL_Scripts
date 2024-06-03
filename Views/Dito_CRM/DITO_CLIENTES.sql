@@ -1,3 +1,4 @@
+--CREATE OR REPLACE VIEW BROKER.DITO_CLIENTES AS
 /**********************************************************
 Trazer clientes que são:
 1. De vendedores que estão na VIEW DITO_VENDEDORES
@@ -13,7 +14,7 @@ Tratamento dos campos:
 2. Trazer o SOBRENOME da JCCLIENTCLUB, caso nulo, trazer demais nomes da PCCLIENT.CLIENTE
 3. Trazer o nome da cidade da tabela PCCIDADE pois na PCCLIENT.MUNICENT o nome esta cortado
 4. Para clientes cadastrados nas lojas, trazer CIDADE, UF, CEP nulos
-5. Para trazer a origem do cadastro é feito um check na tabela JCCLIENTCLUB, se houve 
+5. Para tarzer a origem do cadastro é feito um check na tabela JCCLIENTCLUB, se houve 
    registro do cliente, será LOJA senão SITE
 **********************************************************/
 WITH CEP_LOJAS AS
@@ -83,8 +84,8 @@ CLIENTES_TRATADOS AS
          DATA_CADASTRO,
          DATA_UPDATE,
          TIPO_PESSOA,
-         NVL(NOME_JCCLIENTCLUB, PRIMEIRO_NOME_PCCLIENT) NOME,
-         NVL(SOBRENOME_JCCLIENTCLUB, SOBRENOME_PCCLIENT) SOBRENOME,
+         INITCAP(NVL(NOME_JCCLIENTCLUB, PRIMEIRO_NOME_PCCLIENT)) NOME,
+         INITCAP(NVL(SOBRENOME_JCCLIENTCLUB, SOBRENOME_PCCLIENT)) SOBRENOME,
          EMAIL,
          CELULAR,
          SEXO,
