@@ -89,6 +89,7 @@ CLIENTES_TRATADOS AS
          EMAIL,
          CELULAR,
          SEXO,
+         DTNASCIMENTO,
          LENGTH(CELULAR) TAMNHO_CEL,
          (CASE WHEN CEP IN (SELECT CEP_LOJA FROM CEP_LOJAS)
             THEN NULL
@@ -116,6 +117,7 @@ SELECT CODIGO_CLIENTE,
        EMAIL,
        CELULAR,
        SEXO,
+       DTNASCIMENTO,
        CIDADE,
        ESTADO,
        CEP,
