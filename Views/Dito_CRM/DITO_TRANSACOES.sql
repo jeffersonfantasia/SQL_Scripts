@@ -14,10 +14,9 @@ Tratamento dos campos:
 3. 
 4. 
 5. 
-**********************************************************/
 
 CODIGO_CLIENTE,
-TO_CHAR(LPAD(CPF_CNPJ,11,0)) AS CPF_CNPJ,
+CPF_CNPJ,
 DATA_COMPRA,
 ID_TRANSACAO,
 NOME_LOJA,
@@ -32,3 +31,6 @@ TOTAL_DESCONTO,
 TOTAL_FRETE,
 CUPOM,
 CLASSIFICACAO_LOJA
+
+**********************************************************/
+
