@@ -1,21 +1,11 @@
---CREATE OR REPLACE VIEW BROKER.DITO_TRANSACOES AS
+CREATE OR REPLACE VIEW BROKER.DITO_TRANSACOES AS
 /**********************************************************
-Trazer vendas que são:
-1. 
-2. 
-3. 
-4. 
-5. 
-6. 
-7. 
-
 Tratamento dos campos:
-1. 
-2. 
-3. 
-4. 
-5. 
-
+1. Quando for devolução devemos trazer o valor total negativo
+2. Se a movimentação pertencer alguma loja deverá ser considerada OFFLINE
+   caso contrário ONLINE
+3. Se a cobrança possui desdobramento, trazer a descricão da cobrança desdobrada
+   caso contario, trazer a descricao da propria cobrança
 **********************************************************/
 
 WITH BASE_MOV_PROD_CONSOLIDADA AS
@@ -45,25 +35,27 @@ FILIAIS AS
          F.FANTASIA
     FROM PCFILIAL F),
 
-COBRANCAS AS (
- SELECT B.CODCOB, NVL(B.CODCOBCC, B.CODCOB) CODPAG
- FROM PCCOB B),
- 
-PAGAMENTO AS (
- SELECT C.CODCOB, C.CODPAG, INITCAP(B.COBRANCA) METODO_PAGAMENTO
- FROM COBRANCAS C
- JOIN PCCOB B ON B.CODCOB = C.CODPAG)
+COBRANCAS AS
+ (SELECT B.CODCOB,
+         NVL(B.CODCOBCC, B.CODCOB) CODPAG
+    FROM PCCOB B),
+
+PAGAMENTO AS
+ (SELECT C.CODCOB,
+         C.CODPAG,
+         INITCAP(B.COBRANCA) METODO_PAGAMENTO
+    FROM COBRANCAS C
+    JOIN PCCOB B ON B.CODCOB = C.CODPAG)
 
 SELECT M.CODIGO_CLIENTE,
        M.CPF_CNPJ,
        M.DATA_COMPRA,
        M.ID_TRANSACAO,
-       F.FANTASIA NOME_LOJA,
+       INITCAP(F.FANTASIA) NOME_LOJA,
        M.ID_LOJA,
-       M.NOME_VENDEDOR,
+       INITCAP(M.NOME_VENDEDOR) NOME_VENDEDOR,
        M.CODIGO_VENDEDOR,
-       S.CODCOB,
-			 P.METODO_PAGAMENTO,
+       P.METODO_PAGAMENTO,
        M.TOTAL,
        (CASE
          WHEN M.ID_LOJA IN
@@ -80,8 +72,7 @@ SELECT M.CODIGO_CLIENTE,
        '' CUPOM,
        'Própria' CLASSIFICACAO_LOJA
   FROM BASE_MOV_PROD_CONSOLIDADA M
-	LEFT JOIN PCFILIAL F ON F.CODIGO = M.ID_LOJA
-	LEFT JOIN PCNFSAID S ON S.NUMTRANSVENDA = M.ID_TRANSACAO AND M.OPERACAO_PRODUTO = 'Compra'
-	LEFT JOIN PAGAMENTO P ON P.CODCOB = S.CODCOB
-	WHERE M.OPERACAO_PRODUTO = 'Compra'
-
+  LEFT JOIN PCFILIAL F ON F.CODIGO = M.ID_LOJA
+  LEFT JOIN PCNFSAID S ON S.NUMTRANSVENDA = M.ID_TRANSACAO
+                      AND M.OPERACAO_PRODUTO = 'Compra'
+  LEFT JOIN PAGAMENTO P ON P.CODCOB = S.CODCOB
