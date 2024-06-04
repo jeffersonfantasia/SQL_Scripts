@@ -1,4 +1,5 @@
 CREATE OR REPLACE VIEW BROKER.DITO_TRANSACOES AS
+
 /**********************************************************
 Tratamento dos campos:
 1. Quando for devolução devemos trazer o valor total negativo
