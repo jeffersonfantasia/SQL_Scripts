@@ -2,10 +2,11 @@ CREATE OR REPLACE VIEW BROKER.DITO_BASE_MOV_PRODUTO AS
 
 /**********************************************************
 View criada para alimentar a DITO_TRANSACOES e DITO_PRODUTOS
-1. Inclusão do cliente 1 cONSUMIDOR FINAL para que possamos utilizar a DITO_CLIENTES para filtrar PCMOV
-2. Criado tabelas virtuais com os CFOPs de venda e devolução para filtrar as movimentações e distinguir
+1. Inclusão do cliente 1 CONSUMIDOR FINAL para que possamos utilizar a DITO_CLIENTES para filtrar PCMOV
+2. Somente movimentação dos vendedores da DITO_VENDEDORES
+3. Criado tabelas virtuais com os CFOPs de venda e devolução para filtrar as movimentações e distinguir
    as operações
-3. Assim conseguimos informar que as devoluções possuem quantidade negativa.
+4. Assim conseguimos informar que as devoluções possuem quantidade negativa.
 **********************************************************/
 
 WITH CLIENTES_MAIS_CONSUMIDOR_FINAL AS
@@ -42,6 +43,7 @@ SELECT C.CODIGO_CLIENTE,
        NVL(M.NUMTRANSVENDA, M.NUMTRANSENT) ID_TRANSACAO,
        M.CODFILIAL ID_LOJA,
        M.CODUSUR CODIGO_VENDEDOR,
+       V.NOME_VENDEDOR,
        M.CODPROD ID_PRODUTO,
        M.DESCRICAO NOME_PRODUTO,
        (CASE
@@ -63,5 +65,6 @@ SELECT C.CODIGO_CLIENTE,
   FROM PCMOV M
   JOIN CLIENTES_MAIS_CONSUMIDOR_FINAL C ON C.CODIGO_CLIENTE = M.CODCLI
   JOIN CFOP_TRANSACAO T ON T.CODFISCAL = M.CODFISCAL
+	JOIN BROKER.DITO_VENDEDORES V ON V.CODIGO_VENDEDOR = M.CODUSUR
  WHERE M.DTCANCEL IS NULL
    AND M.DTMOV >= TO_DATE('01/01/2022', 'DD/MM/YYYY');
