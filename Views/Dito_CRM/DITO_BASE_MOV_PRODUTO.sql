@@ -2,21 +2,16 @@ CREATE OR REPLACE VIEW BROKER.DITO_BASE_MOV_PRODUTO AS
 
 /**********************************************************
 View criada para alimentar a DITO_TRANSACOES e DITO_PRODUTOS
-1. Inclusão do cliente 1 CONSUMIDOR FINAL para que possamos utilizar a DITO_CLIENTES para filtrar PCMOV
-2. Porém devemos trazer o CODIGO DO CLIENTE 1 COMO NULO
-3. Somente movimentação dos vendedores da DITO_VENDEDORES
-4. Criado tabelas virtuais com os CFOPs de venda e devolução para filtrar as movimentações e distinguir
-   as operações
-5. Assim conseguimos informar que as devoluções possuem quantidade negativa.
+1. Clientes com movicmentação sem cadastro na DITO_CLIENTES serão jogados para CODCLI = 1 CONSUMIDOR FINAL
+2. Somente movimentação dos vendedores da DITO_VENDEDORES
+3. Criado tabelas virtuais com os CFOPs de venda e devolução para filtrar as movimentações 
+   e distinguir as operações
+4. Assim conseguimos informar que as devoluções possuem quantidade negativa.
 **********************************************************/
 
-WITH CLIENTES_MAIS_CONSUMIDOR_FINAL AS
- (SELECT C.CODIGO_CLIENTE,
-         C.CPF_CNPJ
-    FROM BROKER.DITO_CLIENTES C
-  UNION
-  SELECT C.CODCLI CODIGO_CLIENTE,
-         REGEXP_REPLACE(C.CGCENT, '[^0-9]', '') CPF_CNPJ
+WITH CLIENTES_CONSUMIDOR_FINAL AS
+  (SELECT C.CODCLI CODCLI_CONSUMIDOR_FINAL,
+         REGEXP_REPLACE(C.CGCENT, '[^0-9]', '') CPF_CONSUMIDOR_FINAL
     FROM PCCLIENT C
    WHERE C.CODCLI = 1),
 
@@ -38,8 +33,8 @@ CFOP_TRANSACAO AS
   SELECT CODFISCAL
     FROM CFOP_DEVOLUCAO)
 
-SELECT (CASE WHEN C.CODIGO_CLIENTE = 1 THEN NULL ELSE C.CODIGO_CLIENTE END) CODIGO_CLIENTE,
-       C.CPF_CNPJ,
+SELECT (CASE WHEN M.CODCLI = C.CODIGO_CLIENTE THEN C.CODIGO_CLIENTE ELSE (SELECT CODCLI_CONSUMIDOR_FINAL FROM CLIENTES_CONSUMIDOR_FINAL) END) CODIGO_CLIENTE,
+       (CASE WHEN M.CODCLI = C.CODIGO_CLIENTE THEN C.CPF_CNPJ ELSE (SELECT CPF_CONSUMIDOR_FINAL FROM CLIENTES_CONSUMIDOR_FINAL) END) CPF_CNPJ,
        M.DTMOV DATA_COMPRA,
        NVL(M.NUMTRANSVENDA, M.NUMTRANSENT) ID_TRANSACAO,
        M.CODFILIAL ID_LOJA,
@@ -64,8 +59,8 @@ SELECT (CASE WHEN C.CODIGO_CLIENTE = 1 THEN NULL ELSE C.CODIGO_CLIENTE END) CODI
           'Compra'
        END) OPERACAO_PRODUTO
   FROM PCMOV M
-  JOIN CLIENTES_MAIS_CONSUMIDOR_FINAL C ON C.CODIGO_CLIENTE = M.CODCLI
   JOIN CFOP_TRANSACAO T ON T.CODFISCAL = M.CODFISCAL
 	JOIN BROKER.DITO_VENDEDORES V ON V.CODIGO_VENDEDOR = M.CODUSUR
+	LEFT JOIN BROKER.DITO_CLIENTES C ON C.CODIGO_CLIENTE = M.CODCLI
  WHERE M.DTCANCEL IS NULL
    AND M.DTMOV >= TO_DATE('01/01/2022', 'DD/MM/YYYY');
