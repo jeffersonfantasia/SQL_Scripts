@@ -58,7 +58,7 @@ SELECT C.CODIGO_CLIENTE,
        ROUND(M.QTCONT * NVL(M.VLFRETE, 0), 2) TOTAL_FRETE,
        (CASE
          WHEN M.CODFISCAL IN (SELECT CODFISCAL FROM CFOP_DEVOLUCAO D) THEN
-          'Devolução'
+          'Devolucao'
          ELSE
           'Compra'
        END) OPERACAO_PRODUTO
