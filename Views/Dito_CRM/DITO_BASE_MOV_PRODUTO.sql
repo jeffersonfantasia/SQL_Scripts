@@ -1,4 +1,13 @@
 --CREATE OR REPLACE VIEW BROKER.DITO_BASE_MOV_PRODUTO AS
+
+/**********************************************************
+View criada para alimentar a DITO_TRANSACOES e DITO_PRODUTOS
+1. Inclusão do cliente 1 cONSUMIDOR FINAL para que possamos utilizar a DITO_CLIENTES para filtrar PCMOV
+2. Criado tabelas virtuais com os CFOPs de venda e devolução para filtrar as movimentações e distinguir
+   as operações
+3. Assim conseguimos informar que as devoluções possuem quantidade negativa.
+**********************************************************/
+
 WITH CLIENTES_MAIS_CONSUMIDOR_FINAL AS
  (SELECT C.CODIGO_CLIENTE,
          C.CPF_CNPJ
@@ -39,12 +48,8 @@ SELECT C.CODIGO_CLIENTE,
          ELSE
           M.QTCONT
        END) QUANTIDADE,
-       ROUND(M.QTCONT * (M.PUNITCONT - NVL(M.ST, 0) - NVL(M.VLIPI, 0) -
-             NVL(M.VLFRETE, 0)),
-             2) PRECO_PRODUTO,
-       ROUND(M.QTCONT * (M.PUNITCONT - NVL(M.ST, 0) - NVL(M.VLIPI, 0) -
-             NVL(M.VLFRETE, 0)),
-             2) VALOR_UNITARIO,
+       ROUND(M.QTCONT * (M.PUNITCONT - NVL(M.ST, 0) - NVL(M.VLIPI, 0) - NVL(M.VLFRETE, 0)), 2) PRECO_PRODUTO,
+       ROUND(M.QTCONT * (M.PUNITCONT - NVL(M.ST, 0) - NVL(M.VLIPI, 0) - NVL(M.VLFRETE, 0)), 2) VALOR_UNITARIO,
        ROUND(M.QTCONT * NVL(M.VLDESCONTO, 0), 2) TOTAL_DESCONTO,
        ROUND(M.QTCONT * NVL(M.VLFRETE, 0), 2) TOTAL_FRETE,
        (CASE
