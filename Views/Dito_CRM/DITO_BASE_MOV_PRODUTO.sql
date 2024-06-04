@@ -3,10 +3,11 @@ CREATE OR REPLACE VIEW BROKER.DITO_BASE_MOV_PRODUTO AS
 /**********************************************************
 View criada para alimentar a DITO_TRANSACOES e DITO_PRODUTOS
 1. Inclusão do cliente 1 CONSUMIDOR FINAL para que possamos utilizar a DITO_CLIENTES para filtrar PCMOV
-2. Somente movimentação dos vendedores da DITO_VENDEDORES
-3. Criado tabelas virtuais com os CFOPs de venda e devolução para filtrar as movimentações e distinguir
+2. Porém devemos trazer o CODIGO DO CLIENTE 1 COMO NULO
+3. Somente movimentação dos vendedores da DITO_VENDEDORES
+4. Criado tabelas virtuais com os CFOPs de venda e devolução para filtrar as movimentações e distinguir
    as operações
-4. Assim conseguimos informar que as devoluções possuem quantidade negativa.
+5. Assim conseguimos informar que as devoluções possuem quantidade negativa.
 **********************************************************/
 
 WITH CLIENTES_MAIS_CONSUMIDOR_FINAL AS
