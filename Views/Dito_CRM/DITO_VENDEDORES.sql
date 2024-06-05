@@ -4,6 +4,7 @@ Trazer vendedores que são:
 1. Do Gerente 3 LOJA ou vendedor 37 ECOMMERCE
 2. Que não possuem DIRETORIA no nome
 3. Que estão ativos ou estão inativo a partir de 01/01/2022
+4. Retirar o vendedor TI - CODUSUR = 81
 **********************************************************/
 
 SELECT U.NOME NOME_VENDEDOR,
@@ -23,5 +24,6 @@ SELECT U.NOME NOME_VENDEDOR,
   LEFT JOIN PCSUPERV S ON S.CODSUPERVISOR = U.CODSUPERVISOR
  WHERE (U.CODUSUR = 37 OR S.CODGERENTE = 3)
    AND INSTR(U.NOME, 'DIRETORIA') = 0
+   AND U.CODUSUR <> 81
    AND NVL(U.DTTERMINO, TO_DATE('01/01/2022','DD/MM/YYYY')) >= TO_DATE('01/01/2022','DD/MM/YYYY');
 
