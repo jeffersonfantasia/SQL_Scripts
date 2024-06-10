@@ -13,7 +13,7 @@ RESULTADO AS
                   M.NUMTRANSITEM,
                   M.NUMNOTA NUMNOTADEV,
                   NVL(S.NUMTRANSVENDA,
-                      MIN(V.NUMTRANSVENDA) OVER(PARTITION BY NUMTRANSITEM)) NUMTRANSVENDA,
+                  MIN(V.NUMTRANSVENDA) OVER(PARTITION BY NUMTRANSITEM)) NUMTRANSVENDA,
                   M.DTMOV,
                   M.CODPROD,
                   M.DESCRICAO
