@@ -141,7 +141,7 @@ SELECT *
   FROM (
     SELECT (
         CASE
-            WHEN E.CODFILIAL IN ( 1, 2, 7, 8, 11, 12, 13 ) THEN
+            WHEN E.CODFILIAL IN ( 1, 2, 7, 8, 11, 12, 13, 14 ) THEN
                 'JC BROTHERS'
             WHEN E.CODFILIAL = 5  THEN
                 'JFF'
@@ -185,3 +185,34 @@ SELECT DISTINCT F.CODFORNEC,
    AND F.CODFORNEC IN ( 10260 )
  ORDER BY F.FORNECEDOR;
 /
+/*REPLICAR INFORMACAO ENTRE FILIAIS*/
+/*
+BEGIN
+	FOR temp_rec IN (SELECT * FROM BROKERCONTABIL WHERE CODFILIAL = '1')
+  
+  LOOP
+    BEGIN
+
+        INSERT INTO BROKER.BROKERCONTABIL
+          (CODFILIAL,
+           CODFORNEC,
+           CODCONTAB)
+        VALUES
+          ('14',
+           temp_rec.CODFORNEC,
+           temp_rec.CODCONTAB);
+
+    EXCEPTION
+      WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Erro encontrado: ' || SQLERRM);
+        RAISE_APPLICATION_ERROR(-20000,
+                                'Erro durante a criação da tabela: ' ||
+                                SQLERRM);
+    END;
+  END LOOP;
+
+  COMMIT;
+END;  
+
+*/
+
