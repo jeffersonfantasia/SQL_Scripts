@@ -54,22 +54,22 @@ SELECT A.CODFILIAL,
          A.QTEST,
          (SELECT SUM(B.QTESTGER)
             FROM PCEST B
-           WHERE B.CODFILIAL IN ('1', '4')
+           WHERE B.CODFILIAL IN ('13', '4')
              AND B.CODPROD = A.CODPROD) QTESTGERSOMA
     FROM PCEST A, PCPRODUT C
    WHERE A.CODPROD = C.CODPROD
-     AND A.CODFILIAL IN ('1')
+     AND A.CODFILIAL IN ('13')
      AND C.CODEPTO NOT IN (97)
      AND A.QTEST <> (SELECT SUM(B.QTESTGER)
                        FROM PCEST B
-                      WHERE B.CODFILIAL IN ('1', '4')
+                      WHERE B.CODFILIAL IN ('13', '4')
                         AND B.CODPROD = A.CODPROD)
    ORDER BY C.CODPRODMASTER, CODPROD;
 /
 /*Estoque contabil menor que zero - Filial 8*/
   SELECT E.CODFILIAL, E.CODPROD, P.DESCRICAO, E.QTEST, E.QTESTGER
     FROM PCEST E, PCPRODUT P
-   WHERE E.CODFILIAL IN ('8','13','14')
+   WHERE E.CODFILIAL IN ('1', '8','13','14')
      AND E.CODPROD = P.CODPROD
      AND QTEST < 0;
 /
