@@ -58,8 +58,8 @@ SELECT E.DTLANCTO,
                             2116,
                             1117,
                             2117))
-      --RB SERVICOS, NET, TELEFONICA
-   AND E.CODFORNEC NOT IN (8549, 143, 15)
+      --RB SERVICOS, NET, TELEFONICA, flash
+   AND E.CODFORNEC NOT IN (8549, 143, 15, 10529)
    AND (E.CODCONT <> NVL(L.CODCONTA, 0) OR E.CODCONT IN (590101) OR
        E.CODFORNEC <> E.CODFORNECNF)
       --RETIRAR LANCAMENTOS DAS CONTAS DE LUZ*/

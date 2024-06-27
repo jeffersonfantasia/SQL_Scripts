@@ -5,7 +5,7 @@ SELECT *
                M.CODCLI,
                C.CLIENTE,
                C.CGCENT,
-               C.IEENT,
+               C.IEENT, C.ESTENT,
                M.NUMNOTA,
                M.NUMTRANSVENDA,
                M.DTMOV,
