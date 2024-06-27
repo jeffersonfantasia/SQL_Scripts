@@ -24,7 +24,7 @@ SELECT *
 
 ----análise das queries mais demoradas
 WITH SUMMARY_SNAP AS
- (SELECT S.SQL_ID, S.
+ (SELECT S.SQL_ID,
          MAX(T.SNAP_TIME) SNAP_TIME
     FROM PERFSTAT.STATS$SQL_SUMMARY S
     JOIN PERFSTAT.STATS$SNAPSHOT T ON T.SNAP_ID = S.SNAP_ID
@@ -41,8 +41,8 @@ CONSULTA AS (
                V.CPU_TIME,
                V.BUFFER_GETS,
 							 V.ELAPSED_TIME,
-							 V.EXECUTIONS--,
-               --ROUND(((V.ELAPSED_TIME ) / (V.EXECUTIONS + 1 ) / 1000000),2) SEGUNDOS
+							 V.EXECUTIONS,
+               ROUND(((V.ELAPSED_TIME ) / (V.EXECUTIONS + 1 ) / 1000000),2) SEGUNDOS
           FROM V$SQL V
           JOIN SUMMARY_SNAP S ON S.SQL_ID = V.SQL_ID
          WHERE S.SNAP_TIME >= TRUNC(SYSDATE) - 1
@@ -50,3 +50,12 @@ CONSULTA AS (
  SELECT *
  FROM CONSULTA
  ORDER BY SEGUNDOS DESC;
+ 
+/*   -- Calcula o número de minutos
+  v_minutes := FLOOR(v_total_seconds / 60);
+
+  -- Calcula o número de segundos
+  v_seconds := FLOOR(MOD(v_total_seconds, 60));
+
+  -- Calcula o número de milissegundos
+  v_milliseconds := ROUND((v_total_seconds - TRUNC(v_total_seconds)) * 1000);*/
