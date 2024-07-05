@@ -63,8 +63,8 @@ USING (
     UPDATE SET C.CODUSUR1 = X.NOVO_CODUSUR;
 
 -------------------------------------------------------------
-SELECT U.NOME,
+/*SELECT U.NOME,
        C.*
   FROM PCPEDC C
   JOIN PCUSUARI U ON U.CODUSUR = C.CODUSUR
- WHERE C.CODCLI = 556925;
+ WHERE C.CODCLI = 556925;*/
