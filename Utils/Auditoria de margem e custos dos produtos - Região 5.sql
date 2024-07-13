@@ -20,7 +20,7 @@ WITH PRODUTOS AS
                             FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)) MSUGERIDA,*/
 				 FN_JF_MARGEM_PRECO(L.CUSTOLIQ,
             FN_JF_PRECO_VENDA(L.CUSTOLIQ,
-                           0.17,
+                           17,
                            FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)),
                             FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)) MSUGERIDA,
         /* FN_JF_PRECO_VENDA(L.CUSTOLIQ,
@@ -74,7 +74,7 @@ MERGE
            T.NUMREGIAO,
 				 FN_JF_MARGEM_PRECO(L.CUSTOLIQ,
             FN_JF_PRECO_VENDA(L.CUSTOLIQ,
-                           0.17,
+                           17,
                            FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)),
                             FN_JF_TRANSFORMA_EM_PERCENTUAL(B.CODICMTAB)) MSUGERIDA,
 				FN_JF_PRECO_VENDA(L.CUSTOLIQ,
