@@ -15,8 +15,11 @@ SELECT ROWID, C.CODCONTAB, C.*
                     4786, --CLIELO
                     473516, --GIMBA - SUPRICORP SUPRIMENTOS LTDA 10403
                     477615, --CASA & VIDEO BRASIL S.A
-										477468, --SHOPEE - SHPS TECNOLOGIA E SERVICOS LTDA
-										37484 --FESTALAB FESTAS E EVENTOS LTDA ­ ME
+                    477468, --SHOPEE - SHPS TECNOLOGIA E SERVICOS LTDA
+                    37484, --FESTALAB FESTAS E EVENTOS LTDA ­ ME
+                    560317,--IUPP S.A. (ITAUSHOP)
+                    563376, --LIVELO S.A.
+                    564395 --SENFF SHOPPING LTDA
                     );
 
 --TROCAR O CODCLIPRINC DO CLIENTE DEVOLUCAO 
@@ -48,8 +51,8 @@ SELECT ROWID, F.CODCONTAB, F.*
                      9745, --MERCADO ENVIOS SERVICOS DE LOGISTICA LTDA 20.121.850/0008-21
                      9890, --MERCADO ENVIOS SERVICOS DE LOGISTICA LTDA.  20.121.850/0001-55
                      9258, --MERCADO PAGO COM REPRESENTAÇÕES LTDA  10.573.521/0001-91
-										 10323, --EBAZAR.COM.BR. LTDA 03.007.331/0122-39
-										 10325, --EBAZAR.COM.BR. LTDA 03.007.331/0015-47
+                     10323, --EBAZAR.COM.BR. LTDA 03.007.331/0122-39
+                     10325, --EBAZAR.COM.BR. LTDA 03.007.331/0015-47
                      9286, --PAGAR.ME PAGAMENTOS SA  18.727.053/0001-74
                      9624, --PAYMEE BRASIL SERVICOS DE PAGAMENTOS S/A  28.683.892/0001-91
                      9868, --RI HAPPY BRINQUEDOS S.A 58.731.662/0001-11
@@ -59,10 +62,13 @@ SELECT ROWID, F.CODCONTAB, F.*
                      9632, --VIA VAREJO S/A  33.041.260/0652-90
                      9515, --WALMART BRASIL LTDA 00.063.960/0001-09
                      9197, --WMB COM DE ELETRONICO   14.314.050/0001-58
-										 10248, --CASA & VIDEO BRASIL S.A
-										 10247, --SHOPEE - SHPS TECNOLOGIA E SERVICOS LTDA
-										 10246, -- FESTALAB FESTAS E EVENTOS LTDA
-										 10253 --GIMBA - SUPRICORP SUPRIMENTOS LTDA 10403
+                     10248, --CASA & VIDEO BRASIL S.A
+                     10247, --SHOPEE - SHPS TECNOLOGIA E SERVICOS LTDA
+                     10246, -- FESTALAB FESTAS E EVENTOS LTDA
+                     10253, --GIMBA - SUPRICORP SUPRIMENTOS LTDA 10403
+                     10530, --IUPP S.A.
+                     10558, --LIVELO S.A.
+                     10560 --SENFF SHOPPING LTDA
                      );
 /
 --COBRANÇAS
@@ -82,9 +88,12 @@ SELECT ROWID, F.CODCONTAB, F.*
                     'CMGL', --CARTAO MAGAZINE LUIZA
                     'RIHP', --CARTAO RIHAPPY
                     'CGBA', --CARTAO GIMBA
-										'SHPE', --CARTAO SHOPEE
-										'CSVD', --CARTAO CASAVIDEO
-										'FTLB' --CARTAO FESTALAB
+                    'SHPE', --CARTAO SHOPEE
+                    'CSVD', --CARTAO CASAVIDEO
+                    'FTLB', --CARTAO FESTALAB
+                    'ISHP', --CARTAO ITAUSHOP
+                    'LIVL', --CARTAO LIVELO
+                    'SENF' --CARTAO SENFF
                     );
 /
 --VENDEDORES
@@ -100,9 +109,12 @@ SELECT ROWID, F.CODCONTAB, F.*
                      47, --CARREFOUR
                      55, --RIHAPPY,
                      70, --GIMBA
-										 75, --SHOPEE
-										 74, --FESTALAB 
-										 76  --CASAVIDEO
+                     75, --SHOPEE
+                     74, --FESTALAB 
+                     76,  --CASAVIDEO
+                     112,  --ITAUSHOP
+                     119,  --LIVELO
+                     120  --SENFF
                      );
 /
 --CAIXAS
@@ -124,7 +136,10 @@ SELECT ROWID, F.CODCONTAB, F.*
                         64, --CAIXA GIMBA
                         79, --CAIXA CASA E VIDEO
                         77, --CAIXA FESTA LAB
-                        78 --CAIXA SHOPEE
+                        78, --CAIXA SHOPEE
+                        95,  --ITAUSHOP
+                        96,  --LIVELO
+                        97  --SENFF
                         ) ORDER BY CODBANCO;
 /
 --TODOS MOVIMENTACOES NO CAIXA
