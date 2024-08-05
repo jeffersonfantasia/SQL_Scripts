@@ -7,6 +7,7 @@ View criada para alimentar a DITO_TRANSACOES e DITO_PRODUTOS
 3. Criado tabelas virtuais com os CFOPs de venda e devolução para filtrar as movimentações 
    e distinguir as operações
 4. Assim conseguimos informar que as devoluções possuem quantidade negativa.
+5. Considerar apenas filiais da JC Brothers, evitando registros das empresas do simples
 **********************************************************/
 
 WITH CLIENTES_CONSUMIDOR_FINAL AS
