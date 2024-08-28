@@ -17,6 +17,7 @@ SELECT ROWID, C.CODCONTAB, C.*
                     477615, --CASA & VIDEO BRASIL S.A
                     477468, --SHOPEE - SHPS TECNOLOGIA E SERVICOS LTDA
                     37484, --FESTALAB FESTAS E EVENTOS LTDA ­ ME
+                    42853, --DAFITI - GFG COMERCIO DIGITAL LTDA
                     560317,--IUPP S.A. (ITAUSHOP)
                     563376, --LIVELO S.A.
                     564395 --SENFF SHOPPING LTDA
