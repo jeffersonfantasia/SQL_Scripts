@@ -20,7 +20,8 @@ SELECT ROWID, C.CODCONTAB, C.*
                     42853, --DAFITI - GFG COMERCIO DIGITAL LTDA
                     560317,--IUPP S.A. (ITAUSHOP)
                     563376, --LIVELO S.A.
-                    564395 --SENFF SHOPPING LTDA
+                    564395, --SENFF SHOPPING LTDA
+                    566992 --BRADESCOSHOP
                     );
 
 --TROCAR O CODCLIPRINC DO CLIENTE DEVOLUCAO 
@@ -69,7 +70,8 @@ SELECT ROWID, F.CODCONTAB, F.*
                      10253, --GIMBA - SUPRICORP SUPRIMENTOS LTDA 10403
                      10530, --IUPP S.A.
                      10558, --LIVELO S.A.
-                     10560 --SENFF SHOPPING LTDA
+                     10560, --SENFF SHOPPING LTDA
+                     10572 --BRADSESCOSHOP
                      );
 /
 --COBRANÇAS
