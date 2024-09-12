@@ -46,7 +46,7 @@ SELECT A.CODFILIAL,
                         AND B.CODPROD = A.CODPROD)
    ORDER BY C.CODPRODMASTER, CODPROD;
 /
-/*-------VERIFICAÇÃO ESTOQUE JABAQUARA--------------*/
+/*-------VERIFICAÇÃO ESTOQUE TRIMAIS--------------*/
   SELECT A.CODFILIAL,
          A.CODPROD,
          C.CODPRODMASTER,
@@ -66,10 +66,10 @@ SELECT A.CODFILIAL,
                         AND B.CODPROD = A.CODPROD)
    ORDER BY C.CODPRODMASTER, CODPROD;
 /
-/*Estoque contabil menor que zero - Filial 8*/
+/*Estoque contabil menor que zero - LOJAS */
   SELECT E.CODFILIAL, E.CODPROD, P.DESCRICAO, E.QTEST, E.QTESTGER
     FROM PCEST E, PCPRODUT P
-   WHERE E.CODFILIAL IN ('1', '8','13','14')
+   WHERE E.CODFILIAL IN ('1', '8','12', '13','14')
      AND E.CODPROD = P.CODPROD
      AND QTEST < 0;
 /
