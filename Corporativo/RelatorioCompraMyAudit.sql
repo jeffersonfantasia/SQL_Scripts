@@ -104,6 +104,7 @@ SELECT *
     FROM (
     SELECT F.CODFORNEC,
            F.FORNECEDOR,
+           P.CODFAB,
            I.CODPROD,
            P.DESCRICAO,
            I.QT_VENDIDA,

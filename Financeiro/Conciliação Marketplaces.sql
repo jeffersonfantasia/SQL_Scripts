@@ -181,7 +181,7 @@ SELECT ROWID, F.CODCONTAB, F.*
 
 /
 /******************************************/
-/*       DUPLICATAS REDE B2B FILIAL 2     */
+/*       DUPLICATAS REDE B2B FILIAL 2/11     */
 /******************************************/
 --VERIFICAR NSU / PRESTTEF / NUMRESUMO / PDV / DTTRANSACAOCC NA DUPLICATA DESDOBRADA
   SELECT ROWID,
@@ -193,11 +193,12 @@ SELECT ROWID, F.CODCONTAB, F.*
          P.PDV,
          P.CODBAIXACARTAOREDE,
          P.DTTRANSACAOCC,
+				 P.CODCOBORIG,
          P.*
     FROM PCPREST P
    WHERE CODCOB = 'CARC'
-     AND CODFILIAL = '2'
-   ORDER BY DUPLIC, TO_NUMBER(PREST);
+     AND CODFILIAL = '11'
+   ORDER BY DTEMISSAO DESC, DUPLIC, TO_NUMBER(PREST);
 
 /***********************************************/
 /* DUPLICATAS REDE LOJAS COM CREDITO EM ABERTO */
