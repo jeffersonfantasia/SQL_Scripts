@@ -19,7 +19,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_IMP_NFS_FUNC AS
            (
                CASE
                    WHEN B.GRUPOCONTA NOT IN (
-                       510, 515
+                       510, 515, 230
                    ) THEN ('NFS ' || B.NUMNOTA || ' - ' || B.HISTORICO2 || ' - ' || F.FORNECEDOR)
                    ELSE (B.RECNUM || ' - ' || B.HISTORICO2 || ' - ' || B.HISTORICO)
                END
