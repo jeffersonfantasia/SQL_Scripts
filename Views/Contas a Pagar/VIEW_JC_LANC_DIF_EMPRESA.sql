@@ -2,7 +2,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_DIF_EMPRESA AS
     WITH BANCOS_EMPRESA AS
      (SELECT B.CODBANCO,
              (CASE
-               WHEN B.CODFILIAL IN (1, 2, 7, 8, 11, 12, 13, 14, 99) THEN
+               WHEN B.CODFILIAL IN (1, 2, 7, 8, 11, 12, 13, 14, 15, 99) THEN
                 '1'
                ELSE
                 B.CODFILIAL
@@ -11,7 +11,7 @@ CREATE OR REPLACE VIEW VIEW_JC_LANC_DIF_EMPRESA AS
     LANCAMENTOS_EMPRESA AS
      (SELECT L.RECNUM,
              (CASE
-               WHEN L.CODFILIAL IN (1, 2, 7, 8, 11, 12, 13, 14, 99) THEN
+               WHEN L.CODFILIAL IN (1, 2, 7, 8, 11, 12, 13, 14, 15, 99) THEN
                 '1'
                ELSE
                 L.CODFILIAL
