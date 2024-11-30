@@ -2,7 +2,8 @@
 
 BEGIN
 	
-  PRC_SINC_MOV_PRODUTO;
+  prc_sinc_tabelas_dw;
 COMMIT;
 
 END;
+
