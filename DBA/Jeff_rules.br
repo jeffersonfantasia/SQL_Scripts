@@ -1,5 +1,5 @@
 Version=1
-RightMargin=80
+RightMargin=70
 Indent=2
 UseTabCharacter=FALSE
 TabCharacterSize=0
@@ -20,7 +20,7 @@ DML.LeftAlignItems=FALSE
 DML.OnOneLineIfPossible=TRUE
 DML.WhereSplitAndOr=TRUE
 DML.WhereAndOrAfterExpression=FALSE
-DML.WhereAndOrUnderWhere=TRUE
+DML.WhereAndOrUnderWhere=FALSE
 DML.JoinSplitBeforeOn=FALSE
 DML.InsertItemList.Format=2
 DML.InsertItemList.Align=FALSE

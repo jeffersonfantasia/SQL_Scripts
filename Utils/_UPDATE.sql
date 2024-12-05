@@ -1,9 +1,33 @@
 --UPDATE
-
 BEGIN
+ 
+  BEGIN
+    PRC_SINC_PLANO_CONTAS_JC;
+    COMMIT;
+  END;
 	
-  prc_sinc_tabelas_dw;
-COMMIT;
+ 
+  BEGIN
+    PRC_SINC_TABELAS_DW;
+    COMMIT;
+  END;
+  
+  
+  BEGIN
+    PRC_SINC_MOV_PROD_BASE_AGG;
+    COMMIT;
+  END;
+  
+
+  BEGIN
+    PRC_SINC_MOV_CONTABIL;
+    COMMIT;
+  END;
+  
+
+  BEGIN
+    PRC_SINC_CONTABILIDADE;
+    COMMIT;
+  END;
 
 END;
-

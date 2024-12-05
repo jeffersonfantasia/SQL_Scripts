@@ -49,7 +49,7 @@ NOTAS_DESPESAS AS
          E.NUMTRANSENT,
          (CASE
            WHEN E.ESPECIE = 'CT' THEN
-            420102
+            3202
            ELSE
             E.CODCONT
          END) AS CODCONTA,
