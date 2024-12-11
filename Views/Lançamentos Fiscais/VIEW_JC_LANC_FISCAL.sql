@@ -63,7 +63,7 @@ NOTAS_DESPESAS AS
          B.VLBASE,
          B.ALIQUOTA AS ALIQ_ICMS,
          B.VLICMS,
-         E.VLST,
+         E.VLOUTRAS VLST,
          B.VLISENTAS,
          E.VLOUTRAS,
          P.CST_PISCOFINS,

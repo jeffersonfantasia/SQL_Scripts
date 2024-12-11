@@ -1,5 +1,5 @@
 Version=1
-RightMargin=70
+RightMargin=120
 Indent=2
 UseTabCharacter=FALSE
 TabCharacterSize=0
@@ -20,7 +20,7 @@ DML.LeftAlignItems=FALSE
 DML.OnOneLineIfPossible=TRUE
 DML.WhereSplitAndOr=TRUE
 DML.WhereAndOrAfterExpression=FALSE
-DML.WhereAndOrUnderWhere=FALSE
+DML.WhereAndOrUnderWhere=TRUE
 DML.JoinSplitBeforeOn=FALSE
 DML.InsertItemList.Format=2
 DML.InsertItemList.Align=FALSE
@@ -42,6 +42,6 @@ RecordFieldList.Format=1
 RecordFieldList.Align=TRUE
 RecordFieldList.CommaAfter=TRUE
 RecordFieldList.AtLeftMargin=FALSE
-SplitAndOr=FALSE
+SplitAndOr=TRUE
 AndOrAfterExpression=FALSE
 [SpecialCase]

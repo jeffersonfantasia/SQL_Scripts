@@ -1,3 +1,5 @@
 *.~sql
 *.~pck
+*.~bdy
+*.~spc
 .project
