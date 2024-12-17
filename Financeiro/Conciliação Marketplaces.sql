@@ -21,7 +21,7 @@ SELECT ROWID, C.CODCONTAB, C.*
                     560317,--IUPP S.A. (ITAUSHOP)
                     563376, --LIVELO S.A.
                     564395, --SENFF SHOPPING LTDA
-                    566992 --BRADESCOSHOP
+                    566992 --BRADESCOSHOP 
                     );
 
 --TROCAR O CODCLIPRINC DO CLIENTE DEVOLUCAO 
