@@ -61,12 +61,7 @@ CREATE OR REPLACE VIEW VIEW_JC_PCMOV_SAID AS
               0
            END) AS ALIQ_ICMS,
            /*TRAZER ALIQUOTA*/
-           (CASE
-             WHEN I.GERAICMSLIVROFISCAL = 'S' THEN
-              ROUND(NVL((I.VLBASEICMS * I.PERCICM / 100), 0), 2)
-             ELSE
-              0
-           END) AS VLTOTALCREDICMSNF,
+           ROUND(NVL((I.VLBASEICMS * I.PERCICM / 100), 0), 2) AS VLTOTALCREDICMSNF,
            (CASE
              WHEN M.GERAICMSLIVROFISCAL = 'N' THEN
               ROUND(NVL(I.VLCONTABIL, 0), 2)
