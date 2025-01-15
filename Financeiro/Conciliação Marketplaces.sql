@@ -21,7 +21,8 @@ SELECT ROWID, C.CODCONTAB, C.*
                     560317,--IUPP S.A. (ITAUSHOP)
                     563376, --LIVELO S.A.
                     564395, --SENFF SHOPPING LTDA
-                    566992 --BRADESCOSHOP 
+                    566992, --BRADESCOSHOP 
+										593053 --IFOOD
                     );
 
 --TROCAR O CODCLIPRINC DO CLIENTE DEVOLUCAO 
@@ -71,7 +72,8 @@ SELECT ROWID, F.CODCONTAB, F.*
                      10530, --IUPP S.A.
                      10558, --LIVELO S.A.
                      10560, --SENFF SHOPPING LTDA
-                     10572 --BRADSESCOSHOP
+                     10572, --BRADSESCOSHOP
+										 10673 --IFOOD
                      );
 /
 --COBRANÇAS
@@ -96,7 +98,8 @@ SELECT ROWID, F.CODCONTAB, F.*
                     'FTLB', --CARTAO FESTALAB
                     'ISHP', --CARTAO ITAUSHOP
                     'LIVL', --CARTAO LIVELO
-                    'SENF' --CARTAO SENFF
+                    'SENF', --CARTAO SENFF
+										'IFOD' --CARTAO IFOOD
                     );
 /
 --VENDEDORES
@@ -117,7 +120,8 @@ SELECT ROWID, F.CODCONTAB, F.*
                      76,  --CASAVIDEO
                      112,  --ITAUSHOP
                      119,  --LIVELO
-                     120  --SENFF
+                     120,  --SENFF
+										 138,139,140,141,142 --IFOOD
                      );
 /
 --CAIXAS
@@ -142,7 +146,8 @@ SELECT ROWID, F.CODCONTAB, F.*
                         78, --CAIXA SHOPEE
                         95,  --ITAUSHOP
                         96,  --LIVELO
-                        97  --SENFF
+                        97,  --SENFF
+												21 --IFOOD
                         ) ORDER BY CODBANCO;
 /
 --TODOS MOVIMENTACOES NO CAIXA
