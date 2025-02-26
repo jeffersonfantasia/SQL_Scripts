@@ -50,28 +50,11 @@ ANALISE_PRODUTOS_TABELA AS
             LEFT JOIN PRODUTO_ESTOQUE E ON P.CODPROD = E.CODPROD
                                        AND P.CODFILIAL = E.CODFILIAL
            WHERE P.CODFILIAL = '2'
-             AND P.NUMREGIAO IN (1, 3, 4)
+             AND P.NUMREGIAO IN (1, 3, 4, 7)
              AND E.CODFORNECPRINC = 2
-             AND P.CODPROD NOT IN (805833,
-                                   811191,
-                                   811375,
-                                   814354,
-                                   814403,
-                                   815147,
-                                   815148,
-                                   815149,
-                                   815160,
-                                   815161,
-                                   817172,
-                                   817173,
-                                   817179,
-                                   817394,
-                                   817395,
-                                   817411,
-                                   817413,
-                                   817414,
-                                   817419)
-                --PROMOCIONAIS
+                --PROMOCIONAIS 2024
+             AND P.CODPROD NOT IN (815147, 815149, 815160, 817173, 817179, 817394)
+                --PROMOCIONAIS FEV-2025
              AND P.CODPROD NOT IN (131416,
                                    131417,
                                    797023,
@@ -104,11 +87,12 @@ ANALISE_PRODUTOS_TABELA AS
       OR (PSUGERIDO <> PVENDA AND ABS(PSUGERIDO - PVENDA) > 0.9001)
       OR (NCM = '49019900.' AND MIDEAL <> 37.73)
       OR (NCM <> '49019900.' AND NUMREGIAO = 1 AND MIDEAL <> 30.78)
+      OR (NCM <> '49019900.' AND NUMREGIAO = 7 AND MIDEAL <> 34.91)
       OR (NCM <> '49019900.' AND IMPORTADO = 'N' AND NUMREGIAO = 3 AND MIDEAL <> 34.91)
       OR (NCM <> '49019900.' AND IMPORTADO = 'N' AND NUMREGIAO = 4 AND MIDEAL <> 33.03)
       OR (NCM <> '49019900.' AND IMPORTADO = 'S' AND NUMREGIAO IN (3, 4) AND MIDEAL <> 36.03)),
 
-ANALISE_PRODUTOS_PROMOCIONAIS AS
+ANALISE_PRODUTOS_PROMOCIONAIS_2024 AS
  (SELECT *
     FROM (SELECT P.CODFILIAL,
                  P.CODPROD,
@@ -133,7 +117,45 @@ ANALISE_PRODUTOS_PROMOCIONAIS AS
             LEFT JOIN PRODUTO_ESTOQUE E ON P.CODPROD = E.CODPROD
                                        AND P.CODFILIAL = E.CODFILIAL
            WHERE P.CODFILIAL = '2'
-             AND P.NUMREGIAO IN (1, 3, 4)
+             AND P.NUMREGIAO IN (1, 3, 4, 7)
+             AND P.CODPROD IN (815147, 815149, 815160, 817173, 817179, 817394)
+           ORDER BY P.CODPROD,
+                    P.NUMREGIAO)
+   WHERE MIDEAL <> MPRECO
+      OR ABS(CUSTOPROXIMACOMPRA - CUSTOLIQAPLIC) > 0.0001
+      OR (PSUGERIDO <> PVENDA AND ABS(PSUGERIDO - PVENDA) > 0.9001)
+      OR (NCM = '49019900.' AND MIDEAL <> 34.90)
+      OR (NCM <> '49019900.' AND NUMREGIAO = 1 AND MIDEAL <> 33.62)
+      OR (NCM <> '49019900.' AND NUMREGIAO = 7 AND MIDEAL <> 38.13)
+      OR (NCM <> '49019900.' AND IMPORTADO = 'N' AND NUMREGIAO = 3 AND MIDEAL <> 38.13)
+      OR (NCM <> '49019900.' AND IMPORTADO = 'N' AND NUMREGIAO = 4 AND MIDEAL <> 36.08)),
+
+ANALISE_PRODUTOS_PROMOCIONAIS_FEV_2025 AS
+ (SELECT *
+    FROM (SELECT P.CODFILIAL,
+                 P.CODPROD,
+                 P.DESCRICAO,
+                 E.NCM,
+                 E.IMPORTADO,
+                 E.CODLINHA,
+                 E.LINHA_PROD,
+                 E.MARCA,
+                 P.NUMREGIAO,
+                 P.REGIAO,
+                 E.QTESTOQUE,
+                 P.MARGEM AS MIDEAL,
+                 ROUND(P.MARGEMPRECIFICACAO, 2) AS MPRECO,
+                 ROUND(E.CUSTOPROXIMACOMPRA, 4) CUSTOPROXIMACOMPRA,
+                 ROUND(L.PLIQUIDO, 4) AS CUSTOLIQAPLIC,
+                 ROUND(P.CUSTOSELECIONADO / (1 - ((P.CODICMTAB + P.MARGEM) / 100)), 4) AS PSUGERIDO,
+                 ROUND(P.PVENDA, 4) AS PVENDA
+            FROM VW_PRECIFICACAO P
+            LEFT JOIN VIEW_JC_CUSTOLIQ_240 L ON P.CODPROD = L.CODPROD
+                                            AND P.CODFILIAL = L.CODFILIAL
+            LEFT JOIN PRODUTO_ESTOQUE E ON P.CODPROD = E.CODPROD
+                                       AND P.CODFILIAL = E.CODFILIAL
+           WHERE P.CODFILIAL = '2'
+             AND P.NUMREGIAO IN (1, 3, 4, 7)
              AND P.CODPROD IN (131416,
                                131417,
                                797023,
@@ -166,6 +188,7 @@ ANALISE_PRODUTOS_PROMOCIONAIS AS
       OR (PSUGERIDO <> PVENDA AND ABS(PSUGERIDO - PVENDA) > 0.9001)
       OR (NCM = '49019900.' AND MIDEAL <> 40.84)
       OR (NCM <> '49019900.' AND NUMREGIAO = 1 AND MIDEAL <> 32.96)
+      OR (NCM <> '49019900.' AND NUMREGIAO = 7 AND MIDEAL <> 42.94)
       OR (NCM <> '49019900.' AND IMPORTADO = 'N' AND NUMREGIAO = 3 AND MIDEAL <> 42.94)
       OR (NCM <> '49019900.' AND IMPORTADO = 'N' AND NUMREGIAO = 4 AND MIDEAL <> 38.41)
       OR (NCM <> '49019900.' AND IMPORTADO = 'S' AND NUMREGIAO IN (3, 4) AND MIDEAL <> 45.67))
@@ -173,4 +196,7 @@ ANALISE_PRODUTOS_PROMOCIONAIS AS
 SELECT *
   FROM ANALISE_PRODUTOS_TABELA
 UNION ALL
-SELECT * FROM ANALISE_PRODUTOS_PROMOCIONAIS
+SELECT *
+  FROM ANALISE_PRODUTOS_PROMOCIONAIS_2024
+UNION ALL
+SELECT * FROM ANALISE_PRODUTOS_PROMOCIONAIS_FEV_2025
