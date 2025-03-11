@@ -22,7 +22,8 @@ SELECT ROWID, C.CODCONTAB, C.*
                     563376, --LIVELO S.A.
                     564395, --SENFF SHOPPING LTDA
                     566992, --BRADESCOSHOP 
-										593053 --IFOOD
+										593053, --IFOOD
+										594595 --NUMVEMSHOP
                     );
 
 --TROCAR O CODCLIPRINC DO CLIENTE DEVOLUCAO 
@@ -74,8 +75,9 @@ SELECT ROWID, F.CODCONTAB, F.*
                      10558, --LIVELO S.A.
                      10560, --SENFF SHOPPING LTDA
                      10572, --BRADSESCOSHOP
-										 10673 --IFOOD
-                     );
+										 10673, --IFOOD
+                     10678 --NUMVEMSHOP
+										 );
 /
 --COBRANÇAS
   SELECT *
