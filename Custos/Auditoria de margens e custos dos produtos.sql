@@ -29,7 +29,7 @@ WITH PRODUTO_ESTOQUE AS
      AND P.DTEXCLUSAO IS NULL
      AND P.OBS2 <> 'FL'
      AND P.CODPRODMASTER = P.CODPROD
-     AND D.CODFILIAL IN ('2', '11')
+     AND D.CODFILIAL IN ( '11')
      AND P.ENVIARFORCAVENDAS = 'S'
      AND D.ENVIARFORCAVENDAS = 'S'
      AND E.ENVIAFV = 'S'),
@@ -60,7 +60,7 @@ ANALISE_PRODUTOS_TABELA AS
                                             AND P.CODFILIAL = L.CODFILIAL
             LEFT JOIN PRODUTO_ESTOQUE E ON P.CODPROD = E.CODPROD
                                        AND P.CODFILIAL = E.CODFILIAL
-           WHERE P.CODFILIAL IN ('2', '11')
+           WHERE P.CODFILIAL IN ('11')
              AND P.NUMREGIAO IN (1, 3, 4, 7)
              AND E.CODFORNECPRINC = 2
                 --PROMOCIONAIS 2024
@@ -130,7 +130,7 @@ ANALISE_PRODUTOS_PROMOCIONAIS_2024 AS
                                             AND P.CODFILIAL = L.CODFILIAL
             LEFT JOIN PRODUTO_ESTOQUE E ON P.CODPROD = E.CODPROD
                                        AND P.CODFILIAL = E.CODFILIAL
-           WHERE P.CODFILIAL IN ('2', '11')
+           WHERE P.CODFILIAL IN ('11')
              AND P.NUMREGIAO IN (1, 3, 4, 7)
              AND P.CODPROD IN (815147, 815149, 815160, 817173, 817179, 817394)
            ORDER BY P.CODPROD,
@@ -172,7 +172,7 @@ ANALISE_PRODUTOS_PROMOCIONAIS_FEV_2025 AS
                                             AND P.CODFILIAL = L.CODFILIAL
             LEFT JOIN PRODUTO_ESTOQUE E ON P.CODPROD = E.CODPROD
                                        AND P.CODFILIAL = E.CODFILIAL
-           WHERE P.CODFILIAL IN ('2', '11')
+           WHERE P.CODFILIAL IN ('11')
              AND P.NUMREGIAO IN (1, 3, 4, 7)
              AND P.CODPROD IN (131416,
                                131417,
