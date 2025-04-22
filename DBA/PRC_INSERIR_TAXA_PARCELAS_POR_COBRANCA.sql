@@ -1,0 +1,68 @@
+CREATE OR REPLACE PROCEDURE PRC_UPSERT_TX_PARCELA_COBRANCA
+(
+  pCODCOB        VARCHAR2,
+  pPERCTXADMINCC NUMBER,
+  pQTPARCELAS    NUMBER
+) AS
+
+BEGIN
+  FOR r IN (
+            
+              WITH FILIAL AS
+               (SELECT CODIGO CODFILIAL FROM PCFILIAL F WHERE F.CODIGO IN ('1', '8', '12', '13', '14'))
+              
+              SELECT F.CODFILIAL,
+                     pCODCOB CODCOB,
+                     pPERCTXADMINCC PERCTXADMINCC,
+                     pQTPARCELAS QTPARCELAS,
+                     pQTPARCELAS FAIXAINIQTPARCTXADM,
+                     pQTPARCELAS FAIXAFIMQTPARCTXADM,
+                     NULL PARCELAUNICAOPERADORA,
+                     'N' GERARPARCELAUNICARECEBEDOR
+                FROM DUAL,
+                     FILIAL F)
+  
+  -- Atualiza ou insere os resultados na tabela BI_SINC conforme as condições mencionadas
+  
+  LOOP
+    BEGIN
+      UPDATE PCCOBCARTAOFILIAL
+         SET PERCTXADMINCC              = r.PERCTXADMINCC,
+             FAIXAINIQTPARCTXADM        = r.FAIXAINIQTPARCTXADM,
+             FAIXAFIMQTPARCTXADM        = r.FAIXAFIMQTPARCTXADM,
+             PARCELAUNICAOPERADORA      = r.PARCELAUNICAOPERADORA,
+             GERARPARCELAUNICARECEBEDOR = r.GERARPARCELAUNICARECEBEDOR
+       WHERE CODFILIAL = r.CODFILIAL
+         AND CODCOB = r.CODCOB
+         AND QTPARCELAS = r.QTPARCELAS;
+    
+      IF SQL%NOTFOUND THEN
+        INSERT INTO PCCOBCARTAOFILIAL
+          (CODFILIAL,
+           CODCOB,
+           PERCTXADMINCC,
+           QTPARCELAS,
+           FAIXAINIQTPARCTXADM,
+           FAIXAFIMQTPARCTXADM,
+           PARCELAUNICAOPERADORA,
+           GERARPARCELAUNICARECEBEDOR)
+        VALUES
+          (r.CODFILIAL,
+           r.CODCOB,
+           r.PERCTXADMINCC,
+           r.QTPARCELAS,
+           r.FAIXAINIQTPARCTXADM,
+           r.FAIXAFIMQTPARCTXADM,
+           r.PARCELAUNICAOPERADORA,
+           r.GERARPARCELAUNICARECEBEDOR);
+      END IF;
+    EXCEPTION
+      WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Erro encontrado: ' || SQLERRM);
+        RAISE_APPLICATION_ERROR(-20000, 'Erro durante a insercao na tabela: ' || SQLERRM);
+    END;
+  END LOOP;
+
+  COMMIT;
+
+END;
