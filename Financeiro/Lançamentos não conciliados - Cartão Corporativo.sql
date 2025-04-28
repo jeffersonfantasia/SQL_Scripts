@@ -27,6 +27,7 @@ SELECT DISTINCT M.DATA,
                   ELSE
                    M.VALOR * -1
                 END VALOR,
+								L.VALOR,
                 M.TIPO,
                 M.HISTORICO HISTORICO_PCMOVCR, M.HISTORICO2,
                 L.HISTORICO,
@@ -79,6 +80,7 @@ SELECT DISTINCT M.DATA,
                   ELSE
                    M.VALOR * -1
                 END VALOR,
+								M.VALOR,
                 M.TIPO,
                 M.HISTORICO, m.historico2,
                 L.HISTORICO HISTORICO_PCLANC,
