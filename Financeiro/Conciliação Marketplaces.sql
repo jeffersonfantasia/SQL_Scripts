@@ -69,6 +69,7 @@ SELECT ROWID, F.CODCONTAB, F.*
                      9197, --WMB COM DE ELETRONICO   14.314.050/0001-58
                      10248, --CASA & VIDEO BRASIL S.A
                      10247, --SHOPEE - SHPS TECNOLOGIA E SERVICOS LTDA
+										 10342, --SHOPEE
                      10246, -- FESTALAB FESTAS E EVENTOS LTDA
                      10253, --GIMBA - SUPRICORP SUPRIMENTOS LTDA 10403
                      10530, --IUPP S.A.
