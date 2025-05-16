@@ -66,18 +66,13 @@ ANALISE_PRODUTOS_TABELA AS
                 --PROMOCIONAIS 2024
              AND P.CODPROD NOT IN (815147, 815149, 815160, 817173, 817179, 817394)
                 --PROMOCIONAIS FEV-2025
-             AND P.CODPROD NOT IN (131416,
-                                   131417,
-                                   797023,
-                                   800586,
-                                   811625,
+             AND P.CODPROD NOT IN (797023,
                                    814371,
                                    814350,
                                    817176,
                                    817398,
                                    817177,
                                    817178,
-                                   822255,
                                    822256,
                                    809390,
                                    811430,
@@ -174,18 +169,13 @@ ANALISE_PRODUTOS_PROMOCIONAIS_FEV_2025 AS
                                        AND P.CODFILIAL = E.CODFILIAL
            WHERE P.CODFILIAL IN ('11')
              AND P.NUMREGIAO IN (1, 3, 4, 7)
-             AND P.CODPROD IN (131416,
-                               131417,
-                               797023,
-                               800586,
-                               811625,
+             AND P.CODPROD IN (797023,
                                814371,
                                814350,
                                817176,
                                817398,
                                817177,
                                817178,
-                               822255,
                                822256,
                                809390,
                                811430,
