@@ -4,10 +4,42 @@ BEGIN
  
 END;
 
-/*DELETE PCENCERRAMENTOFINANCEIRO;
+SELECT * FROM PCENCERRAMENTOFINANCEIRO F WHERE F.ANO = 2025 AND F.MES = 04
+
+/*
+   MERGE INTO PCLANC L
+   USING (SELECT L.DTEMISSAO,
+                 L.DTCOMPETENCIA,
+                 L.DTLANC,
+                 L.RECNUM,
+                 L.CODCONTA,
+                 L.CODFORNEC,
+                 L.HISTORICO,
+                 L.NUMNOTA,
+                 L.DUPLIC,
+                 L.VALOR,
+                 L.DTVENC,
+                 L.TIPOLANC,
+                 L.FORNECEDOR
+            FROM PCLANC L
+           WHERE L.DTPAGTO IS NULL
+             AND L.DTCOMPETENCIA <= '30/04/2025'
+             AND L.CODCONTA NOT IN (100001, 3703, 2253)) X
+   
+   ON (L.RECNUM = X.RECNUM)
+   WHEN MATCHED THEN
+     UPDATE SET L.DTCOMPETENCIA = X.DTVENC
+
+
+
+
+
+DELETE PCENCERRAMENTOFINANCEIRO;
+
+
 
 BEGIN
- PRC_FECHAMENTO_FINANCEIRO(TO_DATE('28/02/2025', 'DD/MM/YYYY'));
+ PRC_FECHAMENTO_FINANCEIRO(TO_DATE('30/04/2025', 'DD/MM/YYYY'));
 END;*/
 
 /*
