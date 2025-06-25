@@ -1,0 +1,35 @@
+CREATE OR REPLACE PROCEDURE PRC_JC_UPDATE_ATUALIZA_PCTABPTRIB AS
+
+BEGIN
+
+  FOR r IN (SELECT P.CODFILIALNF,
+                   P.CODPROD,
+                   P.UFDESTINO,
+                   CODST_CONFIG,
+                   CODPC_CONFIG
+              FROM VIEW_JC_PRODUTO_TRIB_SAIDA P
+             WHERE P.CODST_ATUAL <> P.CODST_CONFIG
+                OR P.CODPC_ATUAL <> P.CODPC_CONFIG)
+  
+  LOOP
+    BEGIN
+    
+      --UPDATE DA TRIBUTAÇÃO DE SAIDA
+      UPDATE PCTABTRIB
+         SET CODST            = r.CODST_CONFIG,
+             DTULTALTER       = SYSDATE,
+             CODTRIBPISCOFINS = r.CODPC_CONFIG
+       WHERE CODPROD = r.CODPROD
+         AND CODFILIALNF = r.CODFILIALNF
+         AND UFDESTINO = r.UFDESTINO;
+    
+    EXCEPTION
+      WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Erro encontrado: ' || SQLERRM);
+        RAISE_APPLICATION_ERROR(-20000, 'Erro durante a insercao na tabela: ' || SQLERRM);
+    END;
+  END LOOP;
+
+  COMMIT;
+
+END;
