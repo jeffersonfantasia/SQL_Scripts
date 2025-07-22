@@ -23,14 +23,30 @@ END;
                  L.FORNECEDOR
             FROM PCLANC L
            WHERE L.DTPAGTO IS NULL
-             AND L.DTCOMPETENCIA <= '30/04/2025'
-             AND L.CODCONTA NOT IN (100001, 3703, 2253)) X
+             AND L.DTCOMPETENCIA <= '30/06/2025'
+             AND L.CODCONTA NOT IN (100001, 3703, 2253, 2251,2254, 2255, 2256, 2257, 2261)) X
    
    ON (L.RECNUM = X.RECNUM)
    WHEN MATCHED THEN
      UPDATE SET L.DTCOMPETENCIA = X.DTVENC
 
-
+SELECT l.rowid, L.DTEMISSAO,
+                 L.DTCOMPETENCIA,
+                 L.DTLANC,
+                 L.RECNUM,
+                 L.CODCONTA,
+                 L.CODFORNEC,
+                 L.HISTORICO,
+                 L.NUMNOTA,
+                 L.DUPLIC,
+                 L.VALOR,
+                 L.DTVENC,
+                 L.TIPOLANC,
+                 L.FORNECEDOR
+            FROM PCLANC L
+           WHERE L.DTPAGTO IS NULL
+             AND L.DTCOMPETENCIA <= '30/06/2025'
+             AND L.CODCONTA NOT IN (100001, 3703, 2253, 2251,2254, 2255, 2256, 2257, 2261);
 
 
 
