@@ -1,6 +1,6 @@
 /*Estoque contabil menor que zero */
   SELECT E.CODFILIAL, E.CODPROD, P.DESCRICAO, E.QTEST, E.QTESTGER
-	       --,e.rowid
+	       ,e.rowid
     FROM PCEST E, PCPRODUT P
    WHERE E.CODPROD = P.CODPROD
      AND QTEST < 0;
