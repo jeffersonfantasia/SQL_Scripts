@@ -3,7 +3,7 @@
 	       ,e.rowid
     FROM PCEST E, PCPRODUT P
    WHERE E.CODPROD = P.CODPROD
-     AND QTEST < 0;
+     AND QTEST < 0;              
 
 /*-----------VERIFICAÇÃO ESTOQUE DIADEMA--------------*/
 SELECT A.CODFILIAL,
@@ -28,7 +28,7 @@ SELECT A.CODFILIAL,
 /*Estoque Contábil diferente que zero - Simples Nacional*/
   SELECT E.CODFILIAL, E.CODPROD, P.DESCRICAO, E.QTEST, E.QTESTGER
     FROM PCEST E, PCPRODUT P
-   WHERE E.CODFILIAL IN ('8')
+   WHERE E.CODFILIAL IN ('2')
      AND E.CODPROD = P.CODPROD
      AND (QTEST <> 0 OR QTESTGER <> 0)
    ORDER BY E.CODFILIAL;
