@@ -5,9 +5,9 @@ CREATE OR REPLACE VIEW VIEW_JC_PRODUTO_SEM_TRIB_SAIDA AS
              E.UF
         FROM PCFILIAL F,
              PCESTADO E
-       WHERE F.CODIGO NOT IN ('5', '6', '9', '10', '99')
+       WHERE F.CODIGO NOT IN ('5', '6', '9', '10', '15', '99')
          AND F.DTEXCLUSAO IS NULL)
-    
+
     SELECT DISTINCT P.DTCADASTRO,
                     E.CODPROD,
                     P.DESCRICAO,
