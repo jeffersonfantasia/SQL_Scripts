@@ -31,11 +31,6 @@ SELECT C.NUMPED_TV7,
 	 ;
 
 ------UPDATE DO PVENDA DO TV8 PARA FICAR IGUAL AO TV7--------
-
-/**------------------------------------------------------------------------------------//
-***  DEPOIS RODAR ROTINA 507 - OPÇÃO 18 - RECALCULO DO CABEÇALHO DO PEDIDO DE VENDA   ***
-**------------------------------------------------------------------------------------**/
-
 MERGE INTO PCPEDI I
 USING (
   WITH ITENS_PEDIDO_TV8 AS
