@@ -8,7 +8,7 @@ SELECT DISTINCT M.DATA,
                    FROM PCFORNEC F
                   WHERE F.CODFORNEC = L.CODFORNEC) FORNECEDOR,
                 L.NUMNOTA,
-                M.NUMCARR,
+                M.NUMCARR, l.codconta,
                 (CASE
                   WHEN (L.NUMNOTA = M.NUMCARR) THEN
                    'OK'
