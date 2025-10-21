@@ -8,44 +8,20 @@ SELECT P.DATA,
            SELECT DIAFINANCEIRO
              FROM PCDIASUTEIS
             WHERE DATA = P.DATA
-              AND CODFILIAL = 2
-       ) FILIAL_2,
+              AND CODFILIAL = 11
+       ) FILIAL_11,
        (
            SELECT DIAFINANCEIRO
              FROM PCDIASUTEIS
             WHERE DATA = P.DATA
-              AND CODFILIAL = 5
-       ) FILIAL_5,
+              AND CODFILIAL = 12
+       ) FILIAL_12,
        (
            SELECT DIAFINANCEIRO
              FROM PCDIASUTEIS
             WHERE DATA = P.DATA
-              AND CODFILIAL = 6
-       ) FILIAL_6,
-       (
-           SELECT DIAFINANCEIRO
-             FROM PCDIASUTEIS
-            WHERE DATA = P.DATA
-              AND CODFILIAL = 7
-       ) FILIAL_7,
-       (
-           SELECT DIAFINANCEIRO
-             FROM PCDIASUTEIS
-            WHERE DATA = P.DATA
-              AND CODFILIAL = 8
-       ) FILIAL_8,
-              (
-           SELECT DIAFINANCEIRO
-             FROM PCDIASUTEIS
-            WHERE DATA = P.DATA
-              AND CODFILIAL = 9
-       ) FILIAL_9,
-              (
-           SELECT DIAFINANCEIRO
-             FROM PCDIASUTEIS
-            WHERE DATA = P.DATA
-              AND CODFILIAL = 10
-       ) FILIAL_10
+              AND CODFILIAL = 13
+       ) FILIAL_13
   FROM PCDIASUTEIS P
  WHERE P.DATA BETWEEN TRUNC (SYSDATE) AND TRUNC (SYSDATE) + 30
    AND P.CODFILIAL = 1
