@@ -1,11 +1,12 @@
 --UPDATE
 
 BEGIN
+PRC_UPSERT_CONFIG_TRIB_SAIDA(1, '95030060.', 'AC', 'N', 'N', 90, 1);
 
 
 END;
 
---SELECT * FROM PCENCERRAMENTOFINANCEIRO F WHERE F.ANO = 2025 AND F.MES = 08 ORDER BY DIA DESC;
+--SELECT * FROM PCENCERRAMENTOFINANCEIRO F WHERE F.ANO = 2025 AND F.MES = 09 ORDER BY DIA DESC;
 
 /*
    MERGE INTO PCLANC L
@@ -14,7 +15,7 @@ END;
                  L.DTLANC,
                  L.RECNUM,
                  L.CODCONTA,
-                 L.CODFORNEC,
+                 L.CODFORNEC,            
                  L.HISTORICO,
                  L.NUMNOTA,
                  L.DUPLIC,
