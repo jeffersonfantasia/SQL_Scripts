@@ -17,10 +17,10 @@ WITH ANALITICO AS
     LEFT JOIN PCPRODUT P ON M.CODPROD = P.CODPROD
     LEFT JOIN PCMARCA A ON P.CODMARCA = A.CODMARCA
    WHERE M.CODOPER IN ('EI', 'SI')
-     AND M.DTMOV > TRUNC(SYSDATE) - 7
+     AND M.DTMOV > TRUNC(SYSDATE) - 20
      AND M.DTCANCEL IS NULL
      AND M.STATUS = 'A'
-     AND M.CODFILIAL IN (2, 7)
+     AND M.CODFILIAL IN (11)
    ORDER BY M.CODPROD, M.CODFILIAL, M.CODOPER),
 SINTETICO AS
  (SELECT A.MARCA,
@@ -44,7 +44,7 @@ SELECT *
                A.CODOPER
           FROM ANALITICO A
         UNION ALL
-        SELECT TO_DATE('06/02/2025', 'DD/MM/YYYY') AS DTMOV,
+        SELECT TO_DATE('30/12/2025', 'DD/MM/YYYY') AS DTMOV,
                'SOMA' AS CODFILIAL,
                S.MARCA,
                S.CODPROD,
@@ -61,4 +61,43 @@ SELECT *
                   'IGUAL'
                END) AS CODOPER
           FROM SINTETICO S)
- ORDER BY CODPROD, DESCRICAO, DTMOV DESC 
+ ORDER BY CODPROD, DESCRICAO, DTMOV DESC ;
+ 
+ ------------------------------------
+ 
+ WITH ANALITICO AS
+ (SELECT M.DTMOV,
+         M.CODFILIAL,
+         A.MARCA,
+         M.CODPROD,
+         P.DESCRICAO,
+         (CASE
+           WHEN M.CODOPER = 'EI' THEN
+            M.QTCONT
+           ELSE
+            (M.QTCONT * -1)
+         END) QT,
+         M.CUSTOCONT,
+         M.STATUS,
+         M.CODOPER
+    FROM PCMOV M
+    LEFT JOIN PCPRODUT P ON M.CODPROD = P.CODPROD
+    LEFT JOIN PCMARCA A ON P.CODMARCA = A.CODMARCA
+   WHERE M.CODOPER IN ('EI', 'SI')
+     AND M.DTMOV > TRUNC(SYSDATE) - 20
+     AND M.DTCANCEL IS NULL
+     AND M.STATUS = 'A'
+     AND M.CODFILIAL IN (11)
+   ORDER BY M.CODPROD, M.CODFILIAL, M.CODOPER)
+
+SELECT A.DTMOV,
+               A.CODFILIAL,
+               A.MARCA,
+               A.CODPROD,
+               A.DESCRICAO,
+               A.QT,
+               A.CUSTOCONT,
+							 (A.QT * A.CUSTOCONT) VLTOTAL,
+               A.STATUS,
+               A.CODOPER
+          FROM ANALITICO A
