@@ -1,3 +1,4 @@
+/*
 --CLIENTE
 SELECT ROWID,
        C.CODCONTAB,
@@ -176,7 +177,7 @@ SELECT ROWID,
                         21 --IFOOD
                         )
    ORDER BY CODBANCO;
-/
+*/
 
 /******************************************/
 /*         DUPLICATAS RIHAPPY              */
